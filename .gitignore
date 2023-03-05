@@ -87,3 +87,4 @@ lint/tmp/
 # Default ignored files
 /shelf/
 /workspace.xml
+MainProject/.idea/workspace.xml
