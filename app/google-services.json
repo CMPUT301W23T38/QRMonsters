@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "793368217864",
+    "project_id": "cmput-301-t38-qrmonsters",
+    "storage_bucket": "cmput-301-t38-qrmonsters.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:793368217864:android:b17aa43a68aac5ddc944bd",
+        "android_client_info": {
+          "package_name": "com.example.qrmonsters"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "793368217864-q134nsdd8g8d49jk8lq7g8ffpdo4h2th.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCdG9rnwYyMeILw-VoKto9osIU0t8raVA8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "793368217864-q134nsdd8g8d49jk8lq7g8ffpdo4h2th.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
