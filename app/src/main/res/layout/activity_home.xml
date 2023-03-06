@@ -62,4 +62,16 @@
         android:text="View Leaderboard"
         android:onClick="viewLeaderboard" />
 
+    <Button
+        android:id="@+id/viewCurrentLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="View Current Location"/>
+
+    <TextView
+        android:id="@+id/tv_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Location" />
+
 </LinearLayout>
