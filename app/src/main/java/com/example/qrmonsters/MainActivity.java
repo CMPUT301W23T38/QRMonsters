@@ -2,6 +2,8 @@ package com.example.qrmonsters;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -37,12 +39,22 @@ public class MainActivity extends AppCompatActivity {
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
+        SharedPreferences sharedPreferences = getSharedPreferences("UserDetails", MODE_PRIVATE);
+        boolean isRegistered = sharedPreferences.getBoolean("isRegistered", false);
+
+        Intent intent;
+        if (!isRegistered) {
+            intent = new Intent(this, RegistrationActivity.class);
+        } else {
+            intent = new Intent(this, HomeActivity.class);
+        }
+        startActivity(intent);
+        finish();
     }
+
+
 }
