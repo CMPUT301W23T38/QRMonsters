@@ -60,6 +60,11 @@
             android:exported="true"
             android:label="@string/home_activity_title"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".UserSearchActivity"
+            android:label="@string/user_search_activity_label">
+        </activity>
+
     </application>
 
 </manifest>

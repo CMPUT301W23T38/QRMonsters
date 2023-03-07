@@ -165,6 +165,9 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
     // Handle clicks on the "Search Users" button
     public void searchUsers(View view) {
         // TODO: Add code to launch the user search functionality
+        Intent intent = new Intent(this, UserSearchActivity.class);
+        startActivity(intent);
+
     }
 
     @Override

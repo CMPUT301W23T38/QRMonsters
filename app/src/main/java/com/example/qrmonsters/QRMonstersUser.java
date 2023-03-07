@@ -6,6 +6,10 @@ public class QRMonstersUser {
     private String email;
     private String phoneNumber;
 
+    public QRMonstersUser() {
+        // Required empty constructor for Firebase Database
+    }
+
     public QRMonstersUser(String userId, String username, String email, String phoneNumber) {
         this.userId = userId;
         this.username = username;
