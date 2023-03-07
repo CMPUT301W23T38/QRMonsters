@@ -1,12 +1,16 @@
 package com.example.qrmonsters;
 
-public class QRMonstersUser {
+public class Player {
     private String userId;
     private String username;
     private String email;
     private String phoneNumber;
 
-    public QRMonstersUser(String userId, String username, String email, String phoneNumber) {
+    public Player() {
+        // Required empty constructor for Firebase Database
+    }
+
+    public Player(String userId, String username, String email, String phoneNumber) {
         this.userId = userId;
         this.username = username;
         this.email = email;
