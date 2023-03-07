@@ -12,13 +12,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder> {
-    private List<QRMonstersUser> userList;
+    private List<Player> userList;
 
-    public UserAdapter(List<QRMonstersUser> userList) {
+    public UserAdapter(List<Player> userList) {
         this.userList = userList;
     }
 
-    public void setUsers(List<QRMonstersUser> userList) {
+    public void setUsers(List<Player> userList) {
         this.userList = userList;
         notifyDataSetChanged();
     }
@@ -32,7 +32,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull UserViewHolder holder, int position) {
-        QRMonstersUser user = userList.get(position);
+        Player user = userList.get(position);
         holder.usernameTextView.setText(user.getUsername());
         holder.phoneTextView.setText(user.getPhoneNumber());
     }

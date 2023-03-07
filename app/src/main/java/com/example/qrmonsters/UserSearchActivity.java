@@ -4,17 +4,13 @@ import static android.content.ContentValues.TAG;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -73,9 +69,9 @@ public class UserSearchActivity extends AppCompatActivity {
         searchQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                List<QRMonstersUser> userList = new ArrayList<>();
+                List<Player> userList = new ArrayList<>();
                 for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                    QRMonstersUser user = userSnapshot.getValue(QRMonstersUser.class);
+                    Player user = userSnapshot.getValue(Player.class);
                     userList.add(user);
                 }
                 userAdapter = new UserAdapter(userList);
