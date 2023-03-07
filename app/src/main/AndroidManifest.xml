@@ -62,7 +62,8 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".UserSearchActivity"
-            android:label="@string/user_search_activity_label">
+            android:label="@string/user_search_activity_label"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
     </application>

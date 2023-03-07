@@ -1,21 +1,29 @@
 package com.example.qrmonsters;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.auth.User;
 
 public class RegistrationActivity extends AppCompatActivity {
@@ -70,23 +78,57 @@ public class RegistrationActivity extends AppCompatActivity {
 
             // Store user information in Firebase
             DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users");
-            String userId = usersRef.push().getKey();
-            QRMonstersUser user = new QRMonstersUser(userId, username, email, phoneNumber);
-            usersRef.child(userId).setValue(user);
+//            String userId = usersRef.push().getKey();
+//            QRMonstersUser user = new QRMonstersUser(userId, username, email, phoneNumber);
+//            usersRef.child(userId).setValue(user);
+//
+//            // Store user information in shared preferences
+//            editor.putString("username", username);
+//            editor.putString("email", email);
+//            editor.putString("phoneNumber", phoneNumber);
+//            editor.remove("phone");
+//            editor.putBoolean("isRegistered", true);
+//            editor.apply();
+//
+//            Intent intent = new Intent(RegistrationActivity.this, HomeActivity.class);
+//            startActivity(intent);
+//            finish();
+            // check if the username already exists in the database
+            usersRef.orderByChild("username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+                        // the username already exists, show an error message to the user
+                        Toast.makeText(RegistrationActivity.this, "Username already exists", Toast.LENGTH_SHORT).show();
+                    } else {
+                        // the username is unique, create a new user object and add it to the database
+                        String userId = usersRef.push().getKey();
+                        QRMonstersUser user = new QRMonstersUser(userId, username, email, phoneNumber);
+                        usersRef.push().setValue(user);
+                        // save the registration status to SharedPreferences
 
-            // Store user information in shared preferences
-            editor.putString("username", username);
-            editor.putString("email", email);
-            editor.putString("phoneNumber", phoneNumber);
-            editor.remove("phone");
-            editor.putBoolean("isRegistered", true);
-            editor.apply();
+                        editor.putBoolean("isRegistered", true);
+                        editor.apply();
+                        // start the HomeActivity
+                        Intent intent = new Intent(RegistrationActivity.this, HomeActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                }
 
-            Intent intent = new Intent(RegistrationActivity.this, HomeActivity.class);
-            startActivity(intent);
-            finish();
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    // Display an error message to the user
+                    Toast.makeText(getApplicationContext(), "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
 
+                    // Log the error for debugging purposes
+                    Log.e(TAG, "Error reading data from Firebase Database", error.toException());
+                }
+
+
+            });
         });
     }
-
 }
+
+
