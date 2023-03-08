@@ -12,14 +12,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -27,7 +21,6 @@ public class RegistrationActivity extends AppCompatActivity {
     private EditText mUsernameEditText;
     private EditText mEmailEditText;
     private EditText mPhoneNumberEditText;
-    private Button mRegisterButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +31,7 @@ public class RegistrationActivity extends AppCompatActivity {
         mUsernameEditText = findViewById(R.id.username_edit_text);
         mEmailEditText = findViewById(R.id.email_edit_text);
         mPhoneNumberEditText = findViewById(R.id.phone_number_edit_text);
-        mRegisterButton = findViewById(R.id.register_button);
+        Button mRegisterButton = findViewById(R.id.register_button);
 
         // Initialize shared preferences
         SharedPreferences sharedPrefs = getSharedPreferences("UserDetails", MODE_PRIVATE);
