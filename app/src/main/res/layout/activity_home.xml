@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Add a TextView for the username, email, and phone number -->
+    <TextView
+        android:id="@+id/usernameTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:padding="16dp"
+        android:background="@android:color/darker_gray"
+        android:textColor="@android:color/white"
+        android:text="Username" />
+
+    <TextView
+        android:id="@+id/emailTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:padding="16dp"
+        android:text="Email" />
+
+    <TextView
+        android:id="@+id/phoneNumberTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:padding="16dp"
+        android:text="Phone Number" />
+
+    <!-- Add buttons for QR code scanning, viewing QR codes, searching users, and viewing the leaderboard -->
+    <Button
+        android:id="@+id/scanQRCodeButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Scan QR Code"
+        android:onClick="scanQRCode" />
+
+    <Button
+        android:id="@+id/viewMyQRCodesButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="View My QR Codes"
+        android:onClick="viewMyQRCodes" />
+
+    <Button
+        android:id="@+id/searchUsersButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Search Users"
+        android:onClick="searchUsers" />
+
+    <Button
+        android:id="@+id/viewLeaderboardButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="View Leaderboard"
+        android:onClick="viewLeaderboard" />
+
+    <Button
+        android:id="@+id/viewCurrentLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="View Current Location"/>
+
+    <TextView
+        android:id="@+id/tv_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Location" />
+
+</LinearLayout>

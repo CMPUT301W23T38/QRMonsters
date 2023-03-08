@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">QRMonsters</string>
+    <string name="registration_activity_title">Registration</string>
+    <string name="home_activity_title">Home</string>
+    <string name="search_users_hint">Type Username</string>
+    <string name="search_button_text">Search</string>
+    <string name="search_users">search_users</string>
+    <string name="user_search_activity_label">Find other users</string>
 </resources>
