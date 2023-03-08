@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         boolean isRegistered = sharedPreferences.getBoolean("isRegistered", false);
 
         Intent intent;
+        //intent = new Intent(this, RegistrationActivity.class);
         if (!isRegistered) {
             intent = new Intent(this, RegistrationActivity.class);
         } else {
