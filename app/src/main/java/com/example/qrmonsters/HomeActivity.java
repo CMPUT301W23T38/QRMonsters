@@ -44,6 +44,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
     private static final int PERMISSION_LOCATION = 1000;
 
     Button curLocBut;
+    Button scanQR;
     Location currentlocation;
 
     LocationManager locationManager;
@@ -74,6 +75,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
         emailTextView = findViewById(R.id.emailTextView);
         phoneNumberTextView = findViewById(R.id.phoneNumberTextView);
         curLocBut = findViewById(R.id.viewCurrentLocation);
+        scanQR = findViewById(R.id.scanQRCodeButton);
         tv_location = findViewById(R.id.tv_location);
 
         // Load the user's profile information
@@ -99,6 +101,14 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
 
             new currLocationFragment(currLoc).show(getSupportFragmentManager(),
                     "CURR_LOC");
+        });
+
+        scanQR.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HomeActivity.this, Scan_QR.class);
+                startActivity(intent);
+            }
         });
 
     }
