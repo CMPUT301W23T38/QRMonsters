@@ -45,11 +45,12 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
 
     Button curLocBut;
     Button scanQR;
+    Button nearbyQR;
     Location currentlocation;
 
     LocationManager locationManager;
 
-    @SuppressLint("MissingPermission")
+    @SuppressLint({"MissingPermission", "MissingInflatedId"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +78,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
         curLocBut = findViewById(R.id.viewCurrentLocation);
         scanQR = findViewById(R.id.scanQRCodeButton);
         tv_location = findViewById(R.id.tv_location);
+        nearbyQR = findViewById(R.id.searchNearbyQRButton);
 
         // Load the user's profile information
         SharedPreferences preferences = getSharedPreferences("UserDetails", MODE_PRIVATE);
@@ -93,6 +95,20 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
         emailTextView.setText(email);
         phoneNumberTextView.setText(phoneNumber);
 
+        nearbyQR.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                Intent intent = new Intent(HomeActivity.this, searchNearbyQR.class);
+                intent.putExtra("User Location", currentlocation);
+
+                startActivity(intent);
+
+
+
+            }
+        });
 
         curLocBut.setOnClickListener(view -> {
 
@@ -102,6 +118,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
             new currLocationFragment(currLoc).show(getSupportFragmentManager(),
                     "CURR_LOC");
         });
+
 
         scanQR.setOnClickListener(new View.OnClickListener() {
             @Override

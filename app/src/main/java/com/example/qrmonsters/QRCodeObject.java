@@ -2,21 +2,21 @@ package com.example.qrmonsters;
 
 import android.location.Location;
 
-public class QRCode {
+public class QRCodeObject {
 
     private String codeName;
     private String codeHash;
     private Integer codeScore;
     private Location codeLocation;
 
-    public QRCode(String codeName, String codeHash, Integer codeScore, Location codeLocation) {
+    public QRCodeObject(String codeName, String codeHash, Integer codeScore, Location codeLocation) {
         this.codeName = codeName;
         this.codeHash = codeHash;
         this.codeScore = codeScore;
         this.codeLocation = codeLocation;
     }
 
-    public QRCode(String codeName, String codeHash, Integer codeScore) {
+    public QRCodeObject(String codeName, String codeHash, Integer codeScore) {
         this.codeName = codeName;
         this.codeHash = codeHash;
         this.codeScore = codeScore;

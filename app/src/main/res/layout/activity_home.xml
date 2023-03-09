@@ -42,6 +42,12 @@
         android:onClick="scanQRCode" />
 
     <Button
+        android:id="@+id/searchNearbyQRButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Search Nearby QR codes"/>
+
+    <Button
         android:id="@+id/viewMyQRCodesButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
