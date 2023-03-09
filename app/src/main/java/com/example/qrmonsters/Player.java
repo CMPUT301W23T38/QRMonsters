@@ -1,10 +1,13 @@
 package com.example.qrmonsters;
 
+import java.util.List;
+
 public class Player {
     private String userId;
     private String username;
     private String email;
     private String phoneNumber;
+    private List<String> qrCodes;
 
     public Player() {
         // Required empty constructor for Firebase Database
@@ -33,6 +36,10 @@ public class Player {
         return phoneNumber;
     }
 
+    public List<String> getQrCodes() {
+        return qrCodes;
+    }
+
     public void setUserId(String userId) {
         this.userId = userId;
     }
@@ -47,6 +54,17 @@ public class Player {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public void addQRCode(String qrCodeName){
+
+        this.qrCodes.add(qrCodeName);
+    }
+
+    public void removeQRCode(String qrCodeName){
+
+        this.qrCodes.remove(qrCodeName);
+
     }
 
 }
