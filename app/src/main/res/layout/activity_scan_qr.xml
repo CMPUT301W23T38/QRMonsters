@@ -8,20 +8,20 @@
         android:id="@+id/et"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="输入内容，生成二维码"
+        android:hint="Enter content and generate QR code"
         android:text="http://baidu.com" />
 
     <Button
         android:id="@+id/btn2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="生成二维码" />
+        android:text="Generate QR code" />
 
     <Button
         android:id="@+id/btn1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="扫码（支持识别相册二维码）" />
+        android:text="Scan code" />
 
     <ImageView
         android:id="@+id/image"
@@ -32,7 +32,7 @@
 
     <TextView
         android:id="@+id/tv_result"
-        android:text="扫描返回bitmap"
+        android:text="scan returns bitmap"
         android:gravity="center"
         android:textSize="18sp"
         android:textColor="#FF0000"
