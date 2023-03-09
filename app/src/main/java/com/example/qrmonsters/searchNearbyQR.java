@@ -31,6 +31,13 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+
+ The searchNearbyQR class is an activity that displays a list of the nearest QR codes
+ to the user's current location. It retrieves QR code data from a  database
+ and calculates the distance from the user's location to each code location in the database.
+ It then displays the three nearest codes in a ListView.
+ */
 public class searchNearbyQR extends AppCompatActivity {
 
     FirebaseFirestore db;
@@ -38,7 +45,12 @@ public class searchNearbyQR extends AppCompatActivity {
     ArrayAdapter<QRCodeObject> qrAdapter;
     ArrayList<QRCodeObject> qrDataList;
 
-
+    /**
+     Called when the activity is first created.
+     Sets up the UI, initializes the Firestore database, and retrieves
+     the user's location passed in from the previous activity.
+     @param savedInstanceState The saved state of the activity
+     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
