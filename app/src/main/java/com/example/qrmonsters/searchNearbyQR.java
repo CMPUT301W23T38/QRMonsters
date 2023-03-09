@@ -7,6 +7,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
@@ -18,6 +19,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -59,6 +62,23 @@ public class searchNearbyQR extends AppCompatActivity {
         db =FirebaseFirestore.getInstance();
 
         final CollectionReference collectionReference = db.collection("qrCodes");
+
+        qrList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                QRCodeObject clickQR = qrAdapter.getItem(i);
+
+                Location qrLocation = clickQR.getCodeLocation();
+
+                LatLng currLoc = new LatLng(qrLocation.getLatitude(),
+                        qrLocation.getLongitude());
+
+                new currLocationFragment(currLoc).show(getSupportFragmentManager(),
+                        "CURR_LOC");
+
+            }
+        });
 
 
 
