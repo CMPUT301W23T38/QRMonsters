@@ -12,20 +12,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class RegistrationActivity extends AppCompatActivity {
     private EditText mUsernameEditText;
     private EditText mEmailEditText;
     private EditText mPhoneNumberEditText;
-    private Button mRegisterButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +31,7 @@ public class RegistrationActivity extends AppCompatActivity {
         mUsernameEditText = findViewById(R.id.username_edit_text);
         mEmailEditText = findViewById(R.id.email_edit_text);
         mPhoneNumberEditText = findViewById(R.id.phone_number_edit_text);
-        mRegisterButton = findViewById(R.id.register_button);
+        Button mRegisterButton = findViewById(R.id.register_button);
 
         // Initialize shared preferences
         SharedPreferences sharedPrefs = getSharedPreferences("UserDetails", MODE_PRIVATE);
@@ -71,10 +66,12 @@ public class RegistrationActivity extends AppCompatActivity {
                 return;
             }
 
-            // Store user information in Firebase
-            DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users");
+            // Store user information in Firestore database
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            CollectionReference usersRef = db.collection("users");
+
 //            String userId = usersRef.push().getKey();
-//            QRMonstersUser user = new QRMonstersUser(userId, username, email, phoneNumber);
+//            Player user = new Player(userId, username, email, phoneNumber);
 //            usersRef.child(userId).setValue(user);
 //
 //            // Store user information in shared preferences
@@ -89,38 +86,32 @@ public class RegistrationActivity extends AppCompatActivity {
 //            startActivity(intent);
 //            finish();
             // check if the username already exists in the database
-            usersRef.orderByChild("username").equalTo(username).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if (snapshot.exists()) {
-                        // the username already exists, show an error message to the user
-                        Toast.makeText(RegistrationActivity.this, "Username already exists", Toast.LENGTH_SHORT).show();
-                    } else {
-                        // the username is unique, create a new user object and add it to the database
-                        String userId = usersRef.push().getKey();
+            usersRef.whereEqualTo("username", username).get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    if (task.getResult().isEmpty()) {
+                        // username is unique, so we can create a new user
+                        String userId = usersRef.document().getId();
                         Player user = new Player(userId, username, email, phoneNumber);
-                        usersRef.push().setValue(user);
-                        // save the registration status to SharedPreferences
+                        usersRef.document(userId).set(user);
 
+                        // Store user information in shared preferences
+                        editor.putString("username", username);
+                        editor.putString("email", email);
+                        editor.putString("phoneNumber", phoneNumber);
+                        editor.remove("phone");
                         editor.putBoolean("isRegistered", true);
                         editor.apply();
-                        // start the HomeActivity
+
                         Intent intent = new Intent(RegistrationActivity.this, HomeActivity.class);
                         startActivity(intent);
                         finish();
+                    } else {
+                        // username already exists, so we cannot create a new user
+                        Toast.makeText(RegistrationActivity.this, "Username already exists", Toast.LENGTH_SHORT).show();
                     }
+                } else {
+                    Log.d(TAG, "Error getting documents: ", task.getException());
                 }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    // Display an error message to the user
-                    Toast.makeText(getApplicationContext(), "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-
-                    // Log the error for debugging purposes
-                    Log.e(TAG, "Error reading data from Firebase Database", error.toException());
-                }
-
-
             });
         });
     }

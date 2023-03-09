@@ -3,43 +3,27 @@ package com.example.qrmonsters;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
-import com.google.android.gms.common.api.GoogleApi;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class HomeActivity extends AppCompatActivity implements LocationListener {
-    private TextView usernameTextView;
-    private TextView emailTextView;
-    private TextView phoneNumberTextView;
     private TextView tv_location;
     private static final int PERMISSION_LOCATION = 1000;
 
@@ -48,7 +32,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
     Button nearbyQR;
     Location currentlocation;
 
-    LocationManager locationManager;
+    //LocationManager locationManager;
 
     @SuppressLint({"MissingPermission", "MissingInflatedId"})
     @Override
@@ -57,9 +41,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
         setContentView(R.layout.activity_home);
 
 
-        if((Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) &&
-                checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
-                        != PackageManager.PERMISSION_GRANTED){
+        if(checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
 
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     PERMISSION_LOCATION);
@@ -78,9 +60,9 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
 
 
         // Get references to the UI components
-        usernameTextView = findViewById(R.id.usernameTextView);
-        emailTextView = findViewById(R.id.emailTextView);
-        phoneNumberTextView = findViewById(R.id.phoneNumberTextView);
+        TextView usernameTextView = findViewById(R.id.usernameTextView);
+        TextView emailTextView = findViewById(R.id.emailTextView);
+        TextView phoneNumberTextView = findViewById(R.id.phoneNumberTextView);
         curLocBut = findViewById(R.id.viewCurrentLocation);
         scanQR = findViewById(R.id.scanQRCodeButton);
         tv_location = findViewById(R.id.tv_location);
@@ -97,9 +79,9 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
 //        Log.d("HomeActivity", "Phone: " + phoneNumber);
 
         // Update the UI with the user's profile information
-        usernameTextView.setText(username);
-        emailTextView.setText(email);
-        phoneNumberTextView.setText(phoneNumber);
+        usernameTextView.setText("Username: " + username);
+        emailTextView.setText("Email: " + email);
+        phoneNumberTextView.setText("Phone: " + phoneNumber);
 
         nearbyQR.setOnClickListener(new View.OnClickListener() {
             @Override
