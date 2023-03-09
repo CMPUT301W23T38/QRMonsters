@@ -1,0 +1,83 @@
+US 01.05.01
+Description:  As a player, I want to see the sum of scores of QR codes that I have scanned.
+Rationale:    Users may want to compare their scores with other players.
+Risk level:   High
+Stroy point:  1
+
+US 01.06.01
+Description:  As a player, I want to see the total number of QR codes that I have scanned.
+Rationale:    Users may want to compare their total number of scans with other players.
+Risk level:   High
+Stroy point:  1
+
+US 01.07.01
+Description:  As a player, I want to see other player’s profiles
+Rationale:    Users may want to social with other players.
+Risk level:   High
+Stroy point:  3
+
+Game QR Codes
+
+US 02.01.01
+Description:  As a player, I want to be able to scan QR codes and record a photo of the location or object, and the geolocation of the location or object.
+Rationale:    Seems similar to 'LocalGuide' in Google. Users may have intent to share their locations and photos to strangers.
+Risk level:   High
+Stroy point:  5
+
+US 02.02.01
+Description:   As a player, I want to be able to comment on QR codes.
+Rationale:     User interactings. Build for social.
+Risk level:    High
+Stroy point:   5
+
+US 02.03.01
+Description:   As a player, I want to be able to browse QR codes that other players have scanned.
+Rationale:     User interactings. Build for social.
+Risk level:    High
+Stroy point:   4
+
+US 02.04.01
+Description:   As a player, I want to see that other players have scanned the same QR code.
+Rationale:     Users may want to find if they meet the same person or went to a same place before.
+Risk level:    Medium
+Stroy point:   3
+
+US 02.05.01
+Description:   As a player, I want QR codes to have a unique human readable name.
+Rationale:     Users are likely to have something unique to themselves.
+Risk level:    Low
+Stroy point:   3
+
+US 02.06.01
+Description:   As a player, I want to see a visual representation of a QR code relatively unique to that QR code.
+Rationale:     Users want fancy features on their QR codes.
+Risk level:    Low
+Stroy point:   2
+
+Player profile
+
+US 04.01.01
+Description:   As a player, I want a profile with a unique username and my contact information.
+Rationale:     This will help other players memorize their friends easiler, don't have to remember random address code.
+Risk level:    High
+Stroy point:   3
+
+US 04.02.01 
+Description:   As a player, I do not want to log into my application using a username and password as my device can identify me.
+Rationale:     Memorize the device unique code(like hard drive device code). And let user log in quickly after first time.
+Risk level:    Medium
+Stroy point:   4
+
+Searching
+
+US 05.01.01
+Description:   As a player, I want to search for other players by username.
+Rationale:     Allow user to add friends and view profile without meet face to face and scan.
+Risk level:    High
+Stroy point:   3
+
+US 05.02.01
+Description:   As a player, I want to search for nearby QR codes by using geolocation.
+Rationale:     Allow user to find other players nearby and see their location.(Similar to Zenly, Ice)
+Risk level:    High
+Stroy point:   5

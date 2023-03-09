@@ -28,11 +28,13 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
     private static final int PERMISSION_LOCATION = 1000;
 
     Button curLocBut;
+    Button scanQR;
+    Button nearbyQR;
     Location currentlocation;
 
     //LocationManager locationManager;
 
-    @SuppressLint("MissingPermission")
+    @SuppressLint({"MissingPermission", "MissingInflatedId"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,13 +52,21 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
             showLocation();
         }
 
+        if(checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+
+            requestPermissions(new String[]{Manifest.permission.CAMERA}, PERMISSION_LOCATION);
+
+        }
+
 
         // Get references to the UI components
         TextView usernameTextView = findViewById(R.id.usernameTextView);
         TextView emailTextView = findViewById(R.id.emailTextView);
         TextView phoneNumberTextView = findViewById(R.id.phoneNumberTextView);
         curLocBut = findViewById(R.id.viewCurrentLocation);
+        scanQR = findViewById(R.id.scanQRCodeButton);
         tv_location = findViewById(R.id.tv_location);
+        nearbyQR = findViewById(R.id.searchNearbyQRButton);
 
         // Load the user's profile information
         SharedPreferences preferences = getSharedPreferences("UserDetails", MODE_PRIVATE);
@@ -73,6 +83,20 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
         emailTextView.setText("Email: " + email);
         phoneNumberTextView.setText("Phone: " + phoneNumber);
 
+        nearbyQR.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                Intent intent = new Intent(HomeActivity.this, searchNearbyQR.class);
+                intent.putExtra("User Location", currentlocation);
+
+                startActivity(intent);
+
+
+
+            }
+        });
 
         curLocBut.setOnClickListener(view -> {
 
@@ -81,6 +105,15 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
 
             new currLocationFragment(currLoc).show(getSupportFragmentManager(),
                     "CURR_LOC");
+        });
+
+
+        scanQR.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HomeActivity.this, Scan_QR.class);
+                startActivity(intent);
+            }
         });
 
     }

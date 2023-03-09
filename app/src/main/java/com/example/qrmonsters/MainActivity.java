@@ -10,7 +10,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-    //FirebaseFirestore db = FirebaseFirestore.getInstance();
+// <<<<<<< QRScanner_Integrate 
+FirebaseFirestore db = FirebaseFirestore.getInstance();
+Button btm;
+// =======
+//     //FirebaseFirestore db = FirebaseFirestore.getInstance();
+// >>>>>>> main
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
