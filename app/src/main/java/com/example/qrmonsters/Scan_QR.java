@@ -97,8 +97,8 @@ public class Scan_QR extends AppCompatActivity implements View.OnClickListener {
 
             String result = data.getStringExtra(CaptureActivity.SCAN_QRCODE_RESULT);
             Bitmap bitmap = data.getParcelableExtra(CaptureActivity.SCAN_QRCODE_BITMAP);
-            mTvResult.setText("扫码结果："+result);
-            showToast("扫码结果：" + result);
+            mTvResult.setText("scan result："+result);
+            showToast("scan result：" + result);
             if(bitmap != null){
                 mImageCallback.setImageBitmap(bitmap);//现实扫码图片
             }
