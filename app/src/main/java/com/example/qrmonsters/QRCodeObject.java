@@ -15,7 +15,6 @@ public class QRCodeObject {
     private String codeHash;
     private Integer codeScore;
     private Location codeLocation;
-    //Hashmap<string, string>  for qrcodeobject to represent comments
     HashMap<String, String> comments = new HashMap<>();
 
     /**
