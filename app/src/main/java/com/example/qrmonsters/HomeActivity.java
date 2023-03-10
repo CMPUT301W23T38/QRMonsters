@@ -22,7 +22,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
-
+/**
+ * This is the main activity for the QR Monsters Android application. It allows users to view their
+ * profile information and perform various actions, such as scanning QR codes, searching for nearby
+ * QR codes, searching for other users, and viewing a leaderboard.
+ */
 public class HomeActivity extends AppCompatActivity implements LocationListener {
     private TextView tv_location;
     private static final int PERMISSION_LOCATION = 1000;
@@ -33,7 +37,11 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
     Location currentlocation;
 
     //LocationManager locationManager;
-
+    /**
+     * This method is called when the activity is created. It sets up the UI components and loads
+     * the user's profile information from SharedPreferences. It also checks for location and camera
+     * permissions and requests them if necessary.
+     */
     @SuppressLint({"MissingPermission", "MissingInflatedId"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,7 +126,20 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
 
     }
 
+    /**
 
+     Handles the result of a permission request for location access. If the user grants permission,
+
+     a toast is displayed indicating the permission was granted. If the user denies permission, a toast
+
+     is displayed indicating the permission was not granted and the activity is finished.
+
+     @param requestCode The request code for the permission request
+
+     @param permissions The requested permissions
+
+     @param grantResults The results of the permission request
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
@@ -134,7 +155,12 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
         }
 
     }
+    /**
 
+     Shows the user's current location on the screen. If location access is not enabled, a toast
+
+     is displayed indicating that the user needs to enable location access.
+     */
     @SuppressLint("MissingPermission")
     private void showLocation(){
 
@@ -154,30 +180,47 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
         }
 
     }
+    /**
 
+     Returns a string representation of the user's current location with latitude and longitude .
+
+     @param location The user's current location
+
+     @return A string representation of the user's current location with latitude and longitude
+     */
     private String hereLocation(Location location){
 
         return "Lat: " + location.getLatitude() + "\nLong: " + location.getLongitude();
 
     }
+    /**
 
-
-    // Handle clicks on the "Scan QR Code" button
+     Launches the QR code scanning functionality when the "Scan QR Code" button is clicked.
+     @param view The button view that was clicked
+     */
     public void scanQRCode(View view) {
         // TODO: Add code to launch the QR code scanning functionality
     }
 
-    // Handle clicks on the "View My QR Codes" button
+    /**
+     Displays a list of the user's QR codes when the "View My QR Codes" button is clicked.
+     @param view The button view that was clicked
+     */
     public void viewMyQRCodes(View view) {
         // TODO: Add code to display a list of the user's QR codes
     }
-
-    // Handle clicks on the "View Leaderboard" button
+    /**
+     Displays the leaderboard when the "View Leaderboard" button is clicked.
+     @param view The button view that was clicked
+     */
     public void viewLeaderboard(View view) {
         // TODO: Add code to display the leaderboard
     }
 
-    // Handle clicks on the "Search Users" button
+    /**
+     Launches the user search functionality when the "Search Users" button is clicked.
+     @param view The button view that was clicked
+     */
     public void searchUsers(View view) {
         // TODO: Add code to launch the user search functionality
         Intent intent = new Intent(this, UserSearchActivity.class);

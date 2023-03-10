@@ -16,11 +16,24 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+/**
+
+ The RegistrationActivity class is responsible for handling the registration process for new users.
+ Users are required to input a username, email address, and phone number. Once the user information
+ has been validated, it is stored in a database and shared preferences.
+ */
 
 public class RegistrationActivity extends AppCompatActivity {
     private EditText mUsernameEditText;
     private EditText mEmailEditText;
     private EditText mPhoneNumberEditText;
+    /**
+     * Initializes UI components, shared preferences, and click listener for the register button.
+     * Once the register button is clicked, the user input is validated and stored in Firestore database
+     * and shared preferences.
+     *
+     * @param savedInstanceState a Bundle object containing the activity's previously saved state
+     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
