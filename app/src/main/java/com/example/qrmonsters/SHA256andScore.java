@@ -5,13 +5,20 @@ import static java.lang.Character.isDigit;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
-import java.util.Map;
 
-public class User {
+/**
+ The User class represents a user who has a host name and provides static methods for generating a
+ SHA-256 hash of a string and calculating a score for a string.
+ */
+public class SHA256andScore {
     String host_name;
 
 
+    /**
+     * Returns the SHA-256 hash of a given string.
+     * @param str the string to be hashed
+     * @return the SHA-256 hash of the input string
+     */
     public static String getSha256Str(String str) {
         MessageDigest messageDigest;
         String encodeStr = "";
@@ -19,6 +26,10 @@ public class User {
             messageDigest = MessageDigest.getInstance("SHA-256");
             messageDigest.update(str.getBytes(StandardCharsets.UTF_8));
             encodeStr = byte2Hex(messageDigest.digest());
+
+            // encodeStr is the AFTER HASHED value, which is what you want for QR code
+            // usage for this, somethingHASHED = somethingBEFORE.getSha256Str();
+
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
@@ -59,10 +70,9 @@ public class User {
         return sum;
     }
     /**
-     * sha256加密 将byte转为16进制
-     *
-     * @param bytes 字节码
-     * @return 加密后的字符串
+     * Converts an array of bytes to a hex string.
+     * @param bytes the byte array to be converted
+     * @return the hex string representation of the input byte array
      */
     private static String byte2Hex(byte[] bytes) {
         StringBuilder stringBuilder = new StringBuilder();
@@ -70,7 +80,6 @@ public class User {
         for (byte aByte : bytes) {
             temp = Integer.toHexString(aByte & 0xFF);
             if (temp.length() == 1) {
-                //1得到一位的进行补0操作
                 stringBuilder.append("0");
             }
             stringBuilder.append(temp);

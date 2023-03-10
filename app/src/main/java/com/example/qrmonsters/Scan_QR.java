@@ -16,14 +16,25 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.common.hash.Hashing;
 import com.google.zxing.WriterException;
 import com.google.zxing.activity.CaptureActivity;
 import com.google.zxing.common.BitmapUtils;
 
-import java.nio.charset.StandardCharsets;
+
+/**
+ * Scan_QR class is now on-hold, nothing related to this class for now.
+ * 2023-03-10 07:27am
+ */
 
 
+
+
+
+/**
+
+ Scan_QR is an activity that allows the user to scan and create QR codes. It utilizes the ZXing
+ library to capture QR codes and generate new ones.
+ */
 public class Scan_QR extends AppCompatActivity implements View.OnClickListener {
 
     private Button mBtn1;
@@ -34,7 +45,9 @@ public class Scan_QR extends AppCompatActivity implements View.OnClickListener {
     private Context mContext;
     private TextView mTvResult;
     private ImageView mImageCallback;
-
+    /**
+     * Initializes the activity's UI components.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +55,9 @@ public class Scan_QR extends AppCompatActivity implements View.OnClickListener {
         initView();
         mContext = this;
     }
-
+    /**
+     * Initializes the activity's UI components and sets their click listeners.
+     */
     private void initView() {
         mBtn1 = (Button) findViewById(R.id.btn1);
 
@@ -57,7 +72,11 @@ public class Scan_QR extends AppCompatActivity implements View.OnClickListener {
         mImageCallback = (ImageView) findViewById(R.id.image_callback);
         mImageCallback.setOnClickListener(this);
     }
-
+    /**
+     * Handles clicks on the activity's buttons.
+     *
+     * @param v The view that was clicked.
+     */
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -68,16 +87,15 @@ public class Scan_QR extends AppCompatActivity implements View.OnClickListener {
                 break;
             case R.id.btn2:
                 mImage.setVisibility(View.VISIBLE);
-                //隐藏扫码结果view
                 mImageCallback.setVisibility(View.GONE);
                 mTvResult.setVisibility(View.GONE);
 
                 String content = mEt.getText().toString().trim();
-                content += '\n' + String.valueOf(User.getScore(User.getSha256Str(content))) +'\n' + User.getSha256Str(content);
+                content += '\n' + String.valueOf(SHA256andScore.getScore(SHA256andScore.getSha256Str(content))) +'\n' + SHA256andScore.getSha256Str(content);
                 Bitmap bitmap = null;
 
                 try {
-                    bitmap = BitmapUtils.create2DCode(content);//根据内容生成二维码
+                    bitmap = BitmapUtils.create2DCode(content);
                     mTvResult.setVisibility(View.GONE);
                     mImage.setImageBitmap(bitmap);
                 } catch (WriterException e) {
@@ -86,6 +104,13 @@ public class Scan_QR extends AppCompatActivity implements View.OnClickListener {
                 break;
         }
     }
+/**
+ * Handles the result of the ZXing library's capture activity.
+ *
+ * @param requestCode The request code used to launch the activity.
+ * @param resultCode The result code returned by the activity.
+ * @param data The data returned by the activity.
+ */
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -94,19 +119,29 @@ public class Scan_QR extends AppCompatActivity implements View.OnClickListener {
             mImage.setVisibility(View.GONE);
             mTvResult.setVisibility(View.VISIBLE);
             mImageCallback.setVisibility(View.VISIBLE);
+            try{
+                String result = data.getStringExtra(CaptureActivity.SCAN_QRCODE_RESULT);
+                Bitmap bitmap = data.getParcelableExtra(CaptureActivity.SCAN_QRCODE_BITMAP);
+                mTvResult.setText("scan result："+result);
+                showToast("scan result：" + result);
+                if(bitmap != null){
+                    mImageCallback.setImageBitmap(bitmap);
+                }
 
-            String result = data.getStringExtra(CaptureActivity.SCAN_QRCODE_RESULT);
-            Bitmap bitmap = data.getParcelableExtra(CaptureActivity.SCAN_QRCODE_BITMAP);
-            mTvResult.setText("扫码结果："+result);
-            showToast("扫码结果：" + result);
-            if(bitmap != null){
-                mImageCallback.setImageBitmap(bitmap);//现实扫码图片
+            }catch (NullPointerException e){
+                System.out.println("");
             }
+
+
+
         }
 
 
     }
-
+    /**
+     * show a pop up message of string message
+     * @param msg string of the message
+     */
     private void showToast(String msg) {
         Toast.makeText(mContext, "" + msg, Toast.LENGTH_SHORT).show();
     }

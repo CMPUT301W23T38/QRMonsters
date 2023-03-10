@@ -1,3 +1,24 @@
 <resources>
     <string name="app_name">QRMonsters</string>
+    <string name="registration_activity_title">Registration</string>
+    <string name="home_activity_title">Home</string>
+    <string name="search_users_hint">Type Username</string>
+    <string name="search_button_text">Search</string>
+    <string name="search_users">search_users</string>
+    <string name="user_search_activity_label">Find other users</string>
+    <string name="back_to_home">Back to Home</string>
+    <string name="username">Username</string>
+    <string name="email_address">Email Address</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="register">Register</string>
+    <string name="email">Email</string>
+    <string name="phone_numberr">Phone Number</string>
+    <string name="username_">Username</string>
+    <string name="scan_qr_code">Scan QR Code</string>
+    <string name="view_my_qr_codes">View My QR Codes</string>
+    <string name="search_users_">Search Users</string>
+    <string name="view_leaderboard_">View Leaderboard</string>
+    <string name="view_current_location">View Current Location</string>
+    <string name="location">Location</string>
+    <string name="create_account">Create account</string>
 </resources>
