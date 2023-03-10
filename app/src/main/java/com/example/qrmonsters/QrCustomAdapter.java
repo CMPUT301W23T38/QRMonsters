@@ -10,8 +10,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.w3c.dom.Text;
-
 
 import java.util.ArrayList;
 
@@ -22,7 +20,7 @@ import java.util.ArrayList;
  The getView() method overrides the ArrayAdapter's getView() method and returns a view for each item in the list.
  The adapter is used in the NearbyQrListActivity to display the list of nearby QR codes.
  */
-public class nearbyQrCustomAdapter extends ArrayAdapter<QRCodeObject> {
+public class QrCustomAdapter extends ArrayAdapter<QRCodeObject> {
 
     private ArrayList<QRCodeObject> qrs;
     private Context context;
@@ -32,7 +30,7 @@ public class nearbyQrCustomAdapter extends ArrayAdapter<QRCodeObject> {
      * @param context The context of the activity where the adapter is used
      * @param qrs     The ArrayList of QRCodeObject objects to be displayed in the list view
      */
-    public nearbyQrCustomAdapter(Context context, ArrayList<QRCodeObject> qrs) {
+    public QrCustomAdapter(Context context, ArrayList<QRCodeObject> qrs) {
         super(context, 0, qrs);
         this.qrs = qrs;
         this.context = context;

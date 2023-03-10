@@ -1,15 +1,10 @@
 package com.example.qrmonsters;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -24,12 +19,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.google.zxing.qrcode.encoder.QRCode;
-
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
 
@@ -60,13 +51,13 @@ public class searchNearbyQR extends AppCompatActivity {
 
         Location userLocation = getIntent().getParcelableExtra("User Location");
 
-        QRCodeObject qrAdd;
+        //QRCodeObject qrAdd;
 
         qrList = findViewById(R.id.nearbyQRList);
 
         qrDataList = new ArrayList<>();
 
-        qrAdapter = new nearbyQrCustomAdapter(this, qrDataList);
+        qrAdapter = new QrCustomAdapter(this, qrDataList);
 
         qrList.setAdapter(qrAdapter);
 
@@ -74,6 +65,8 @@ public class searchNearbyQR extends AppCompatActivity {
         db =FirebaseFirestore.getInstance();
 
         final CollectionReference collectionReference = db.collection("qrCodes");
+
+        
 
         qrList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -111,7 +104,9 @@ public class searchNearbyQR extends AppCompatActivity {
                     qrLoc.setLatitude((Double) locationData.get("latitude"));
                     qrLoc.setLongitude((Double) locationData.get("longitude"));
 
-                    qrDataList.add(new QRCodeObject(cn, ch, cs, qrLoc));
+
+                    QRCodeObject toAdd = new QRCodeObject(cn, ch, cs, qrLoc);
+                    qrDataList.add(toAdd);
 
                 }
 
