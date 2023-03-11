@@ -22,16 +22,6 @@ import com.google.zxing.common.BitmapUtils;
 
 
 /**
- * Scan_QR class is now on-hold, nothing related to this class for now.
- * 2023-03-10 07:27am
- */
-
-
-
-
-
-/**
-
  Scan_QR is an activity that allows the user to scan and create QR codes. It utilizes the ZXing
  library to capture QR codes and generate new ones.
  */
@@ -130,6 +120,7 @@ public class Scan_QR extends AppCompatActivity implements View.OnClickListener {
 
             }catch (NullPointerException e){
                 System.out.println("");
+
             }
 
 

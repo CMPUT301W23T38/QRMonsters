@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".searchNearbyQR">
+
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="?actionBarSize"
+        android:background="@color/darkGray">
+
+        <TextView
+            android:id="@+id/qrTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="QR CODE"
+            android:textSize="35sp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:layout_gravity="center"/>
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <TextView
+        android:id="@+id/qrNameTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="QR NAME" />
+
+    <TextView
+        android:id="@+id/qrScoreTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="QR SCORE" />
+
+
+    <Button
+        android:id="@+id/viewLocationButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="View QRcode Location"/>
+
+    <Button
+        android:id="@+id/viewCommentsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="View QRcode Comments"/>
+
+    <Button
+        android:id="@+id/commentButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Comment on QRCode"/>
+
+</LinearLayout>

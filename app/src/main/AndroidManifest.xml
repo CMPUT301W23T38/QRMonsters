@@ -28,6 +28,19 @@
         <activity
             android:name=".ScannedResult"
             android:exported="false" />
+            android:name=".viewQRCode"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".viewPlayerProfile"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
         <activity
             android:name=".searchNearbyQR"
             android:exported="false"

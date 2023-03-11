@@ -107,6 +107,7 @@ public class RegistrationActivity extends AppCompatActivity {
                         Player user = new Player(userId, username, email, phoneNumber);
                         // This line for getting who is now using the app
                         HomeActivity.CURRENT_USER = userId;
+
                         usersRef.document(userId).set(user);
 
                         // Store user information in shared preferences

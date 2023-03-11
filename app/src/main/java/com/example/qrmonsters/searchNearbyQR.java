@@ -10,6 +10,11 @@ import android.location.LocationManager;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import android.location.Location;
+
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -30,7 +35,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-
+import java.util.ArrayList;
+import java.util.HashMap;
 /**
 
  The searchNearbyQR class is an activity that displays a list of the nearest QR codes
@@ -60,14 +66,14 @@ public class searchNearbyQR extends AppCompatActivity {
 
         Location userLocation = getIntent().getParcelableExtra("User Location");
 
-        QRCodeObject qrAdd;
 
+        //QRCodeObject qrAdd;
         qrList = findViewById(R.id.nearbyQRList);
 
         qrDataList = new ArrayList<>();
 
-        qrAdapter = new nearbyQrCustomAdapter(this, qrDataList);
 
+        qrAdapter = new QrCustomAdapter(this, qrDataList);
         qrList.setAdapter(qrAdapter);
 
 
@@ -111,7 +117,9 @@ public class searchNearbyQR extends AppCompatActivity {
                     qrLoc.setLatitude((Double) locationData.get("latitude"));
                     qrLoc.setLongitude((Double) locationData.get("longitude"));
 
-                    qrDataList.add(new QRCodeObject(cn, ch, cs, qrLoc));
+
+                    QRCodeObject toAdd = new QRCodeObject(cn, ch, cs, qrLoc);
+                    qrDataList.add(toAdd);
 
                 }
 

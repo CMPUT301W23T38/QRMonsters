@@ -123,9 +123,9 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
         scanQR.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 Intent intent = new Intent(HomeActivity.this, CaptureActivity.class);
                 startActivityForResult(intent, REQ_CODE);
+
             }
         });
 
