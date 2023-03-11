@@ -29,9 +29,6 @@ public class viewQRCode extends AppCompatActivity {
         Button commentButton = findViewById(R.id.commentButton);
         Button qrLocButton = findViewById(R.id.viewLocationButton);
 
-
-
-
         qrLocButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -47,8 +44,6 @@ public class viewQRCode extends AppCompatActivity {
 
             }
         });
-
-
 
 
     }
