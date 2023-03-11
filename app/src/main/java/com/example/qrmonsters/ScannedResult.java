@@ -20,11 +20,13 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.zxing.activity.CaptureActivity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -114,6 +116,7 @@ public class ScannedResult extends AppCompatActivity {
                 });
 
 
+        List<String> qrConvert = (List<String>) qrList;
         if(qrList.contains(theResult)){
 
             Toast.makeText(ScannedResult.this, "Already have this QR Code!",
@@ -123,7 +126,7 @@ public class ScannedResult extends AppCompatActivity {
 
         qrList.add(theResult);
 
-        userInfo.update("qrCodes", qrList);
+        userInfo.update("qrCodes", FieldValue.arrayUnion(theResult));
 
         qrRef.whereEqualTo("codeName", theResult).get().addOnCompleteListener(task -> {
             if(task.isSuccessful()){
