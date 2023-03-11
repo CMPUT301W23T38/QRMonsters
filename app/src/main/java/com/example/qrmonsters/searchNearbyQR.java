@@ -1,5 +1,15 @@
 package com.example.qrmonsters;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import android.location.Location;
@@ -19,9 +29,14 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.google.zxing.qrcode.encoder.QRCode;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ArrayList;
 import java.util.HashMap;
-
 /**
 
  The searchNearbyQR class is an activity that displays a list of the nearest QR codes
@@ -51,22 +66,20 @@ public class searchNearbyQR extends AppCompatActivity {
 
         Location userLocation = getIntent().getParcelableExtra("User Location");
 
-        //QRCodeObject qrAdd;
 
+        //QRCodeObject qrAdd;
         qrList = findViewById(R.id.nearbyQRList);
 
         qrDataList = new ArrayList<>();
 
-        qrAdapter = new QrCustomAdapter(this, qrDataList);
 
+        qrAdapter = new QrCustomAdapter(this, qrDataList);
         qrList.setAdapter(qrAdapter);
 
 
         db =FirebaseFirestore.getInstance();
 
         final CollectionReference collectionReference = db.collection("qrCodes");
-
-        
 
         qrList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

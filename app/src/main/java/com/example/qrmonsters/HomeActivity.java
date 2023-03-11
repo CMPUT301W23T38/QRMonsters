@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -20,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.zxing.activity.CaptureActivity;
 
 import java.util.List;
 /**
@@ -30,7 +32,9 @@ import java.util.List;
 public class HomeActivity extends AppCompatActivity implements LocationListener {
     private TextView tv_location;
     private static final int PERMISSION_LOCATION = 1000;
+    private final static int REQ_CODE = 1028;
 
+    static String CURRENT_USER;
     Button curLocBut;
     Button scanQR;
     Button nearbyQR;
@@ -119,13 +123,41 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
         scanQR.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(HomeActivity.this, Scan_QR.class);
-                startActivity(intent);
+                Intent intent = new Intent(HomeActivity.this, CaptureActivity.class);
+                startActivityForResult(intent, REQ_CODE);
+
             }
         });
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQ_CODE) {
+
+            try{
+                String result = data.getStringExtra(CaptureActivity.SCAN_QRCODE_RESULT);
+                Bitmap bitmap = data.getParcelableExtra(CaptureActivity.SCAN_QRCODE_BITMAP);
+                Intent intent1 = new Intent(HomeActivity.this, ScannedResult.class);
+                intent1.putExtra("TheResult", result);
+                intent1.putExtra("TheBitmap", bitmap);
+                startActivity(intent1);                   //Jumped to ScannedResult class
+                Toast.makeText(HomeActivity.this, "" + result, Toast.LENGTH_SHORT).show();
+//                if(bitmap != null){
+//                    mImageCallback.setImageBitmap(bitmap);
+//                }
+
+            }catch (NullPointerException e){
+                System.out.println("");
+            }
+
+
+
+        }
+
+
+    }
     /**
 
      Handles the result of a permission request for location access. If the user grants permission,

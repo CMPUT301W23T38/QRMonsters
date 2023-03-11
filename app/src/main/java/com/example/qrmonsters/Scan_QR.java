@@ -16,15 +16,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.common.hash.Hashing;
 import com.google.zxing.WriterException;
 import com.google.zxing.activity.CaptureActivity;
 import com.google.zxing.common.BitmapUtils;
 
-import java.nio.charset.StandardCharsets;
 
 /**
-
  Scan_QR is an activity that allows the user to scan and create QR codes. It utilizes the ZXing
  library to capture QR codes and generate new ones.
  */
@@ -84,7 +81,7 @@ public class Scan_QR extends AppCompatActivity implements View.OnClickListener {
                 mTvResult.setVisibility(View.GONE);
 
                 String content = mEt.getText().toString().trim();
-                content += '\n' + String.valueOf(User.getScore(User.getSha256Str(content))) +'\n' + User.getSha256Str(content);
+                content += '\n' + String.valueOf(SHA256andScore.getScore(SHA256andScore.getSha256Str(content))) +'\n' + SHA256andScore.getSha256Str(content);
                 Bitmap bitmap = null;
 
                 try {
@@ -112,14 +109,22 @@ public class Scan_QR extends AppCompatActivity implements View.OnClickListener {
             mImage.setVisibility(View.GONE);
             mTvResult.setVisibility(View.VISIBLE);
             mImageCallback.setVisibility(View.VISIBLE);
+            try{
+                String result = data.getStringExtra(CaptureActivity.SCAN_QRCODE_RESULT);
+                Bitmap bitmap = data.getParcelableExtra(CaptureActivity.SCAN_QRCODE_BITMAP);
+                mTvResult.setText("scan result："+result);
+                showToast("scan result：" + result);
+                if(bitmap != null){
+                    mImageCallback.setImageBitmap(bitmap);
+                }
 
-            String result = data.getStringExtra(CaptureActivity.SCAN_QRCODE_RESULT);
-            Bitmap bitmap = data.getParcelableExtra(CaptureActivity.SCAN_QRCODE_BITMAP);
-            mTvResult.setText("scan result："+result);
-            showToast("scan result：" + result);
-            if(bitmap != null){
-                mImageCallback.setImageBitmap(bitmap);
+            }catch (NullPointerException e){
+                System.out.println("");
+
             }
+
+
+
         }
 
 

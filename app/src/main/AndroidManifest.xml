@@ -26,6 +26,8 @@
         android:theme="@style/Theme.QRMonsters"
         tools:targetApi="31">
         <activity
+            android:name=".ScannedResult"
+            android:exported="false" />
             android:name=".viewQRCode"
             android:exported="false">
             <meta-data

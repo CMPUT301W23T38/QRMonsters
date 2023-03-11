@@ -15,8 +15,8 @@ public class QRCodeObject {
     private String codeHash;
     private Integer codeScore;
     private Location codeLocation;
-    private HashMap<String, String> comments;
 
+    private HashMap<String, String> comments;
     /**
 
      Constructs a QRCodeObject with the given name, hash, score, and location.
@@ -32,11 +32,9 @@ public class QRCodeObject {
         this.codeHash = codeHash;
         this.codeScore = codeScore;
         this.codeLocation = codeLocation;
+
         this.comments = new HashMap<String, String>();
     }
-
-
-
 
     /**
 
@@ -50,6 +48,7 @@ public class QRCodeObject {
         this.codeHash = codeHash;
         this.codeScore = codeScore;
         this.codeLocation = null;
+
         this.comments = new HashMap<String, String>();
     }
 
@@ -88,6 +87,7 @@ public class QRCodeObject {
     public Location getCodeLocation() {
         return codeLocation;
     }
+
 
     /**
      * Returns the comments of the QR code.
