@@ -5,23 +5,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="#A7DEE9"
     tools:context=".searchNearbyQR">
 
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="?actionBarSize"
-        android:background="@color/darkGray">
+        android:background="#EAAF26"
+        android:minHeight="?actionBarSize">
 
         <TextView
             android:id="@+id/playerTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:text="PLAYER PROFILE"
-            android:textSize="35sp"
             android:textColor="@color/white"
-            android:textStyle="bold"
-            android:layout_gravity="center"/>
+            android:textSize="35sp"
+            android:textStyle="bold" />
 
     </androidx.appcompat.widget.Toolbar>
 
@@ -29,19 +30,22 @@
         android:id="@+id/playerNameTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="PLAYER NAME" />
+        android:text="PLAYER NAME"
+        android:textColor="#F6EFEF" />
 
     <TextView
         android:id="@+id/playerScoreTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="PLAYER SCORE" />
+        android:text="PLAYER SCORE"
+        android:textColor="#F6F0F0" />
 
     <TextView
         android:id="@+id/playerQRcountTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="PLAYER QRCount" />
+        android:text="PLAYER QRCount"
+        android:textColor="#F4F2F2" />
     <ListView
         android:id="@+id/playerQRList"
         android:layout_width="match_parent"

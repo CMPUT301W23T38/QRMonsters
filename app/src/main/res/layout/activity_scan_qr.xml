@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#A7DEE9"
     android:orientation="vertical">
 
     <EditText
@@ -15,12 +16,14 @@
         android:id="@+id/btn2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="#EAAF26"
         android:text="Generate QR code" />
 
     <Button
         android:id="@+id/btn1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="#EAAF26"
         android:text="Scan code" />
 
     <ImageView
@@ -32,13 +35,13 @@
 
     <TextView
         android:id="@+id/tv_result"
-        android:text="scan returns bitmap"
-        android:gravity="center"
-        android:textSize="18sp"
-        android:textColor="#FF0000"
-        android:layout_marginTop="30dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:gravity="center"
+        android:text="scan returns bitmap"
+        android:textColor="#FAF4F4"
+        android:textSize="18sp" />
 
     <ImageView
         android:id="@+id/image_callback"

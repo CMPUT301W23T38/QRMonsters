@@ -10,22 +10,23 @@
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="?actionBarSize"
-        android:background="@color/darkGray">
+        android:background="#EAAF26"
+        android:minHeight="?actionBarSize">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:text="NEARBY QR CODES (NAME/SCORE)"
-            android:textSize="35sp"
             android:textColor="@color/white"
-            android:textStyle="bold"
-            android:layout_gravity="center"/>
+            android:textSize="35sp"
+            android:textStyle="bold" />
 
     </androidx.appcompat.widget.Toolbar>
 
     <ListView
         android:id="@+id/nearbyQRList"
+        android:background="#A7DEE9"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

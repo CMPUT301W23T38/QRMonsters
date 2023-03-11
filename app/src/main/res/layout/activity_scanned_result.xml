@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#A7DEE9"
     android:orientation="vertical">
 
 
@@ -10,7 +11,7 @@
         android:text="scan returns bitmap"
         android:gravity="center"
         android:textSize="18sp"
-        android:textColor="#FF0000"
+        android:textColor="#F6F3F3"
         android:layout_marginTop="30dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
