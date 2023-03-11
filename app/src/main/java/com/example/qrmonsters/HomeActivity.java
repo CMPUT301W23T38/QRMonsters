@@ -34,13 +34,13 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
     private static final int PERMISSION_LOCATION = 1000;
     private final static int REQ_CODE = 1028;
 
-    static String CURRENT_USER;
+
     Button curLocBut;
     Button scanQR;
     Button nearbyQR;
     Location currentlocation;
+    String userID;
 
-    //LocationManager locationManager;
     /**
      * This method is called when the activity is created. It sets up the UI components and loads
      * the user's profile information from SharedPreferences. It also checks for location and camera
@@ -70,7 +70,6 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
 
         }
 
-
         // Get references to the UI components
         TextView usernameTextView = findViewById(R.id.usernameTextView);
         TextView emailTextView = findViewById(R.id.emailTextView);
@@ -85,6 +84,8 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
         String username = preferences.getString("username", "");
         String email = preferences.getString("email", "");
         String phoneNumber = preferences.getString("phoneNumber", "");
+        userID = preferences.getString("userID", "");
+
 
 //        Log.d("HomeActivity", "Username: " + username);
 //        Log.d("HomeActivity", "Email: " + email);
@@ -99,13 +100,10 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
             @Override
             public void onClick(View view) {
 
-
                 Intent intent = new Intent(HomeActivity.this, searchNearbyQR.class);
                 intent.putExtra("User Location", currentlocation);
 
                 startActivity(intent);
-
-
 
             }
         });
@@ -142,8 +140,10 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
                 Intent intent1 = new Intent(HomeActivity.this, ScannedResult.class);
                 intent1.putExtra("TheResult", result);
                 intent1.putExtra("TheBitmap", bitmap);
+                intent1.putExtra("UserID", userID);
+                intent1.putExtra("location", currentlocation);
                 startActivity(intent1);                   //Jumped to ScannedResult class
-                Toast.makeText(HomeActivity.this, "" + result, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(HomeActivity.this, "" + result, Toast.LENGTH_SHORT).show();
 //                if(bitmap != null){
 //                    mImageCallback.setImageBitmap(bitmap);
 //                }
@@ -152,10 +152,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
                 System.out.println("");
             }
 
-
-
         }
-
 
     }
     /**

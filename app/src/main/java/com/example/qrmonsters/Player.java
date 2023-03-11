@@ -1,5 +1,7 @@
 package com.example.qrmonsters;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 /**
  * The Player class represents a player of the QR Monsters game.
@@ -10,13 +12,23 @@ public class Player {
     private String username;
     private String email;
     private String phoneNumber;
-    private List<String> qrCodes;
+    private ArrayList<String> qrCodes;
+    //private List<String> qrCodes = new List<String>;
     /**
      * Default constructor required for Firebase Database.
      */
     public Player() {
         // Required empty constructor for Firebase Database
     }
+    public Player(String userId, String username, String email, String phoneNumber, ArrayList
+                  qrCodes) {
+        this.userId = userId;
+        this.username = username;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.qrCodes = qrCodes;
+    }
+
     /**
      * Constructs a new Player object.
      *
@@ -30,6 +42,7 @@ public class Player {
         this.username = username;
         this.email = email;
         this.phoneNumber = phoneNumber;
+        this.qrCodes = new ArrayList<>();
     }
     /**
      * Returns the user ID of the player.
@@ -68,7 +81,7 @@ public class Player {
      *
      * @return the list of QR codes owned by the player
      */
-    public List<String> getQrCodes() {
+    public ArrayList<String> getQrCodes() {
         return qrCodes;
     }
     /**

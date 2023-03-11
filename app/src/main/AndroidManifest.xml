@@ -28,6 +28,7 @@
         <activity
             android:name=".ScannedResult"
             android:exported="false" />
+        <activity
             android:name=".viewQRCode"
             android:exported="false">
             <meta-data
