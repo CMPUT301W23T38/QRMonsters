@@ -5,14 +5,12 @@ import static java.lang.Character.isDigit;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  The User class represents a user who has a host name and provides static methods for generating a
  SHA-256 hash of a string and calculating a score for a string.
  */
-public class User {
+public class SHA256andScore {
     String host_name;
 
 
@@ -28,6 +26,10 @@ public class User {
             messageDigest = MessageDigest.getInstance("SHA-256");
             messageDigest.update(str.getBytes(StandardCharsets.UTF_8));
             encodeStr = byte2Hex(messageDigest.digest());
+
+            // encodeStr is the AFTER HASHED value, which is what you want for QR code
+            // usage for this, somethingHASHED = somethingBEFORE.getSha256Str();
+
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
