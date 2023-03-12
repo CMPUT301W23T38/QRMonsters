@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -161,10 +162,17 @@ public class viewPlayerProfile extends AppCompatActivity {
 
                                     playerRef.getQrCodes().remove(clickQR.getCodeName());
 
-
                                     playerInfo.update("qrCodes", playerRef.getQrCodes());
 
                                     qrDataList.clear();
+
+                                    if(playerRef.getQrCodes().size() == 0){
+
+                                        Toast.makeText(viewPlayerProfile.this, "Deleted all owned QR codes!",
+                                                Toast.LENGTH_SHORT).show();
+                                        finish();
+
+                                    }
 
                                     for (String qrCode: playerRef.getQrCodes()) {
 
