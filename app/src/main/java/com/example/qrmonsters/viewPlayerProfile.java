@@ -145,11 +145,74 @@ public class viewPlayerProfile extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                DocumentReference playerInfo = db.collection("users")
-                        .document(playerView);
-
                 QRCodeObject clickQR = qrAdapter.getItem(i);
 
+                playerInfo.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                Log.d("EXISTS", "DocumentSnapshot data: " + document.getData());
+
+                                Player playerRef = document.toObject(Player.class);
+
+                                for (String qrCode: playerRef.getQrCodes()) {
+
+                                    DocumentReference qrInfo = db.collection("qrCodes").document(qrCode);
+
+                                    qrInfo.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                            if (task.isSuccessful()) {
+                                                DocumentSnapshot document = task.getResult();
+                                                if (document.exists()) {
+                                                    Log.d("EXISTS", "DocumentSnapshot data: " + document.getData());
+
+                                                    String cn = (String) document.getData().get("codeName");
+                                                    String ch = (String) document.getData().get("codeHash");
+                                                    Integer cs = Math.toIntExact((Long) document.getData().get("codeScore"));
+                                                    HashMap locationData = (HashMap) document.getData().get("codeLocation");
+
+                                                    Location qrLoc = new Location("");
+                                                    qrLoc.setLatitude((Double) locationData.get("latitude"));
+                                                    qrLoc.setLongitude((Double) locationData.get("longitude"));
+
+
+                                                    QRCodeObject toAdd = new QRCodeObject(cn, ch, cs, qrLoc);
+                                                    qrDataList.add(toAdd);
+
+                                                    qrAdapter.notifyDataSetChanged();
+
+                                                    playerNameTV.setText("Player Name: " + playerRef.getUsername());
+
+                                                    updateScore();
+                                                    updateTotalQR();
+
+                                                    playerScoreTV.setText("Player Score: " + String.valueOf(playerScore));
+                                                    playerQRCountTV.setText("Player QR count: " + String.valueOf(playerQRCount));
+
+                                                } else {
+                                                    Log.d("!EXISTS", "No such document");
+                                                }
+                                            } else {
+                                                Log.d("TASK FAILED", "get failed with ", task.getException());
+                                            }
+                                        }
+                                    });
+
+                                }
+
+                            } else {
+                                Log.d("!EXISTS", "No such document");
+                            }
+                        } else {
+                            Log.d("TASK FAILED", "get failed with ", task.getException());
+                        }
+                    }
+                });
+
+                return true;
             }
         });
 
