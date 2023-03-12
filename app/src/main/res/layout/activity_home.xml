@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:padding="16dp"
-        android:text="Welcome to QRMonster!"
+        android:text="WELCOME TO QRMONSTER"
         android:textColor="#EDF3F2"
         android:textSize="24sp"
         android:textStyle="bold" />
