@@ -5,6 +5,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
+    android:background="#EAAF26"
     android:orientation="horizontal">
 
     <TextView
@@ -12,18 +13,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="20dp"
-        android:text="Name"
-        android:textSize="30sp">
-    </TextView>
+        android:text="NAME"
+        android:textColor="#EFE9E9"
+        android:textSize="30sp"></TextView>
 
     <TextView
+        android:id="@+id/qrScore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/qrScore"
-        android:textSize="30sp"
         android:layout_marginLeft="20dp"
-        android:text="Score">
-    </TextView>
+        android:text="SCORE"
+        android:textColor="#F4F2F2"
+        android:textSize="30sp"></TextView>
 
 
 </LinearLayout>

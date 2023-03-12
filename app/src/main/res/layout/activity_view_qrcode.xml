@@ -5,23 +5,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="#A7DEE9"
     tools:context=".searchNearbyQR">
 
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="?actionBarSize"
-        android:background="@color/darkGray">
+        android:background="#EAAF26"
+        android:minHeight="?actionBarSize">
 
         <TextView
             android:id="@+id/qrTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:text="QR CODE"
-            android:textSize="35sp"
             android:textColor="@color/white"
-            android:textStyle="bold"
-            android:layout_gravity="center"/>
+            android:textSize="35sp"
+            android:textStyle="bold" />
 
     </androidx.appcompat.widget.Toolbar>
 
@@ -29,31 +30,36 @@
         android:id="@+id/qrNameTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="QR NAME" />
+        android:text="QR NAME"
+        android:textColor="#F3EFEF" />
 
     <TextView
         android:id="@+id/qrScoreTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="QR SCORE" />
+        android:text="QR SCORE"
+        android:textColor="#F6F3F3" />
 
 
     <Button
         android:id="@+id/viewLocationButton"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="View QRcode Location"/>
+        android:backgroundTint="#EAAF26"
+        android:text="View QRcode Location" />
 
     <Button
         android:id="@+id/viewCommentsButton"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="View QRcode Comments"/>
+        android:backgroundTint="#EAAF26"
+        android:text="View QRcode Comments" />
 
     <Button
         android:id="@+id/commentButton"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Comment on QRCode"/>
+        android:backgroundTint="#EAAF26"
+        android:text="Comment on QRCode" />
 
 </LinearLayout>

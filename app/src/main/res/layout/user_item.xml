@@ -3,12 +3,14 @@
 android:layout_width="match_parent"
 android:layout_height="wrap_content"
 android:padding="16dp"
-android:orientation="vertical">
+android:orientation="vertical"
+    android:background="#A7DEE9">
 
 <TextView
     android:id="@+id/username_text_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="#A7DEE9"
     android:textSize="18sp"
     android:textStyle="bold" />
 
@@ -16,6 +18,7 @@ android:orientation="vertical">
     android:id="@+id/phone_text_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="#A7DEE9"
     android:textSize="14sp" />
 
 </LinearLayout>
