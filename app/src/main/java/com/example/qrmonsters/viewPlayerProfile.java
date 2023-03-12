@@ -45,6 +45,8 @@ public class viewPlayerProfile extends AppCompatActivity {
     TextView playerNameTV;
     TextView playerScoreTV;
     TextView playerQRCountTV;
+    TextView playerLowestTV;
+    TextView playerHighestTV;
 
 
     @Override
@@ -71,6 +73,8 @@ public class viewPlayerProfile extends AppCompatActivity {
         playerScoreTV = findViewById(R.id.playerScoreTextView);
         playerNameTV = findViewById(R.id.playerNameTextView);
         playerQRCountTV = findViewById(R.id.playerQRcountTextView);
+        playerLowestTV = findViewById(R.id.lowestQRTextView);
+        playerHighestTV = findViewById(R.id.highestQRTextView);
 
         //final CollectionReference qrReference = db.collection("qrCodes");
 
@@ -122,16 +126,63 @@ public class viewPlayerProfile extends AppCompatActivity {
                                             playerScoreTV.setText("Player Score: " + String.valueOf(playerScore));
                                             playerQRCountTV.setText("Player QR count: " + String.valueOf(playerQRCount));
 
-                                        } else {
+                                            QRCodeObject lowest =  qrDataList.get(0);
+                                            //START NEW
+                                            for (QRCodeObject qrLowest : qrDataList) {
+
+                                                if(lowest != qrLowest){
+
+                                                    if(qrLowest.getCodeScore() < lowest.getCodeScore()){
+
+                                                        lowest = qrLowest;
+
+                                                    }
+
+                                                }
+
+                                            }
+                                            playerLowestTV.setText("Player Lowest QR code: \n" +
+                                                    lowest.getCodeName() + "    Score: "
+                                                    + lowest.getCodeScore().toString());
+
+                                            //END NEW
+
+                                            QRCodeObject highest =  qrDataList.get(0);
+                                            //START NEW
+                                            for (QRCodeObject qrHighest : qrDataList) {
+
+                                                if(highest != qrHighest){
+
+                                                    if(qrHighest.getCodeScore() > highest.getCodeScore()){
+
+                                                        highest = qrHighest;
+
+                                                    }
+
+                                                }
+
+                                            }
+                                            playerHighestTV.setText("Player Highest QR code: \n" +
+                                                    highest.getCodeName() + "    Score: "
+                                                    + highest.getCodeScore().toString());
+
+                                        }
+
+
+                                        else {
                                             Log.d("!EXISTS", "No such document");
                                         }
-                                    } else {
+
+                                    }
+                                    else {
                                         Log.d("TASK FAILED", "get failed with ", task.getException());
                                     }
                                 }
                             });
 
+
                         }
+
 
                     } else {
                         Log.d("!EXISTS", "No such document");
@@ -139,6 +190,7 @@ public class viewPlayerProfile extends AppCompatActivity {
                 } else {
                     Log.d("TASK FAILED", "get failed with ", task.getException());
                 }
+
             }
         });
 
@@ -209,6 +261,46 @@ public class viewPlayerProfile extends AppCompatActivity {
                                                         playerScoreTV.setText("Player Score: " + String.valueOf(playerScore));
                                                         playerQRCountTV.setText("Player QR count: " + String.valueOf(playerQRCount));
 
+                                                        QRCodeObject lowest =  qrDataList.get(0);
+                                                        //START NEW
+                                                        for (QRCodeObject qrLowest : qrDataList) {
+
+                                                            if(lowest != qrLowest){
+
+                                                                if(qrLowest.getCodeScore() < lowest.getCodeScore()){
+
+                                                                    lowest = qrLowest;
+
+                                                                }
+
+                                                            }
+
+                                                        }
+                                                        playerLowestTV.setText("Player Lowest QR code: \n" +
+                                                                lowest.getCodeName() + "    Score: "
+                                                                + lowest.getCodeScore().toString());
+
+                                                        //END NEW
+
+                                                        QRCodeObject highest =  qrDataList.get(0);
+                                                        //START NEW
+                                                        for (QRCodeObject qrHighest : qrDataList) {
+
+                                                            if(highest != qrHighest){
+
+                                                                if(qrHighest.getCodeScore() > highest.getCodeScore()){
+
+                                                                    highest = qrHighest;
+
+                                                                }
+
+                                                            }
+
+                                                        }
+                                                        playerHighestTV.setText("Player Highest QR code: \n" +
+                                                                highest.getCodeName() + "    Score: "
+                                                                + highest.getCodeScore().toString());
+
                                                     } else {
                                                         Log.d("!EXISTS", "No such document");
                                                     }
@@ -229,10 +321,7 @@ public class viewPlayerProfile extends AppCompatActivity {
                         }
                     });
 
-
                 }
-
-
 
                 return true;
             }
