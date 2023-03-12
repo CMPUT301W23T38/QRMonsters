@@ -38,6 +38,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
     Button curLocBut;
     Button scanQR;
     Button nearbyQR;
+    Button viewSelfProfile;
     Location currentlocation;
     String userID;
 
@@ -78,6 +79,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
         scanQR = findViewById(R.id.scanQRCodeButton);
         tv_location = findViewById(R.id.tv_location);
         nearbyQR = findViewById(R.id.searchNearbyQRButton);
+        viewSelfProfile = findViewById(R.id.viewMyQRCodesButton);
 
         // Load the user's profile information
         SharedPreferences preferences = getSharedPreferences("UserDetails", MODE_PRIVATE);
@@ -95,6 +97,19 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
         usernameTextView.setText("Username: " + username);
         emailTextView.setText("Email: " + email);
         phoneNumberTextView.setText("Phone: " + phoneNumber);
+
+        viewSelfProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(HomeActivity.this, viewPlayerProfile.class);
+                intent.putExtra("currentUser", userID);
+                intent.putExtra("viewUser", userID);
+
+                startActivity(intent);
+
+            }
+        });
 
         nearbyQR.setOnClickListener(new View.OnClickListener() {
             @Override
