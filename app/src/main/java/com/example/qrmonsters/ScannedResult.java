@@ -36,6 +36,7 @@ public class ScannedResult extends AppCompatActivity {
     private Context mContext;
     private TextView mTvResult;
     private ImageView mImageCallback;
+    private Player playerRef;
     ArrayList qrList = new ArrayList<>();
 
     @Override
@@ -80,11 +81,6 @@ public class ScannedResult extends AppCompatActivity {
 
         QRCodeObject qrAdd = new QRCodeObject(theResult, hashCode, hashScore, qrLocation);
 
-       // Toast.makeText(ScannedResult.this, "Code Score: " + qrAdd.getCodeScore().toString(),
-        //        Toast.LENGTH_SHORT).show();
-
-       // Toast.makeText(ScannedResult.this, "UserID: " + currentUser,
-       //         Toast.LENGTH_SHORT).show();
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -98,7 +94,52 @@ public class ScannedResult extends AppCompatActivity {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         if(documentSnapshot.exists()){
-                            qrList = (ArrayList) documentSnapshot.getData().get("qrCodes");
+                            playerRef = documentSnapshot.toObject(Player.class);
+
+                            if(playerRef.getQrCodes().contains(theResult)){
+
+                                Toast.makeText(ScannedResult.this, "Already have this QR Code!",
+                                        Toast.LENGTH_SHORT).show();
+                                finish();
+                            }
+
+                            userInfo.update("qrCodes", FieldValue.arrayUnion(theResult));
+
+                            qrRef.whereEqualTo("codeName", theResult).get().addOnCompleteListener(task -> {
+                                if(task.isSuccessful()){
+                                    if(task.getResult().isEmpty()){
+
+                                        Map<String, Object> data = new HashMap<>();
+
+                                        data.put("codeName", qrAdd.getCodeName());
+                                        data.put("codeHash", qrAdd.getCodeHash());
+                                        data.put("codeScore", qrAdd.getCodeScore());
+                                        data.put("codeLocation", qrAdd.getCodeLocation());
+                                        data.put("comments", qrAdd.getComments());
+
+                                        qrRef
+                                                .document(qrAdd.getCodeName())
+                                                .set(data)
+                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void unused) {
+                                                        Log.d("Working", "Data added successfully");
+                                                    }
+                                                })
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        Log.d("Working", "Data not added" + e.toString());
+                                                    }
+                                                });
+
+                                    }
+                                }
+                            });
+
+
+
+
                         }
                         else {
                             Toast.makeText(ScannedResult.this, "DOCUMENT DOES NOT EXIST",
@@ -114,58 +155,6 @@ public class ScannedResult extends AppCompatActivity {
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
-
-
-        List<String> qrConvert = (List<String>) qrList;
-        if(qrList.contains(theResult)){
-
-            Toast.makeText(ScannedResult.this, "Already have this QR Code!",
-                    Toast.LENGTH_SHORT).show();
-            finish();
-        }
-
-        qrList.add(theResult);
-
-        userInfo.update("qrCodes", FieldValue.arrayUnion(theResult));
-
-        qrRef.whereEqualTo("codeName", theResult).get().addOnCompleteListener(task -> {
-            if(task.isSuccessful()){
-                if(task.getResult().isEmpty()){
-
-                    Map<String, Object> data = new HashMap<>();
-
-                    data.put("codeName", qrAdd.getCodeName());
-                    data.put("codeHash", qrAdd.getCodeHash());
-                    data.put("codeScore", qrAdd.getCodeScore());
-                    data.put("codeLocation", qrAdd.getCodeLocation());
-                    data.put("comments", qrAdd.getComments());
-
-                    qrRef
-                            .document(qrAdd.getCodeName())
-                            .set(data)
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void unused) {
-                                    Log.d("Working", "Data added successfully");
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.d("Working", "Data not added" + e.toString());
-                                }
-                            });
-
-                }
-            }
-        });
-
-
-
-
-
-
-
 
         }
 }

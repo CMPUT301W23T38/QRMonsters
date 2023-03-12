@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -34,7 +36,7 @@ public class viewPlayerProfile extends AppCompatActivity {
     ArrayAdapter<QRCodeObject> qrAdapter;
     ArrayList<QRCodeObject> qrDataList;
     Integer playerScore;
-    String playerQRCount;
+    Integer playerQRCount;
     List<String> playerQRs;
 
     ListView qrList;
@@ -50,10 +52,10 @@ public class viewPlayerProfile extends AppCompatActivity {
         setContentView(R.layout.activity_view_player_profile);
 
         //for when viewing other profiles, still has access to curent user name
-        Player currentUser = getIntent().getParcelableExtra("Current User");
+        String currentUser = getIntent().getStringExtra("currentUser");
 
         //reference to current player profile being viewed
-        Player playerName = getIntent().getParcelableExtra("Player Name");
+        String playerView = getIntent().getStringExtra("viewUser");
 
         db = FirebaseFirestore.getInstance();
 
@@ -65,11 +67,14 @@ public class viewPlayerProfile extends AppCompatActivity {
 
         qrList.setAdapter(qrAdapter);
 
+        playerScoreTV = findViewById(R.id.playerScoreTextView);
+        playerNameTV = findViewById(R.id.playerNameTextView);
+        playerQRCountTV = findViewById(R.id.playerQRcountTextView);
 
         //final CollectionReference qrReference = db.collection("qrCodes");
 
         DocumentReference playerInfo = db.collection("users")
-                .document(playerName.getUsername());
+                .document(playerView);
 
         playerInfo.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -79,7 +84,53 @@ public class viewPlayerProfile extends AppCompatActivity {
                     if (document.exists()) {
                         Log.d("EXISTS", "DocumentSnapshot data: " + document.getData());
 
-                        playerQRs = (List<String>) document.getData().get("qrCodes");
+                        Player playerRef = document.toObject(Player.class);
+
+                        for (String qrCode: playerRef.getQrCodes()) {
+
+                            DocumentReference qrInfo = db.collection("qrCodes").document(qrCode);
+
+                            qrInfo.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        DocumentSnapshot document = task.getResult();
+                                        if (document.exists()) {
+                                            Log.d("EXISTS", "DocumentSnapshot data: " + document.getData());
+
+                                            String cn = (String) document.getData().get("codeName");
+                                            String ch = (String) document.getData().get("codeHash");
+                                            Integer cs = Math.toIntExact((Long) document.getData().get("codeScore"));
+                                            HashMap locationData = (HashMap) document.getData().get("codeLocation");
+
+                                            Location qrLoc = new Location("");
+                                            qrLoc.setLatitude((Double) locationData.get("latitude"));
+                                            qrLoc.setLongitude((Double) locationData.get("longitude"));
+
+
+                                            QRCodeObject toAdd = new QRCodeObject(cn, ch, cs, qrLoc);
+                                            qrDataList.add(toAdd);
+
+                                            qrAdapter.notifyDataSetChanged();
+
+                                            playerNameTV.setText("Player Name: " + playerRef.getUsername());
+
+                                            updateScore();
+                                            updateTotalQR();
+
+                                            playerScoreTV.setText("Player Score: " + String.valueOf(playerScore));
+                                            playerQRCountTV.setText("Player QR count: " + String.valueOf(playerQRCount));
+
+                                        } else {
+                                            Log.d("!EXISTS", "No such document");
+                                        }
+                                    } else {
+                                        Log.d("TASK FAILED", "get failed with ", task.getException());
+                                    }
+                                }
+                            });
+
+                        }
 
                     } else {
                         Log.d("!EXISTS", "No such document");
@@ -90,58 +141,101 @@ public class viewPlayerProfile extends AppCompatActivity {
             }
         });
 
-        playerQRCount =  String.valueOf(playerQRs.size());
-        
-        playerScore = 0;
+        qrList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-        for (String qrCode: playerQRs) {
+                QRCodeObject clickQR = qrAdapter.getItem(i);
 
-            DocumentReference qrInfo =db.collection("qrCodes").document(qrCode);
+                playerInfo.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                Log.d("EXISTS", "DocumentSnapshot data: " + document.getData());
 
-            qrInfo.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (document.exists()) {
-                            Log.d("EXISTS", "DocumentSnapshot data: " + document.getData());
+                                Player playerRef = document.toObject(Player.class);
 
-                            playerScore += (Integer) document.getData().get("codeScore");
+                                for (String qrCode: playerRef.getQrCodes()) {
 
-                            String cn = (String) document.getData().get("codeName");
-                            String ch = (String) document.getData().get("codeHash");
-                            Integer cs = Math.toIntExact((Long) document.getData().get("codeScore"));
-                            HashMap locationData = (HashMap) document.getData().get("codeLocation");
+                                    DocumentReference qrInfo = db.collection("qrCodes").document(qrCode);
 
-                            Location qrLoc = new Location("");
-                            qrLoc.setLatitude((Double) locationData.get("latitude"));
-                            qrLoc.setLongitude((Double) locationData.get("longitude"));
+                                    qrInfo.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                            if (task.isSuccessful()) {
+                                                DocumentSnapshot document = task.getResult();
+                                                if (document.exists()) {
+                                                    Log.d("EXISTS", "DocumentSnapshot data: " + document.getData());
+
+                                                    String cn = (String) document.getData().get("codeName");
+                                                    String ch = (String) document.getData().get("codeHash");
+                                                    Integer cs = Math.toIntExact((Long) document.getData().get("codeScore"));
+                                                    HashMap locationData = (HashMap) document.getData().get("codeLocation");
+
+                                                    Location qrLoc = new Location("");
+                                                    qrLoc.setLatitude((Double) locationData.get("latitude"));
+                                                    qrLoc.setLongitude((Double) locationData.get("longitude"));
 
 
-                            QRCodeObject toAdd = new QRCodeObject(cn, ch, cs, qrLoc);
-                            qrDataList.add(toAdd);
+                                                    QRCodeObject toAdd = new QRCodeObject(cn, ch, cs, qrLoc);
+                                                    qrDataList.add(toAdd);
 
-                            qrAdapter.notifyDataSetChanged();
+                                                    qrAdapter.notifyDataSetChanged();
 
+                                                    playerNameTV.setText("Player Name: " + playerRef.getUsername());
+
+                                                    updateScore();
+                                                    updateTotalQR();
+
+                                                    playerScoreTV.setText("Player Score: " + String.valueOf(playerScore));
+                                                    playerQRCountTV.setText("Player QR count: " + String.valueOf(playerQRCount));
+
+                                                } else {
+                                                    Log.d("!EXISTS", "No such document");
+                                                }
+                                            } else {
+                                                Log.d("TASK FAILED", "get failed with ", task.getException());
+                                            }
+                                        }
+                                    });
+
+                                }
+
+                            } else {
+                                Log.d("!EXISTS", "No such document");
+                            }
                         } else {
-                            Log.d("!EXISTS", "No such document");
+                            Log.d("TASK FAILED", "get failed with ", task.getException());
                         }
-                    } else {
-                        Log.d("TASK FAILED", "get failed with ", task.getException());
                     }
-                }
-            });
-            
+                });
+
+                return true;
+            }
+        });
+
+
+    }
+
+    public void updateScore(){
+
+        Integer tentScore = 0;
+
+        for(QRCodeObject qr: qrDataList){
+
+            tentScore += qr.getCodeScore();
+
         }
 
-        playerNameTV = findViewById(R.id.playerNameTextView);
-        playerScoreTV = findViewById(R.id.playerScoreTextView);
-        playerQRCountTV = findViewById(R.id.playerQRcountTextView);
+        playerScore = tentScore;
 
-        playerNameTV.setText(playerName.getUsername());
-        playerScoreTV.setText(String.valueOf(playerScore));
-        playerQRCountTV.setText(playerQRCount);
+    }
 
+    public void updateTotalQR(){
+
+        playerQRCount = qrDataList.size();
 
     }
 }
