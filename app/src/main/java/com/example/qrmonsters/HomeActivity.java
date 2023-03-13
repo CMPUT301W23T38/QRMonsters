@@ -117,6 +117,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
 
                 Intent intent = new Intent(HomeActivity.this, searchNearbyQR.class);
                 intent.putExtra("User Location", currentlocation);
+                intent.putExtra("currUser", userID);
 
                 startActivity(intent);
 
