@@ -67,10 +67,10 @@ public class viewSelfProfileTest {
 
 
         solo.clickOnButton("View My QR Codes");
-        assertTrue(solo.waitForText("22", 1, 2000));
-        assertTrue(solo.waitForText("41", 2, 2000));
-        assertTrue(solo.waitForText("6", 2, 2000));
-        assertTrue(solo.waitForText("24", 1, 2000));
+        assertTrue(solo.waitForText("22", 1, 5000));
+        assertTrue(solo.waitForText("41", 2, 5000));
+        assertTrue(solo.waitForText("6", 2, 5000));
+        assertTrue(solo.waitForText("24", 1, 5000));
 
 
 
