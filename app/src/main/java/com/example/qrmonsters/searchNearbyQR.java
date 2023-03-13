@@ -7,9 +7,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 
-import com.google.android.gms.common.util.CollectionUtils;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import androidx.annotation.Nullable;
@@ -17,10 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.location.Location;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -39,7 +34,6 @@ import com.google.zxing.qrcode.encoder.QRCode;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,8 +50,6 @@ public class searchNearbyQR extends AppCompatActivity {
     ListView qrList;
     ArrayAdapter<QRCodeObject> qrAdapter;
     ArrayList<QRCodeObject> qrDataList;
-    ArrayList<String> playerList;
-    Player currPlayer;
 
     /**
      Called when the activity is first created.
@@ -73,7 +65,8 @@ public class searchNearbyQR extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Location userLocation = getIntent().getParcelableExtra("User Location");
-        String currentUser = getIntent().getStringExtra("currUser");
+        ArrayList playerList = getIntent().getStringArrayListExtra("playerList");
+
 
         //QRCodeObject qrAdd;
         qrList = findViewById(R.id.nearbyQRList);
@@ -83,9 +76,6 @@ public class searchNearbyQR extends AppCompatActivity {
 
         qrAdapter = new QrCustomAdapter(this, qrDataList);
         qrList.setAdapter(qrAdapter);
-
-
-
 
 
         db =FirebaseFirestore.getInstance();
@@ -109,123 +99,96 @@ public class searchNearbyQR extends AppCompatActivity {
             }
         });
 
-        //getPlayerQRList(currentUser);
-        generateMasterList();
-        getTop3(userLocation);
 
-
-        DocumentReference playerInfo = db.collection("users")
-                .document(currentUser);
-
-    }
-
-    public void getPlayerQRList(String userID){
-
-        db =FirebaseFirestore.getInstance();
-
-        db.collection("users").document(userID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-
-                if(task.isSuccessful()){
-
-                    DocumentSnapshot documentSnapshot = task.getResult();
-                    if(documentSnapshot.exists()){
-
-                        currPlayer = documentSnapshot.toObject(Player.class);
-
-                    }
-
-                }
-
-            }
-        });
-
-    }
-    public void generateMasterList(){
-
-        db =FirebaseFirestore.getInstance();
-
-        final CollectionReference collectionReference = db.collection("qrCodes");
 
         collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 qrDataList.clear();
-
-                for(QueryDocumentSnapshot doc: value){
-
+                for (QueryDocumentSnapshot doc: value) {
                     Log.d("Retrieve", String.valueOf(doc.getData().get("Nearest QR")));
 
 
-                    String cn = (String) doc.getData().get("codeName");
-                    String ch = (String) doc.getData().get("codeHash");
-                    Integer cs = Math.toIntExact((Long) doc.getData().get("codeScore"));
-                    HashMap locationData = (HashMap) doc.getData().get("codeLocation");
+                    if(!playerList.contains((String) doc.getData().get("codeName"))){
 
-                    Location qrLoc = new Location("");
-                    qrLoc.setLatitude((Double) locationData.get("latitude"));
-                    qrLoc.setLongitude((Double) locationData.get("longitude"));
+                        String cn = (String) doc.getData().get("codeName");
+                        String ch = (String) doc.getData().get("codeHash");
+                        Integer cs = Math.toIntExact((Long) doc.getData().get("codeScore"));
+                        HashMap locationData = (HashMap) doc.getData().get("codeLocation");
+
+                        Location qrLoc = new Location("");
+                        qrLoc.setLatitude((Double) locationData.get("latitude"));
+                        qrLoc.setLongitude((Double) locationData.get("longitude"));
 
 
-                    QRCodeObject toAdd = new QRCodeObject(cn, ch, cs, qrLoc);
-                    qrDataList.add(toAdd);
+                        QRCodeObject toAdd = new QRCodeObject(cn, ch, cs, qrLoc);
+                        qrDataList.add(toAdd);
+
+
+                    }
+
+
 
                 }
+
+                QRCodeObject top1;
+                QRCodeObject top2;
+                QRCodeObject top3;
+
+                Integer top1int;
+                Integer top2int;
+                Integer top3int;
+
+
+                top1 = qrDataList.get(0);
+                top1int = 0;
+                for (int i = 1; i < qrDataList.size(); i++)
+                {
+                    if (userLocation.distanceTo(qrDataList.get(i).getCodeLocation())
+                            < userLocation.distanceTo(top1.getCodeLocation())){
+                        top1 = qrDataList.get(i);
+                        top1int = i;
+                    }
+                }
+
+                qrDataList.remove(top1);
+
+                top2 = qrDataList.get(0);
+                top2int = 0;
+                for (int i = 1; i < qrDataList.size(); i++)
+                {
+                    if (userLocation.distanceTo(qrDataList.get(i).getCodeLocation())
+                            < userLocation.distanceTo(top2.getCodeLocation())){
+                        top2 = qrDataList.get(i);
+                        top2int = i;
+                    }
+                }
+
+                qrDataList.remove(top2);
+
+                top3 = qrDataList.get(0);
+                top3int = 0;
+                for (int i = 1; i < qrDataList.size(); i++)
+                {
+                    if (userLocation.distanceTo(qrDataList.get(i).getCodeLocation())
+                            < userLocation.distanceTo(top3.getCodeLocation())){
+                        top3 = qrDataList.get(i);
+                        top3int = i;
+                    }
+                }
+
+                qrDataList.remove(top3);
+
+                qrDataList.clear();
+
+                qrDataList.add(top1);
+                qrDataList.add(top2);
+                qrDataList.add(top3);
+
+                qrAdapter.notifyDataSetChanged();
+
             }
         });
 
     }
-
-    public void getTop3(Location userLocation){
-
-        QRCodeObject top1;
-        QRCodeObject top2;
-        QRCodeObject top3;
-
-
-        top1 = qrDataList.get(0);
-        for (int i = 1; i < qrDataList.size(); i++)
-        {
-            if (userLocation.distanceTo(qrDataList.get(i).getCodeLocation())
-                    < userLocation.distanceTo(top1.getCodeLocation())){
-                top1 = qrDataList.get(i);
-            }
-        }
-        qrDataList.remove(top1);
-
-        top2 = qrDataList.get(0);
-        for (int i = 1; i < qrDataList.size(); i++)
-        {
-            if (userLocation.distanceTo(qrDataList.get(i).getCodeLocation())
-                    < userLocation.distanceTo(top2.getCodeLocation())){
-                top1 = qrDataList.get(i);
-            }
-        }
-
-        qrDataList.remove(top2);
-        top3 = qrDataList.get(0);
-        for (int i = 1; i < qrDataList.size(); i++)
-        {
-            if (userLocation.distanceTo(qrDataList.get(i).getCodeLocation())
-                    < userLocation.distanceTo(top3.getCodeLocation())){
-                top1 = qrDataList.get(i);
-            }
-        }
-
-        qrDataList.remove(top3);
-
-        qrDataList.clear();
-
-        qrDataList.add(top1);
-        qrDataList.add(top2);
-        qrDataList.add(top3);
-
-        qrAdapter.notifyDataSetChanged();
-
-    }
-
-
-
-
 }

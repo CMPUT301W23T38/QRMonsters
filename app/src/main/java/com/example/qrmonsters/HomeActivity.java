@@ -21,8 +21,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.zxing.activity.CaptureActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 /**
  * This is the main activity for the QR Monsters Android application. It allows users to view their
@@ -115,11 +120,30 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(HomeActivity.this, searchNearbyQR.class);
-                intent.putExtra("User Location", currentlocation);
-                intent.putExtra("currUser", userID);
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-                startActivity(intent);
+                db.collection("users").document(userID).get()
+                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+
+                                DocumentSnapshot documentSnapshot = task.getResult();
+
+                                ArrayList playerList =
+                                        (ArrayList) documentSnapshot.getData().get("qrCodes");
+
+                                Intent intent = new Intent(HomeActivity.this, searchNearbyQR.class);
+                                intent.putExtra("User Location", currentlocation);
+                                intent.putStringArrayListExtra("playerList", playerList);
+
+                                startActivity(intent);
+
+
+                            }
+                        });
+
+
+
 
             }
         });
@@ -214,7 +238,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
 
         if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
 
-           // tv_location.setText("Loading Location...");
+            // tv_location.setText("Loading Location...");
 
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
                     0, 0, this);

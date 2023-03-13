@@ -59,7 +59,7 @@ public class viewNearbyQRTest {
     }
 
     @Test
-    public void viewSelfProfileTest(){
+    public void viewNearbyQR(){
 
         solo.waitForText("Latitude");
         solo.clickOnButton("Search Nearby QR codes");

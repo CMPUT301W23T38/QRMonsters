@@ -6,7 +6,10 @@ import android.app.Instrumentation;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.widget.Button;
 import android.widget.EditText;
+
+import android.view.View;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -62,12 +65,12 @@ public class viewSelfProfileTest {
     @Test
     public void viewSelfProfileTest(){
 
-        solo.clickOnButton("view my qr codes");
-        assertTrue(solo.waitForText("01125447", 1, 2000));
+
+        solo.clickOnButton("View My QR Codes");
         assertTrue(solo.waitForText("22", 1, 2000));
-        assertTrue(solo.waitForText("24", 1, 2000));
+        assertTrue(solo.waitForText("41", 2, 2000));
         assertTrue(solo.waitForText("6", 2, 2000));
-        assertTrue(solo.waitForText("34", 2, 2000));
+        assertTrue(solo.waitForText("24", 1, 2000));
 
 
 

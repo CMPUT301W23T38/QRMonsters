@@ -16,10 +16,43 @@ public class playerTest {
     }
 
     @Test
-    void testUser(){
+    void testUserName(){
 
         Player test = mockPLayer();
         assertEquals("testPlayer", test.getUsername());
+
+    }
+
+    @Test
+    void testUserID(){
+
+        Player test = mockPLayer();
+        assertEquals("fdafeadfad", test.getUserId());
+
+    }
+
+    @Test
+    void testUserEmail(){
+
+        Player test = mockPLayer();
+        assertEquals("test@c.c", test.getEmail());
+
+    }
+
+    @Test
+    void testUserPhone(){
+
+        Player test = mockPLayer();
+        assertEquals("43343113", test.getPhoneNumber());
+
+    }
+
+    void testUserQRList(){
+
+        Player test = mockPLayer();
+        test.addQRCode("new_qr");
+
+        assertTrue(test.getQrCodes().contains("new_qr"));
 
     }
 
