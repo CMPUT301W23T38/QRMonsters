@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:backgroundTint="#EAAF26"
             android:text="@string/search_button_text"
-            android:textColor="#F3EEED"
+            android:textColor="#5D4037"
             tools:ignore="TouchTargetSizeCheck" />
 
 
@@ -69,7 +69,7 @@
         android:layout_height="wrap_content"
         android:backgroundTint="#EAAF26"
         android:text="@string/back_to_home"
-        android:textColor="#F3F0EF"
+        android:textColor="#5D4037"
         tools:ignore="VisualLintButtonSize" />
 
 </LinearLayout>

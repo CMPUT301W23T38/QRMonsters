@@ -21,14 +21,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+//import com.google.android.gms.tasks.OnCompleteListener;
+//import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.zxing.activity.CaptureActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
 /**
  * This is the main activity for the QR Monsters Android application. It allows users to view their
  * profile information and perform various actions, such as scanning QR codes, searching for nearby
@@ -103,49 +105,40 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
         emailTextView.setText("Email: " + email);
         phoneNumberTextView.setText("Phone: " + phoneNumber);
 
-        viewSelfProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        viewSelfProfile.setOnClickListener(view -> {
 
-                Intent intent = new Intent(HomeActivity.this, viewPlayerProfile.class);
-                intent.putExtra("currentUser", userID);
-                intent.putExtra("viewUser", userID);
+            Intent intent = new Intent(HomeActivity.this, viewPlayerProfile.class);
+            intent.putExtra("currentUser", userID);
+            intent.putExtra("viewUser", userID);
 
-                startActivity(intent);
+            startActivity(intent);
 
-            }
         });
 
-        nearbyQR.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        nearbyQR.setOnClickListener(view -> {
 
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-                db.collection("users").document(userID).get()
-                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+            db.collection("users").document(userID).get()
+                    .addOnCompleteListener(task -> {
 
-                                DocumentSnapshot documentSnapshot = task.getResult();
+                        DocumentSnapshot documentSnapshot = task.getResult();
 
-                                ArrayList playerList =
-                                        (ArrayList) documentSnapshot.getData().get("qrCodes");
+                        ArrayList playerList =
+                                (ArrayList) Objects.requireNonNull(documentSnapshot.getData()).get("qrCodes");
 
-                                Intent intent = new Intent(HomeActivity.this, searchNearbyQR.class);
-                                intent.putExtra("User Location", currentlocation);
-                                intent.putStringArrayListExtra("playerList", playerList);
+                        Intent intent = new Intent(HomeActivity.this, searchNearbyQR.class);
+                        intent.putExtra("User Location", currentlocation);
+                        intent.putStringArrayListExtra("playerList", playerList);
 
-                                startActivity(intent);
+                        startActivity(intent);
 
 
-                            }
-                        });
+                    });
 
 
 
 
-            }
         });
 
         curLocBut.setOnClickListener(view -> {
@@ -158,13 +151,10 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
         });
 
 
-        scanQR.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(HomeActivity.this, CaptureActivity.class);
-                startActivityForResult(intent, REQ_CODE);
+        scanQR.setOnClickListener(view -> {
+            Intent intent = new Intent(HomeActivity.this, CaptureActivity.class);
+            startActivityForResult(intent, REQ_CODE);
 
-            }
         });
 
     }
@@ -189,7 +179,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
 //                }
 
             }catch (NullPointerException e){
-                System.out.println("");
+                System.out.println();
             }
 
         }

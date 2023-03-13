@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#A7DEE9"
@@ -9,22 +10,28 @@
         android:id="@+id/et"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter content and generate QR code"
-        android:text="http://baidu.com" />
+        android:hint="@string/enter_content_and_generate_qr_code"
+        android:text="@string/http_baidu_com"
+        android:autofillHints=""
+        tools:ignore="VisualLintTextFieldSize" />
 
     <Button
         android:id="@+id/btn2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="#EAAF26"
-        android:text="Generate QR code" />
+        android:text="@string/generate_qr_code"
+        android:textColor="#5D4037"
+        tools:ignore="VisualLintButtonSize" />
 
     <Button
         android:id="@+id/btn1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="#EAAF26"
-        android:text="Scan code" />
+        android:text="@string/scan_code"
+        android:textColor="#5D4037"
+        tools:ignore="VisualLintButtonSize" />
 
     <ImageView
         android:id="@+id/image"
@@ -39,8 +46,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:gravity="center"
-        android:text="scan returns bitmap"
-        android:textColor="#FAF4F4"
+        android:text="@string/scan_returns_bitmap"
+        android:textColor="#455A64"
         android:textSize="18sp" />
 
     <ImageView

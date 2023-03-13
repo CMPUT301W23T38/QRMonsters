@@ -21,4 +21,11 @@
     <string name="view_current_location">View Current Location</string>
     <string name="location">Location</string>
     <string name="create_account">Create account</string>
+    <string name="enter_content_and_generate_qr_code">Enter content and generate QR code</string>
+    <string name="http_baidu_com">http://baidu.com</string>
+    <string name="generate_qr_code">Generate QR code</string>
+    <string name="scan_code">Scan code</string>
+    <string name="scan_returns_bitmap">scan returns bitmap</string>
+    <string name="welcome_to_qrmonster">WELCOME TO QRMONSTER!</string>
+    <string name="search_nearby_qr_codes">Search Nearby QR codes</string>
 </resources>
