@@ -65,6 +65,7 @@ public class searchNearbyQR extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Location userLocation = getIntent().getParcelableExtra("User Location");
+        ArrayList playerList = getIntent().getStringArrayListExtra("playerList");
 
 
         //QRCodeObject qrAdd;
@@ -108,18 +109,25 @@ public class searchNearbyQR extends AppCompatActivity {
                     Log.d("Retrieve", String.valueOf(doc.getData().get("Nearest QR")));
 
 
-                    String cn = (String) doc.getData().get("codeName");
-                    String ch = (String) doc.getData().get("codeHash");
-                    Integer cs = Math.toIntExact((Long) doc.getData().get("codeScore"));
-                    HashMap locationData = (HashMap) doc.getData().get("codeLocation");
+                    if(!playerList.contains((String) doc.getData().get("codeName"))){
 
-                    Location qrLoc = new Location("");
-                    qrLoc.setLatitude((Double) locationData.get("latitude"));
-                    qrLoc.setLongitude((Double) locationData.get("longitude"));
+                        String cn = (String) doc.getData().get("codeName");
+                        String ch = (String) doc.getData().get("codeHash");
+                        Integer cs = Math.toIntExact((Long) doc.getData().get("codeScore"));
+                        HashMap locationData = (HashMap) doc.getData().get("codeLocation");
+
+                        Location qrLoc = new Location("");
+                        qrLoc.setLatitude((Double) locationData.get("latitude"));
+                        qrLoc.setLongitude((Double) locationData.get("longitude"));
 
 
-                    QRCodeObject toAdd = new QRCodeObject(cn, ch, cs, qrLoc);
-                    qrDataList.add(toAdd);
+                        QRCodeObject toAdd = new QRCodeObject(cn, ch, cs, qrLoc);
+                        qrDataList.add(toAdd);
+
+
+                    }
+
+
 
                 }
 
