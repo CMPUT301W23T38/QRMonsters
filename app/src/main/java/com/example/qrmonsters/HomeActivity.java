@@ -228,7 +228,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
 
         if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
 
-           // tv_location.setText("Loading Location...");
+            // tv_location.setText("Loading Location...");
 
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
                     0, 0, this);
