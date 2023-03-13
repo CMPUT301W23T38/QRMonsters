@@ -3,7 +3,7 @@ package com.example.qrmonsters;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class playerTest {
+public class playerTest1 {
 
     private Player mockPLayer(){
 
