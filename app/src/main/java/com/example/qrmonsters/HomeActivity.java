@@ -52,7 +52,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
      * the user's profile information from SharedPreferences. It also checks for location and camera
      * permissions and requests them if necessary.
      */
-    @SuppressLint({"MissingPermission", "MissingInflatedId"})
+    @SuppressLint({"MissingPermission", "MissingInflatedId", "SetTextI18n"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
