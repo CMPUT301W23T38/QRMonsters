@@ -145,13 +145,13 @@ public class searchNearbyQR extends AppCompatActivity {
                 for (int i = 1; i < qrDataList.size(); i++)
                 {
                     if (userLocation.distanceTo(qrDataList.get(i).getCodeLocation())
-                           < userLocation.distanceTo(top1.getCodeLocation())){
-                       top1 = qrDataList.get(i);
-                       top1int = i;
+                            < userLocation.distanceTo(top1.getCodeLocation())){
+                        top1 = qrDataList.get(i);
+                        top1int = i;
                     }
                 }
 
-               qrDataList.remove(top1);
+                qrDataList.remove(top1);
 
                 top2 = qrDataList.get(0);
                 top2int = 0;
