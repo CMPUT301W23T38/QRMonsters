@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
     android:background="#A7DEE9">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="163dp"
+        app:srcCompat="@drawable/logo2" />
 
     <TextView
         android:id="@+id/create_an_account"
@@ -16,7 +23,7 @@
         android:layout_marginTop="200dp"
         android:padding="16dp"
         android:text="@string/create_account"
-        android:textColor="#455A64"
+        android:textColor="#F3F6F8"
         android:textSize="24sp"
         android:textStyle="bold" />
 
@@ -24,42 +31,45 @@
         android:id="@+id/username_edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/username"
-        android:minHeight="48dp"
+        android:layout_gravity="center"
         android:autofillHints=""
+        android:hint="@string/username"
         android:inputType="text"
-        tools:ignore="VisualLintTextFieldSize" 
-        android:layout_gravity="center"/>
+        android:minHeight="48dp"
+        android:textColorHint="#EFE6E6"
+        tools:ignore="VisualLintTextFieldSize" />
 
     <EditText
         android:id="@+id/email_edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:autofillHints=""
         android:hint="@string/email_address"
         android:inputType="textEmailAddress"
         android:minHeight="48dp"
-        android:autofillHints=""
-        tools:ignore="VisualLintTextFieldSize" 
-        android:layout_gravity="center"/>
+        android:textColorHint="#F6F0F0"
+        tools:ignore="VisualLintTextFieldSize" />
 
     <EditText
         android:id="@+id/phone_number_edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:autofillHints=""
         android:hint="@string/phone_number"
         android:inputType="phone"
         android:minHeight="48dp"
-        android:autofillHints=""
-        tools:ignore="VisualLintTextFieldSize"
-        android:layout_gravity="center"/>
+        android:textColorHint="#F1EAEA"
+        tools:ignore="VisualLintTextFieldSize" />
 
     <Button
         android:id="@+id/register_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:backgroundTint="#EAAF26"
         android:text="@string/register"
-        android:textColor="#5D4037"
-        android:layout_gravity="center"/>
+        android:textColor="#F3EFEE" />
 
 </LinearLayout>

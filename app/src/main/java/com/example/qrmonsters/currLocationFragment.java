@@ -17,7 +17,9 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-
+/**
+ * A fragment that displays a Google Maps map centered on a given location.
+ */
 public class currLocationFragment extends DialogFragment {
 
     private LatLng locUse;
@@ -37,6 +39,8 @@ public class currLocationFragment extends DialogFragment {
          * If Google Play services is not installed on the device, the user will be prompted to
          * install it inside the SupportMapFragment. This method will only be triggered once the
          * user has installed Google Play services and returned to the app.
+         *
+         * @param googleMap The GoogleMap object that represents the map.
          */
         @Override
         public void onMapReady(GoogleMap googleMap) {
@@ -47,7 +51,13 @@ public class currLocationFragment extends DialogFragment {
 
         }
     };
-
+    /** Inflates the fragment's layout.
+     *
+     * @param inflater           The LayoutInflater object to inflate the layout with.
+     * @param container          The ViewGroup that the fragment is a part of.
+     * @param savedInstanceState The saved state of the fragment, if any.
+     * @return The inflated View object.
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -55,7 +65,12 @@ public class currLocationFragment extends DialogFragment {
                              @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_curr_location, container, false);
     }
-
+    /**
+     * Called when the view hierarchy is created for the fragment.
+     *
+     * @param view               The root View object of the fragment.
+     * @param savedInstanceState The saved state of the fragment, if any.
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);

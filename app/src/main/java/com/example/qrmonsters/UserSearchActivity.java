@@ -20,12 +20,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+
+ The UserSearchActivity class is responsible for allowing users to search for other users
+ by their username. The activity displays a search bar and a search button. When the user
+ enters a username and clicks the search button, the activity queries the Firebase Firestore
+ database for users with matching usernames and displays them in a RecyclerView.
+ */
 public class UserSearchActivity extends AppCompatActivity {
 
     private EditText searchEditText;
     private RecyclerView userRecyclerView;
     private UserAdapter userAdapter;
 
+    /**
+     * Initializes the UI components of the activity, sets up the RecyclerView with a UserAdapter,
+     * and sets listeners for the search button and back button.
+     *
+     * @param savedInstanceState a Bundle containing the previously saved state of the activity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +61,12 @@ public class UserSearchActivity extends AppCompatActivity {
         backButton.setOnClickListener(view -> finish());
 
     }
-
+    /**
+     * Queries the Firebase database for users with matching usernames and displays
+     * them in the RecyclerView using a UserAdapter.
+     *
+     * @param searchText a String containing the username to search for
+     */
     public void searchForUsers(String searchText) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference usersRef = db.collection("users");

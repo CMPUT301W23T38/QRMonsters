@@ -3,15 +3,34 @@ package com.example.qrmonsters;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+
 //import com.google.firebase.firestore.FirebaseFirestore;
 
+/**
+ The MainActivity class represents the first screen of the QR Monsters application and extends AppCompatActivity.
+ It checks if the user is registered and redirects them to the RegistrationActivity or HomeActivity accordingly.
+ */
 public class MainActivity extends AppCompatActivity {
 
-    //FirebaseFirestore db = FirebaseFirestore.getInstance();
+// <<<<<<< QRScanner_Integrate 
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    Button btm;
+// =======
+//     //FirebaseFirestore db = FirebaseFirestore.getInstance();
+// >>>>>>> main
 
+    /**
+     * Called when the activity is starting.
+     * Initializes the SharedPreferences object to check if the user is registered,
+     * and redirects them to the RegistrationActivity or HomeActivity accordingly.
+     *
+     * @param savedInstanceState the saved instance state of the activity.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
