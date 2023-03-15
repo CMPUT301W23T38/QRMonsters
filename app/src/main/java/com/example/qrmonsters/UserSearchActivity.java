@@ -2,6 +2,7 @@ package com.example.qrmonsters;
 
 import static android.content.ContentValues.TAG;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -27,18 +28,12 @@ import java.util.Objects;
  enters a username and clicks the search button, the activity queries the Firebase Firestore
  database for users with matching usernames and displays them in a RecyclerView.
  */
-public class UserSearchActivity extends AppCompatActivity {
+public class UserSearchActivity extends AppCompatActivity implements UserAdapter.OnUserClickListener {
 
     private EditText searchEditText;
     private RecyclerView userRecyclerView;
     private UserAdapter userAdapter;
 
-    /**
-     * Initializes the UI components of the activity, sets up the RecyclerView with a UserAdapter,
-     * and sets listeners for the search button and back button.
-     *
-     * @param savedInstanceState a Bundle containing the previously saved state of the activity
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,12 +56,7 @@ public class UserSearchActivity extends AppCompatActivity {
         backButton.setOnClickListener(view -> finish());
 
     }
-    /**
-     * Queries the Firebase database for users with matching usernames and displays
-     * them in the RecyclerView using a UserAdapter.
-     *
-     * @param searchText a String containing the username to search for
-     */
+
     public void searchForUsers(String searchText) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference usersRef = db.collection("users");
@@ -77,6 +67,7 @@ public class UserSearchActivity extends AppCompatActivity {
                 List<Player> userList = new ArrayList<>(task.getResult().toObjects(Player.class));
                 userAdapter = new UserAdapter(userList);
                 userRecyclerView.setAdapter(userAdapter);
+
             } else {
                 Toast.makeText(UserSearchActivity.this, "User search failed: " + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
                 Log.e(TAG, "User search failed: " + task.getException().getMessage());
@@ -84,5 +75,13 @@ public class UserSearchActivity extends AppCompatActivity {
 
         });
     }
+    @Override
+    public void onUserClick(Player user) {
+        // Launch the activity to view the user's profile
+        Intent intent = new Intent(UserSearchActivity.this, viewPlayerProfile.class);
+        intent.putExtra("username", user.getUsername());
+        startActivity(intent);
+    }
+
 
 }
