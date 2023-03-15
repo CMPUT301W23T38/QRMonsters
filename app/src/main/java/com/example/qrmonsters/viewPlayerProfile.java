@@ -133,13 +133,13 @@ public class viewPlayerProfile extends AppCompatActivity {
 
                                                 qrAdapter.notifyDataSetChanged();
 
-                                                playerNameTV.setText("Player Name: " + playerRef.getUsername());
+                                                playerNameTV.setText("Name: " + playerRef.getUsername());
 
                                                 updateScore();
                                                 updateTotalQR();
 
-                                                playerScoreTV.setText("Player Score: " + String.valueOf(playerScore));
-                                                playerQRCountTV.setText("Player QR count: " + String.valueOf(playerQRCount));
+                                                playerScoreTV.setText("Score: " + String.valueOf(playerScore));
+                                                playerQRCountTV.setText("# of QR codes: " + String.valueOf(playerQRCount));
 
                                                 QRCodeObject lowest =  qrDataList.get(0);
                                                 //START NEW
@@ -156,7 +156,7 @@ public class viewPlayerProfile extends AppCompatActivity {
                                                     }
 
                                                 }
-                                                playerLowestTV.setText("Player Lowest QR code: \n" +
+                                                playerLowestTV.setText("Lowest QR code Score: \n" +
                                                         lowest.getCodeName() + "    Score: "
                                                         + lowest.getCodeScore().toString());
 
@@ -177,7 +177,7 @@ public class viewPlayerProfile extends AppCompatActivity {
                                                     }
 
                                                 }
-                                                playerHighestTV.setText("Player Highest QR code: \n" +
+                                                playerHighestTV.setText("Highest QR code Score: \n" +
                                                         highest.getCodeName() + "    Score: "
                                                         + highest.getCodeScore().toString());
                                             } else {

@@ -19,9 +19,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="QR CODE"
-            android:textColor="@color/white"
-            android:textSize="35sp"
+            android:text="QR Code details"
+            android:textColor="#616161"
+            android:textSize="30sp"
             android:textStyle="bold" />
 
     </androidx.appcompat.widget.Toolbar>
@@ -30,15 +30,19 @@
         android:id="@+id/qrNameTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="QR NAME"
-        android:textColor="#F3EFEF" />
+        android:text="Name:"
+        android:textColor="#616161"
+        android:padding="8dp"
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/qrScoreTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="QR SCORE"
-        android:textColor="#F6F3F3" />
+        android:text="Score:"
+        android:textColor="#616161"
+        android:padding="8dp"
+        android:textStyle="bold"/>
 
 
     <Button

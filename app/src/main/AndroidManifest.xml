@@ -27,24 +27,28 @@
         tools:targetApi="31">
         <activity
             android:name=".ScannedResult"
-            android:exported="false" />
+            android:exported="true"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".viewQRCode"
-            android:exported="false">
+            android:exported="true"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".viewPlayerProfile"
-            android:exported="false">
+            android:exported="true"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".searchNearbyQR"
-            android:exported="false"
+            android:exported="true"
+            android:theme="@style/AppTheme.NoActionBar"
             android:parentActivityName=".HomeActivity">
             <meta-data
                 android:name="android.app.lib_name"
@@ -98,7 +102,8 @@
         <activity
             android:name=".UserSearchActivity"
             android:label="@string/user_search_activity_label"
-             />
+            android:exported="true"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

@@ -12,14 +12,19 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:backgroundTint="#EAAF26"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:title="FIND OTHER USERS"
-        app:titleTextColor="#F8F2F2" />
+        android:background="#EAAF26"
+        android:minHeight="?actionBarSize">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Search for other users "
+        android:textColor="#616161"
+        android:textSize="30sp"
+        android:textStyle="bold" />
 
+    </androidx.appcompat.widget.Toolbar>
     <!-- Search bar -->
     <LinearLayout
         android:id="@+id/search_bar"
@@ -46,7 +51,7 @@
             android:layout_height="wrap_content"
             android:backgroundTint="#EAAF26"
             android:text="@string/search_button_text"
-            android:textColor="#5D4037"
+            android:textColor="#FFFFFF"
             tools:ignore="TouchTargetSizeCheck" />
 
 
@@ -69,7 +74,7 @@
         android:layout_height="wrap_content"
         android:backgroundTint="#EAAF26"
         android:text="@string/back_to_home"
-        android:textColor="#5D4037"
+        android:textColor="#FFFFFF"
         tools:ignore="VisualLintButtonSize" />
 
 </LinearLayout>

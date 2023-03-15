@@ -62,7 +62,7 @@ public class searchNearbyQR extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_nearby_qr);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Location userLocation = getIntent().getParcelableExtra("User Location");
         ArrayList playerList = getIntent().getStringArrayListExtra("playerList");

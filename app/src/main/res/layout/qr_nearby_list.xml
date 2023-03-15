@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
-    android:background="#EAAF26"
+    android:background="#A7DEE9"
     android:orientation="horizontal">
 
     <TextView
@@ -14,17 +12,17 @@
         android:layout_height="wrap_content"
         android:padding="20dp"
         android:text="NAME"
-        android:textColor="#EFE9E9"
-        android:textSize="30sp"></TextView>
+        android:textColor="#37474F"
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/qrScore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp"
         android:text="SCORE"
-        android:textColor="#F4F2F2"
-        android:textSize="30sp"></TextView>
+        android:textColor="#D15E47"
+        android:textSize="20sp" />
 
 
 </LinearLayout>

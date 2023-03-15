@@ -14,7 +14,7 @@
         android:layout_gravity="center"
         android:padding="16dp"
         android:text="@string/welcome_to_qrmonster"
-        android:textColor="#EDF3F2"
+        android:textColor="#757575"
         android:textSize="24sp"
         android:textStyle="bold" />
 
@@ -27,7 +27,7 @@
         android:background="#A7DEE9"
         android:padding="16dp"
         android:text="@string/username_"
-        android:textColor="#E4E9EC"
+        android:textColor="#757575"
         android:textSize="24sp"
         android:textStyle="bold" />
 
@@ -38,7 +38,7 @@
         android:layout_gravity="center"
         android:padding="16dp"
         android:text="@string/email"
-        android:textColor="#EEF1F3"
+        android:textColor="#455A64"
         android:textSize="18sp" />
 
     <TextView
@@ -48,7 +48,7 @@
         android:layout_gravity="center"
         android:padding="16dp"
         android:text="@string/phone_numberr"
-        android:textColor="#EEF1F3"
+        android:textColor="#455A64"
         android:textSize="18sp" />
 
     <!-- Add buttons for QR code scanning, viewing QR codes, searching users, and viewing the leaderboard -->
@@ -59,14 +59,15 @@
         android:backgroundTint="#EAAF26"
         android:onClick="scanQRCode"
         android:text="@string/scan_qr_code"
-        android:textColor="#F3F0EF" />
+        android:textColor="#FFFFFF" />
 
     <Button
         android:id="@+id/searchNearbyQRButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="#EAAF26"
-        android:text="@string/search_nearby_qr_codes"/>
+        android:text="@string/search_nearby_qr_codes"
+        android:textColor="#FFFFFF" />
 
     <Button
         android:id="@+id/viewMyQRCodesButton"
@@ -75,7 +76,7 @@
         android:backgroundTint="#EAAF26"
         android:onClick="viewMyQRCodes"
         android:text="@string/view_my_qr_codes"
-        android:textColor="#F3F0EF" />
+        android:textColor="#FFFFFF" />
 
     <Button
         android:id="@+id/searchUsersButton"
@@ -84,7 +85,7 @@
         android:backgroundTint="#EAAF26"
         android:onClick="searchUsers"
         android:text="@string/search_users_"
-        android:textColor="#F8F4F2" />
+        android:textColor="#FFFFFF" />
 
     <Button
         android:id="@+id/viewLeaderboardButton"
@@ -93,7 +94,7 @@
         android:backgroundTint="#EAAF26"
         android:onClick="viewLeaderboard"
         android:text="@string/view_leaderboard_"
-        android:textColor="#F8F5F4" />
+        android:textColor="#FFFFFF" />
 
     <Button
         android:id="@+id/viewCurrentLocation"
@@ -101,13 +102,13 @@
         android:layout_height="wrap_content"
         android:backgroundTint="#EAAF26"
         android:text="@string/view_current_location"
-        android:textColor="#F4F3F2" />
+        android:textColor="#FFFFFF" />
 
     <TextView
         android:id="@+id/tv_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/location"
-        android:textColor="#F0F4F6" />
+        android:textColor="#455A64" />
 
 </LinearLayout>
