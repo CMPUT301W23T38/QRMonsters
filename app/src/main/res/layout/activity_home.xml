@@ -51,6 +51,35 @@
         android:textColor="#455A64"
         android:textSize="18sp" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Would you like to track location?"
+            android:padding="16dp"
+            android:textColor="#455A64"
+            android:textSize="18sp"
+            android:layout_gravity="center"/>
+
+        <ToggleButton
+            android:id="@+id/toggle_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:backgroundTint="#EAAF26"
+            android:textColor="#FFFFFF"
+            android:textOn="YES"
+            android:textOff="NO"/>
+
+    </LinearLayout>
+
+
+
     <!-- Add buttons for QR code scanning, viewing QR codes, searching users, and viewing the leaderboard -->
     <Button
         android:id="@+id/scanQRCodeButton"
