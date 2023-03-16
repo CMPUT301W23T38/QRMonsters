@@ -50,6 +50,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="#EAAF26"
+        android:textColor="#FFFFFF"
         android:text="View QRcode Location" />
 
     <Button
@@ -57,6 +58,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="#EAAF26"
+        android:textColor="#FFFFFF"
         android:text="View QRcode Comments" />
 
     <Button
@@ -64,6 +66,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="#EAAF26"
+        android:textColor="#FFFFFF"
         android:text="Comment on QRCode" />
+
+    <Button
+        android:id="@+id/back_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#EAAF26"
+        android:text="@string/back_to_home"
+        android:textColor="#FFFFFF"
+        tools:ignore="VisualLintButtonSize" />
 
 </LinearLayout>

@@ -71,9 +71,28 @@
         android:padding="8dp"
         android:textStyle="bold"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:padding="8dp"
+        android:text="QR Codes (name/score)"
+        android:textSize="20dp"
+        android:textColor="#455A64"
+        android:textStyle="bold" />
+
     <ListView
         android:id="@+id/playerQRList"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </ListView>
+        android:layout_height="wrap_content"
+        android:layout_weight="1"/>
+
+    <Button
+        android:id="@+id/back_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#EAAF26"
+        android:text="@string/back_to_home"
+        android:textColor="#FFFFFF"
+        tools:ignore="VisualLintButtonSize" />
 </LinearLayout>

@@ -5,12 +5,14 @@ import static android.content.ContentValues.TAG;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -85,6 +87,9 @@ public class viewPlayerProfile extends AppCompatActivity {
         playerLowestTV = findViewById(R.id.lowestQRTextView);
         playerHighestTV = findViewById(R.id.highestQRTextView);
 
+        Button backButton = findViewById(R.id.back_button);
+        backButton.setOnClickListener(view -> finish());
+
         //final CollectionReference qrReference = db.collection("qrCodes");
         DocumentReference playerInfo = db.collection("users")
                 .document(playerView);
@@ -149,6 +154,18 @@ public class viewPlayerProfile extends AppCompatActivity {
                                                 }
                                             }
                                             playerHighestTV.setText("Highest QR code Score: \n" + highest.getCodeName() + "    Score: " + highest.getCodeScore().toString());
+                                            //set on click listener for each item in the list view 
+                                            qrList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                                @Override
+                                                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                                                    QRCodeObject selectedQR = qrDataList.get(i);
+                                                    Intent intent = new Intent(viewPlayerProfile.this, viewQRCode.class);
+                                                    intent.putExtra("qrCodeObject", selectedQR);
+                                                    startActivity(intent);
+                                                }
+                                            });
+
+
                                         } else {
                                             Log.d("ERROR", "Missing or invalid codeLocation field in Firestore document");
                                         }
