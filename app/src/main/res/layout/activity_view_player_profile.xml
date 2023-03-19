@@ -19,9 +19,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="PLAYER PROFILE"
-            android:textColor="@color/white"
-            android:textSize="35sp"
+            android:text="View player profile"
+            android:textColor="#616161"
+            android:textSize="30sp"
             android:textStyle="bold" />
 
     </androidx.appcompat.widget.Toolbar>
@@ -30,43 +30,69 @@
         android:id="@+id/playerNameTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="PLAYER NAME"
-        android:textColor="#F6EFEF" />
+        android:text="@string/name"
+        android:textColor="#455A64"
+        android:padding="8dp"
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/playerScoreTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="PLAYER SCORE"
-        android:textColor="#F6F0F0" />
+        android:text="Current score:"
+        android:textColor="#455A64"
+        android:padding="8dp"
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/playerQRcountTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="PLAYER QRCount"
-        android:textColor="#F4F2F2" />
+        android:text="# of QR Codes:"
+        android:textColor="#455A64"
+        android:padding="8dp"
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/highestQRTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="PLAYER Highest QR Score"
-        android:textColor="#F4F2F2" />
+        android:text="Highest QR Score:"
+        android:textColor="#455A64"
+        android:padding="8dp"
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/lowestQRTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="PLAYER Lowest QR Score"
-        android:textColor="#F4F2F2" />
+        android:text="Lowest QR Score:"
+        android:textColor="#455A64"
+        android:padding="8dp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:padding="8dp"
+        android:text="QR Codes (name/score)"
+        android:textSize="20dp"
+        android:textColor="#455A64"
+        android:textStyle="bold" />
+
     <ListView
         android:id="@+id/playerQRList"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_weight="1"/>
 
-
-
-    </ListView>
-
+    <Button
+        android:id="@+id/back_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#EAAF26"
+        android:text="@string/back_to_home"
+        android:textColor="#FFFFFF"
+        tools:ignore="VisualLintButtonSize" />
 </LinearLayout>

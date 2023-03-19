@@ -1,15 +1,18 @@
 package com.example.qrmonsters;
 
 import android.location.Location;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
+import java.io.Serializable;
 import java.util.HashMap;
 /**
 
  The QRCodeObject class represents a QR code object that contains information such as its name, hash, score, and location.
  */
-public class QRCodeObject {
+public class QRCodeObject implements Parcelable {
     // Private fields for storing QR code properties
     private String codeName;
     private String codeHash;
@@ -55,6 +58,26 @@ public class QRCodeObject {
     public QRCodeObject() {
         // Required empty constructor for Firebase Database
     }
+
+    protected QRCodeObject(Parcel in) {
+        codeName = in.readString();
+        codeHash = in.readString();
+        codeScore = in.readInt();
+        codeLocation = in.readParcelable(Location.class.getClassLoader());
+        comments = in.readHashMap(String.class.getClassLoader());
+    }
+
+    public static final Creator<QRCodeObject> CREATOR = new Creator<QRCodeObject>() {
+        @Override
+        public QRCodeObject createFromParcel(Parcel in) {
+            return new QRCodeObject(in);
+        }
+
+        @Override
+        public QRCodeObject[] newArray(int size) {
+            return new QRCodeObject[size];
+        }
+    };
 
     /**
 
@@ -119,6 +142,20 @@ public class QRCodeObject {
      */
     public void removeComment(String comment) {
         comments.remove(comment);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(codeName);
+        dest.writeString(codeHash);
+        dest.writeInt(codeScore);
+        dest.writeParcelable(codeLocation, flags);
+        dest.writeMap(comments);
     }
 
     /**

@@ -14,11 +14,14 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.maps.model.LatLng;
 //import com.google.android.gms.tasks.OnCompleteListener;
@@ -40,7 +43,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
     private TextView tv_location;
     private static final int PERMISSION_LOCATION = 1000;
     private final static int REQ_CODE = 1028;
-
+    private LocationListener locationListener;
 
     Button curLocBut;
     Button scanQR;
@@ -60,24 +63,17 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-
         if(checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
-
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     PERMISSION_LOCATION);
-
         }
-
         else{
             showLocation();
         }
 
         if(checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
-
             requestPermissions(new String[]{Manifest.permission.CAMERA}, PERMISSION_LOCATION);
-
         }
-
         // Get references to the UI components
         TextView usernameTextView = findViewById(R.id.usernameTextView);
         TextView emailTextView = findViewById(R.id.emailTextView);
@@ -94,8 +90,6 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
         String email = preferences.getString("email", "");
         String phoneNumber = preferences.getString("phoneNumber", "");
         userID = preferences.getString("userID", "");
-
-
 //        Log.d("HomeActivity", "Username: " + username);
 //        Log.d("HomeActivity", "Email: " + email);
 //        Log.d("HomeActivity", "Phone: " + phoneNumber);
@@ -110,53 +104,85 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
             Intent intent = new Intent(HomeActivity.this, viewPlayerProfile.class);
             intent.putExtra("currentUser", userID);
             intent.putExtra("viewUser", userID);
-
             startActivity(intent);
-
         });
 
         nearbyQR.setOnClickListener(view -> {
-
             FirebaseFirestore db = FirebaseFirestore.getInstance();
-
             db.collection("users").document(userID).get()
                     .addOnCompleteListener(task -> {
-
                         DocumentSnapshot documentSnapshot = task.getResult();
-
                         ArrayList playerList =
                                 (ArrayList) Objects.requireNonNull(documentSnapshot.getData()).get("qrCodes");
-
                         Intent intent = new Intent(HomeActivity.this, searchNearbyQR.class);
                         intent.putExtra("User Location", currentlocation);
                         intent.putStringArrayListExtra("playerList", playerList);
-
                         startActivity(intent);
-
-
                     });
-
-
-
-
         });
 
         curLocBut.setOnClickListener(view -> {
-
             LatLng currLoc = new LatLng(currentlocation.getLatitude(),
                     currentlocation.getLongitude());
-
             new currLocationFragment(currLoc).show(getSupportFragmentManager(),
                     "CURR_LOC");
         });
 
-
         scanQR.setOnClickListener(view -> {
             Intent intent = new Intent(HomeActivity.this, CaptureActivity.class);
             startActivityForResult(intent, REQ_CODE);
-
         });
 
+        ToggleButton toggleLocationTracking = findViewById(R.id.toggle_location);
+        toggleLocationTracking.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // Handle location tracking being enabled or disabled
+                LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                if (isChecked) {
+                    // Check if location permissions have been granted
+                    if (ActivityCompat.checkSelfPermission(HomeActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(HomeActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                        // Set up a location listener to receive location updates
+                        locationListener = new LocationListener() {
+                            @Override
+                            public void onLocationChanged(Location location) {
+                                // Save the user's location to SharedPreferences
+                                SharedPreferences sharedPreferences = getSharedPreferences("LocationPref", Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putString("latitude", String.valueOf(location.getLatitude()));
+                                editor.putString("longitude", String.valueOf(location.getLongitude()));
+                                editor.apply();
+                            }
+
+                            @Override
+                            public void onStatusChanged(String provider, int status, Bundle extras) {
+                            }
+
+                            @Override
+                            public void onProviderEnabled(String provider) {
+                            }
+
+                            @Override
+                            public void onProviderDisabled(String provider) {
+                            }
+                        };
+
+                        // Register the location listener with the location manager
+                        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+                    } else {
+                        // Request location permissions from the user
+                        ActivityCompat.requestPermissions(HomeActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_LOCATION);
+                    }
+                } else {
+                    // Remove the location listener
+                    if (locationListener != null) {
+                        locationManager.removeUpdates(locationListener);
+                    }
+                }
+
+            }
+        });
     }
 
     @Override
@@ -177,13 +203,10 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
 //                if(bitmap != null){
 //                    mImageCallback.setImageBitmap(bitmap);
 //                }
-
             }catch (NullPointerException e){
                 System.out.println();
             }
-
         }
-
     }
     /**
 
@@ -200,8 +223,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
      @param grantResults The results of the permission request
      */
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -215,9 +237,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
 
     }
     /**
-
      Shows the user's current location on the screen. If location access is not enabled, a toast
-
      is displayed indicating that the user needs to enable location access.
      */
     @SuppressLint("MissingPermission")
@@ -227,9 +247,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
                 getSystemService(Context.LOCATION_SERVICE);
 
         if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-
             // tv_location.setText("Loading Location...");
-
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
                     0, 0, this);
         }
@@ -240,20 +258,15 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
 
     }
     /**
-
      Returns a string representation of the user's current location with latitude and longitude .
-
      @param location The user's current location
-
      @return A string representation of the user's current location with latitude and longitude
      */
     private String hereLocation(Location location){
-
         return "Lat: " + location.getLatitude() + "\nLong: " + location.getLongitude();
-
     }
-    /**
 
+    /**
      Launches the QR code scanning functionality when the "Scan QR Code" button is clicked.
      @param view The button view that was clicked
      */
