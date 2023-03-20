@@ -116,6 +116,10 @@ public class viewPlayerProfile extends AppCompatActivity {
                                         String ch = (String) document.getData().get("codeHash");
                                         Integer cs = Math.toIntExact((Long) document.getData().get("codeScore"));
                                         HashMap locationData = (HashMap) document.getData().get("codeLocation");
+
+                                        // Line 121 to get the value of the comments, not sure where to put this
+                                        HashMap comments = (HashMap) document.getData().get("comments");
+
                                         if (locationData != null) {
                                             Location qrLoc = new Location("");
                                             qrLoc.setLatitude((Double) locationData.get("latitude"));
