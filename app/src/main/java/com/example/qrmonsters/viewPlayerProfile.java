@@ -161,6 +161,7 @@ public class viewPlayerProfile extends AppCompatActivity {
                                                     QRCodeObject selectedQR = qrDataList.get(i);
                                                     Intent intent = new Intent(viewPlayerProfile.this, viewQRCode.class);
                                                     intent.putExtra("qrCodeObject", selectedQR);
+                                                    intent.putExtra("usersID", currentUser);
                                                     startActivity(intent);
                                                 }
                                             });
