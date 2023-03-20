@@ -5,12 +5,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ListView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class viewQRComment extends AppCompatActivity {
 
-
+    private viewQRCommentAdapter commentAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -18,11 +22,15 @@ public class viewQRComment extends AppCompatActivity {
 
         Intent intent1 = getIntent();
         String codeName = intent1.getStringExtra("The_Code_Name");
-        HashMap<String, String> map = (HashMap<String, String>) getIntent().getSerializableExtra("comments");
-        // Not working for now but not influencing anything related (blank page)
-        for (String key : map.keySet()) {
-            Log.v("wjw","The key you got = " + key);
-            Log.v("wjw","The value you got = " + map.get(key));
-        }
+        HashMap<String, String> comments = (HashMap<String, String>) getIntent().getSerializableExtra("comments");
+        //String commenttts = intent1.getStringExtra("comments");
+
+        ListView comment_view = findViewById(R.id.comments);
+
+        ArrayList<Map.Entry<String, String>> data = new ArrayList<>(comments.entrySet());
+        commentAdapter = new viewQRCommentAdapter(this, data);
+        comment_view.setAdapter(commentAdapter);
+
+
     }
 }

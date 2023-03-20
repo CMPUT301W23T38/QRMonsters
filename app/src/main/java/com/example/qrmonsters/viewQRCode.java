@@ -19,6 +19,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.io.Serializable;
 
+import java.util.*;
 public class viewQRCode extends AppCompatActivity {
     TextView qrNameTV, qrScoreTV;
     String myuserID;
@@ -35,7 +36,7 @@ public class viewQRCode extends AppCompatActivity {
         qrNameTV = findViewById(R.id.qrNameTextView);
         qrScoreTV = findViewById(R.id.qrScoreTextView);
 
-        qrNameTV.setText("Name: " + qrCodeObject.getCodeName());
+        qrNameTV.setText("Name: " + qrCodeObject.toString());
 
         // Was trying to make qrCodeObject.toString() to see if I can mannually add a code inside there.
         // But not working, the code used for testing named 5vhp 08q
@@ -75,10 +76,6 @@ public class viewQRCode extends AppCompatActivity {
 
                 intent1.putExtra("comments",(Serializable)qrCodeObject.getComments());
 
-                // This line above is for transfering data to viewQRComment class
-                // Whether is the QRCodeObject class has syntax problem on the comment hashmap so I cant use qrCodeObject.getComments
-                // Or is the way of what I manually adding comments having syntax problem.
-                //
 
                 startActivity(intent1);
             }
@@ -93,9 +90,9 @@ public class viewQRCode extends AppCompatActivity {
                 inputDialog.setPositiveButton("Confirm",
                         (dialog, which) -> {
                                 Toast.makeText(viewQRCode.this, editText.getText().toString(), Toast.LENGTH_SHORT).show();
-
+                                qrCodeObject.addComment(editText.getText().toString());
                                 //myuserID  THIS IS WHAT THE CURRENTUSER'S USERID, SHOULD BE USEFUL FOR UPDATING COMMENTS;
-
+                                // update after 8:30 : addComment needs update
                                 });
                 inputDialog.setNegativeButton("Cancel",
                         (dialog, which) -> {

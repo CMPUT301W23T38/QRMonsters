@@ -117,15 +117,15 @@ public class viewPlayerProfile extends AppCompatActivity {
                                         Integer cs = Math.toIntExact((Long) document.getData().get("codeScore"));
                                         HashMap locationData = (HashMap) document.getData().get("codeLocation");
 
-                                        // Line 121 to get the value of the comments, not sure where to put this
-                                        HashMap comments = (HashMap) document.getData().get("comments");
+
+                                        HashMap<String, String> comments = (HashMap) document.getData().get("comments");
 
                                         if (locationData != null) {
                                             Location qrLoc = new Location("");
                                             qrLoc.setLatitude((Double) locationData.get("latitude"));
                                             qrLoc.setLongitude((Double) locationData.get("longitude"));
 
-                                            QRCodeObject toAdd = new QRCodeObject(cn, ch, cs, qrLoc);
+                                            QRCodeObject toAdd = new QRCodeObject(cn, ch, cs, qrLoc, comments);
                                             qrDataList.add(toAdd);
                                             qrAdapter.notifyDataSetChanged();
                                             playerNameTV.setText("Name: " + playerRef.getUsername());
