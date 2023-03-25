@@ -141,25 +141,21 @@ public class searchNearbyQR extends AppCompatActivity {
 
 
 
+
                 QRCodeObject top1 = null;
                 QRCodeObject top2 = null;
                 QRCodeObject top3 = null;
 
-                Integer top1int;
-                Integer top2int;
-                Integer top3int;
 
 
                 if (qrDataList.size() > 0){
 
                     top1 = qrDataList.get(0);
-                    top1int = 0;
                     for (int i = 1; i < qrDataList.size(); i++)
                     {
                         if (userLocation.distanceTo(qrDataList.get(i).getCodeLocation())
                                 < userLocation.distanceTo(top1.getCodeLocation())){
                             top1 = qrDataList.get(i);
-                            top1int = i;
                         }
                     }
 
@@ -171,38 +167,34 @@ public class searchNearbyQR extends AppCompatActivity {
                 if (qrDataList.size() > 0){
 
                     top2 = qrDataList.get(0);
-                    top2int = 0;
                     for (int i = 1; i < qrDataList.size(); i++)
                     {
                         if (userLocation.distanceTo(qrDataList.get(i).getCodeLocation())
-                                < userLocation.distanceTo(top2.getCodeLocation())){
+                                < userLocation.distanceTo(top1.getCodeLocation())){
                             top2 = qrDataList.get(i);
-                            top2int = i;
                         }
                     }
 
                     qrDataList.remove(top2);
 
+
                 }
 
                 if (qrDataList.size() > 0){
 
-
                     top3 = qrDataList.get(0);
-                    top3int = 0;
                     for (int i = 1; i < qrDataList.size(); i++)
                     {
                         if (userLocation.distanceTo(qrDataList.get(i).getCodeLocation())
-                                < userLocation.distanceTo(top3.getCodeLocation())){
+                                < userLocation.distanceTo(top1.getCodeLocation())){
                             top3 = qrDataList.get(i);
-                            top3int = i;
                         }
                     }
 
+                    qrDataList.remove(top3);
+
+
                 }
-
-
-                //qrDataList.remove(top3);
 
                 qrDataList.clear();
 
@@ -212,12 +204,15 @@ public class searchNearbyQR extends AppCompatActivity {
                 }
 
                 if(top2 != null){
+
                     qrDataList.add(top2);
                 }
 
                 if(top3 != null){
+
                     qrDataList.add(top3);
                 }
+
 
 
 

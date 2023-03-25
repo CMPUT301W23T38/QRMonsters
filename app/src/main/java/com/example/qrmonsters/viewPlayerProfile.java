@@ -120,10 +120,13 @@ public class viewPlayerProfile extends AppCompatActivity {
 
                                         HashMap<String, String> comments = (HashMap) document.getData().get("comments");
 
+                                        Location qrLoc = null;
+
                                         if (locationData != null) {
-                                            Location qrLoc = new Location("");
+                                            qrLoc = new Location("");
                                             qrLoc.setLatitude((Double) locationData.get("latitude"));
                                             qrLoc.setLongitude((Double) locationData.get("longitude"));
+                                        }
 
                                             QRCodeObject toAdd = new QRCodeObject(cn, ch, cs, qrLoc, comments);
                                             qrDataList.add(toAdd);
@@ -171,9 +174,7 @@ public class viewPlayerProfile extends AppCompatActivity {
                                             });
 
 
-                                        } else {
-                                            Log.d("ERROR", "Missing or invalid codeLocation field in Firestore document");
-                                        }
+
                                     }
                                     else {
                                         Log.d("!EXISTS", "No such document");
@@ -232,11 +233,13 @@ public class viewPlayerProfile extends AppCompatActivity {
                                                     Integer cs = Math.toIntExact((Long) document.getData().get("codeScore"));
                                                     HashMap locationData = (HashMap) document.getData().get("codeLocation");
 
+                                                    Location qrLoc = null;
+
                                                     if (locationData != null) {
-                                                        Location qrLoc = new Location("");
+                                                        qrLoc = new Location("");
                                                         qrLoc.setLatitude((Double) locationData.get("latitude"));
                                                         qrLoc.setLongitude((Double) locationData.get("longitude"));
-
+                                                    }
                                                         QRCodeObject toAdd = new QRCodeObject(cn, ch, cs, qrLoc);
                                                         qrDataList.add(toAdd);
 
@@ -272,9 +275,6 @@ public class viewPlayerProfile extends AppCompatActivity {
                                                             }
                                                         }
                                                         playerHighestTV.setText("Player Highest QR code: \n" + highest.getCodeName() + "    Score: " + highest.getCodeScore().toString());
-                                                    } else {
-                                                        Log.d("ERROR", "Missing or invalid codeLocation field in Firestore document");
-                                                    }
                                                 } else {
                                                     Log.d("!EXISTS", "No such document");
                                                 }
