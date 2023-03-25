@@ -139,7 +139,7 @@ public class searchNearbyQR extends AppCompatActivity {
 
                 }
 
-                
+
 
                 QRCodeObject top1 = null;
                 QRCodeObject top2 = null;
