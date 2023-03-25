@@ -111,79 +111,115 @@ public class searchNearbyQR extends AppCompatActivity {
 
                     if(!playerList.contains((String) doc.getData().get("codeName"))){
 
-                        String cn = (String) doc.getData().get("codeName");
-                        String ch = (String) doc.getData().get("codeHash");
-                        Integer cs = Math.toIntExact((Long) doc.getData().get("codeScore"));
-                        HashMap locationData = (HashMap) doc.getData().get("codeLocation");
+                            String cn = (String) doc.getData().get("codeName");
+                            String ch = (String) doc.getData().get("codeHash");
+                            Integer cs = Math.toIntExact((Long) doc.getData().get("codeScore"));
+                            HashMap locationData = (HashMap) doc.getData().get("codeLocation");
 
-                        Location qrLoc = new Location("");
-                        qrLoc.setLatitude((Double) locationData.get("latitude"));
-                        qrLoc.setLongitude((Double) locationData.get("longitude"));
+                            Location qrLoc = null;
 
+                            if(locationData != null){
+                                qrLoc = new Location("");
+                                qrLoc.setLatitude((Double) locationData.get("latitude"));
+                                qrLoc.setLongitude((Double) locationData.get("longitude"));
 
-                        QRCodeObject toAdd = new QRCodeObject(cn, ch, cs, qrLoc);
-                        qrDataList.add(toAdd);
+                            }
+
+                            QRCodeObject toAdd = new QRCodeObject(cn, ch, cs, qrLoc);
+
+                            if(qrLoc != null){
+
+                                qrDataList.add(toAdd);
+
+                            }
+
 
 
                     }
 
-
-
                 }
 
-                QRCodeObject top1;
-                QRCodeObject top2;
-                QRCodeObject top3;
+                
+
+                QRCodeObject top1 = null;
+                QRCodeObject top2 = null;
+                QRCodeObject top3 = null;
 
                 Integer top1int;
                 Integer top2int;
                 Integer top3int;
 
 
-                top1 = qrDataList.get(0);
-                top1int = 0;
-                for (int i = 1; i < qrDataList.size(); i++)
-                {
-                    if (userLocation.distanceTo(qrDataList.get(i).getCodeLocation())
-                            < userLocation.distanceTo(top1.getCodeLocation())){
-                        top1 = qrDataList.get(i);
-                        top1int = i;
+                if (qrDataList.size() > 0){
+
+                    top1 = qrDataList.get(0);
+                    top1int = 0;
+                    for (int i = 1; i < qrDataList.size(); i++)
+                    {
+                        if (userLocation.distanceTo(qrDataList.get(i).getCodeLocation())
+                                < userLocation.distanceTo(top1.getCodeLocation())){
+                            top1 = qrDataList.get(i);
+                            top1int = i;
+                        }
                     }
+
+                    qrDataList.remove(top1);
+
+
                 }
 
-                qrDataList.remove(top1);
+                if (qrDataList.size() > 0){
 
-                top2 = qrDataList.get(0);
-                top2int = 0;
-                for (int i = 1; i < qrDataList.size(); i++)
-                {
-                    if (userLocation.distanceTo(qrDataList.get(i).getCodeLocation())
-                            < userLocation.distanceTo(top2.getCodeLocation())){
-                        top2 = qrDataList.get(i);
-                        top2int = i;
+                    top2 = qrDataList.get(0);
+                    top2int = 0;
+                    for (int i = 1; i < qrDataList.size(); i++)
+                    {
+                        if (userLocation.distanceTo(qrDataList.get(i).getCodeLocation())
+                                < userLocation.distanceTo(top2.getCodeLocation())){
+                            top2 = qrDataList.get(i);
+                            top2int = i;
+                        }
                     }
+
+                    qrDataList.remove(top2);
+
                 }
 
-                qrDataList.remove(top2);
+                if (qrDataList.size() > 0){
 
-                top3 = qrDataList.get(0);
-                top3int = 0;
-                for (int i = 1; i < qrDataList.size(); i++)
-                {
-                    if (userLocation.distanceTo(qrDataList.get(i).getCodeLocation())
-                            < userLocation.distanceTo(top3.getCodeLocation())){
-                        top3 = qrDataList.get(i);
-                        top3int = i;
+
+                    top3 = qrDataList.get(0);
+                    top3int = 0;
+                    for (int i = 1; i < qrDataList.size(); i++)
+                    {
+                        if (userLocation.distanceTo(qrDataList.get(i).getCodeLocation())
+                                < userLocation.distanceTo(top3.getCodeLocation())){
+                            top3 = qrDataList.get(i);
+                            top3int = i;
+                        }
                     }
+
                 }
 
-                qrDataList.remove(top3);
+
+                //qrDataList.remove(top3);
 
                 qrDataList.clear();
 
-                qrDataList.add(top1);
-                qrDataList.add(top2);
-                qrDataList.add(top3);
+                if(top1 != null){
+
+                    qrDataList.add(top1);
+                }
+
+                if(top2 != null){
+                    qrDataList.add(top2);
+                }
+
+                if(top3 != null){
+                    qrDataList.add(top3);
+                }
+
+
 
                 qrAdapter.notifyDataSetChanged();
 
@@ -191,4 +227,5 @@ public class searchNearbyQR extends AppCompatActivity {
         });
 
     }
+
 }
