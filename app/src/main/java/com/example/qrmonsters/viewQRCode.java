@@ -43,7 +43,7 @@ public class viewQRCode extends AppCompatActivity {
         SharedPreferences preferences = getSharedPreferences("UserDetails", MODE_PRIVATE);
         String username = preferences.getString("username", "");
 
-        qrNameTV.setText("Name: " + qrCodeObject.toString());
+        qrNameTV.setText("Name: " + qrCodeObject.getCodeName());
 
         // Was trying to make qrCodeObject.toString() to see if I can mannually add a code inside there.
         // But not working, the code used for testing named 5vhp 08q
