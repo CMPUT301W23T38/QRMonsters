@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +17,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.Serializable;
 
@@ -36,7 +40,10 @@ public class viewQRCode extends AppCompatActivity {
         qrNameTV = findViewById(R.id.qrNameTextView);
         qrScoreTV = findViewById(R.id.qrScoreTextView);
 
-        qrNameTV.setText("Name: " + qrCodeObject.toString());
+        SharedPreferences preferences = getSharedPreferences("UserDetails", MODE_PRIVATE);
+        String username = preferences.getString("username", "");
+
+        qrNameTV.setText("Name: " + qrCodeObject.getCodeName());
 
         // Was trying to make qrCodeObject.toString() to see if I can mannually add a code inside there.
         // But not working, the code used for testing named 5vhp 08q
@@ -59,11 +66,21 @@ public class viewQRCode extends AppCompatActivity {
 
                 Location qrLocation = qrCodeObject.getCodeLocation();
 
-                LatLng currLoc = new LatLng(qrLocation.getLatitude(),
-                        qrLocation.getLongitude());
+                if(qrLocation != null){
 
-                new currLocationFragment(currLoc).show(getSupportFragmentManager(),
-                        "CURR_LOC");
+                    LatLng currLoc = new LatLng(qrLocation.getLatitude(),
+                            qrLocation.getLongitude());
+
+                    new currLocationFragment(currLoc).show(getSupportFragmentManager(),
+                            "CURR_LOC");
+
+                }
+                else {
+
+                    Toast.makeText(viewQRCode.this, "No Location Data Available!",
+                            Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 
@@ -89,10 +106,28 @@ public class viewQRCode extends AppCompatActivity {
                 inputDialog.setTitle("Please enter your comment:").setView(editText);
                 inputDialog.setPositiveButton("Confirm",
                         (dialog, which) -> {
+
+                            if(qrCodeObject.getComments().keySet().contains(username)){
+
+                                Toast.makeText(viewQRCode.this,
+                                        "You have already commented on this QR code!",
+                                        Toast.LENGTH_SHORT).show();
+
+                            }
+                            else{
                                 Toast.makeText(viewQRCode.this, editText.getText().toString(), Toast.LENGTH_SHORT).show();
-                                qrCodeObject.addComment(editText.getText().toString());
+                                qrCodeObject.addComment(username ,editText.getText().toString());
                                 //myuserID  THIS IS WHAT THE CURRENTUSER'S USERID, SHOULD BE USEFUL FOR UPDATING COMMENTS;
                                 // update after 8:30 : addComment needs update
+
+                                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                DocumentReference qrComments = db.collection("qrCodes")
+                                        .document(qrCodeObject.getCodeName());
+
+                                qrComments.update("comments", qrCodeObject.getComments());
+                            }
+
+
                                 });
                 inputDialog.setNegativeButton("Cancel",
                         (dialog, which) -> {

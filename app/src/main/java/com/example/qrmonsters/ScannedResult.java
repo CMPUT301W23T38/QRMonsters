@@ -78,8 +78,9 @@ public class ScannedResult extends AppCompatActivity {
 
         String hashCode = SHA256andScore.getSha256Str(theResult);
         Integer hashScore = SHA256andScore.getScore(hashCode);
+        String qrName = SHA256andScore.generateName(hashCode);
 
-        QRCodeObject qrAdd = new QRCodeObject(theResult, hashCode, hashScore, qrLocation);
+        QRCodeObject qrAdd = new QRCodeObject(qrName, hashCode, hashScore, qrLocation);
 
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -96,16 +97,16 @@ public class ScannedResult extends AppCompatActivity {
                         if(documentSnapshot.exists()){
                             playerRef = documentSnapshot.toObject(Player.class);
 
-                            if(playerRef.getQrCodes().contains(theResult)){
+                            if(playerRef.getQrCodes().contains(qrName)){
 
                                 Toast.makeText(ScannedResult.this, "Already have this QR Code!",
                                         Toast.LENGTH_SHORT).show();
                                 finish();
                             }
 
-                            userInfo.update("qrCodes", FieldValue.arrayUnion(theResult));
+                            userInfo.update("qrCodes", FieldValue.arrayUnion(qrName));
 
-                            qrRef.whereEqualTo("codeName", theResult).get().addOnCompleteListener(task -> {
+                            qrRef.whereEqualTo("codeName", qrName).get().addOnCompleteListener(task -> {
                                 if(task.isSuccessful()){
                                     if(task.getResult().isEmpty()){
 

@@ -138,8 +138,8 @@ public class QRCodeObject implements Parcelable {
      * Adds a comment to the QR code.
      * @param comment the comment to add to the QR code
      */
-    public void addComment(String comment) {
-        comments.put(comment, comment);
+    public void addComment(String user, String comment) {
+        comments.put(user, comment);
     }
 
     /**

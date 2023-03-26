@@ -5,6 +5,7 @@ import static java.lang.Character.isDigit;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Locale;
 
 /**
  The User class represents a user who has a host name and provides static methods for generating a
@@ -85,5 +86,111 @@ public class SHA256andScore {
             stringBuilder.append(temp);
         }
         return stringBuilder.toString();
+    }
+
+    public static Boolean isVowel(char isV){
+
+        switch (isV){
+
+            case 'a':
+            case 'e':
+            case 'i':
+            case 'o':
+            case 'u':
+            case 'A':
+            case 'E':
+            case 'I':
+            case 'O':
+            case 'U':
+                return true;
+
+            default:
+                return false;
+
+        }
+
+    }
+
+    public static String generateName (String hashCode){
+
+        char[] hashC= hashCode.toCharArray();
+        
+        String theConstonants = "";
+        String theVowels = "";
+        String theNumbers = "";
+        String finalName = "";
+
+        for (char letter: hashC) {
+
+            if (Character.isLetter(letter)){
+
+                if(!isVowel(letter)){
+
+                    theConstonants = theConstonants + letter;
+
+                }
+
+            }
+            if (theConstonants.length() == 4){
+
+                break;
+
+            }
+            
+        }
+
+        theConstonants = theConstonants.toUpperCase(Locale.ROOT);
+
+        for (char letter: hashC) {
+
+            if (Character.isLetter(letter)){
+
+                if(isVowel(letter)){
+
+                    theVowels = theVowels + letter;
+
+                }
+
+            }
+            if (theVowels.length() == 4){
+
+                break;
+
+            }
+
+        }
+
+        theVowels = theVowels.toLowerCase(Locale.ROOT);
+
+        for (char letter: hashC) {
+
+            if (Character.isDigit(letter)){
+
+                theNumbers = theNumbers + letter;
+
+            }
+            if (theNumbers.length() == 3){
+
+                break;
+
+            }
+
+        }
+
+
+        for (int i = 0; i < 4; i++) {
+
+            finalName = finalName + theConstonants.charAt(i);
+            finalName = finalName + theVowels.charAt(i);
+
+
+        }
+
+        finalName = finalName + theNumbers;
+
+        return finalName;
+
+
+
     }
 }
