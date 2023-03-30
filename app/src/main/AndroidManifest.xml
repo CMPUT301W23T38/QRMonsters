@@ -26,6 +26,9 @@
         android:theme="@style/Theme.QRMonsters"
         tools:targetApi="31">
         <activity
+            android:name=".viewQRComment"
+            android:exported="false" />
+        <activity
             android:name=".ScannedResult"
             android:exported="true"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -48,8 +51,8 @@
         <activity
             android:name=".searchNearbyQR"
             android:exported="true"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName=".HomeActivity">
+            android:parentActivityName=".HomeActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -101,9 +104,9 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".UserSearchActivity"
-            android:label="@string/user_search_activity_label"
             android:exported="true"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:label="@string/user_search_activity_label"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

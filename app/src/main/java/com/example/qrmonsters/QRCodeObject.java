@@ -29,14 +29,20 @@ public class QRCodeObject implements Parcelable {
      @param codeLocation the location of the QR code
      */
 
-
     public QRCodeObject(String codeName, String codeHash, Integer codeScore, Location codeLocation) {
         this.codeName = codeName;
         this.codeHash = codeHash;
         this.codeScore = codeScore;
         this.codeLocation = codeLocation;
 
-        this.comments = new HashMap<String, String>();
+        this.comments = new HashMap<>();
+    }
+    public QRCodeObject(String codeName, String codeHash, Integer codeScore, Location codeLocation, HashMap<String, String> comments) {
+        this.codeName = codeName;
+        this.codeHash = codeHash;
+        this.codeScore = codeScore;
+        this.codeLocation = codeLocation;
+        this.comments = comments;
     }
 
     /**
@@ -132,8 +138,8 @@ public class QRCodeObject implements Parcelable {
      * Adds a comment to the QR code.
      * @param comment the comment to add to the QR code
      */
-    public void addComment(String comment) {
-        comments.put(comment, comment);
+    public void addComment(String user, String comment) {
+        comments.put(user, comment);
     }
 
     /**

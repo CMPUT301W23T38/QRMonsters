@@ -51,6 +51,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
     Button viewSelfProfile;
     Location currentlocation;
     String userID;
+    Boolean recordLocation;
 
     /**
      * This method is called when the activity is created. It sets up the UI components and loads
@@ -108,6 +109,9 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
         });
 
         nearbyQR.setOnClickListener(view -> {
+
+            //Grabbing list of already player owned QR's so they don't show up
+            //in nearby QR list
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             db.collection("users").document(userID).get()
                     .addOnCompleteListener(task -> {
@@ -140,45 +144,11 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
                 // Handle location tracking being enabled or disabled
                 LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
                 if (isChecked) {
-                    // Check if location permissions have been granted
-                    if (ActivityCompat.checkSelfPermission(HomeActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(HomeActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-                        // Set up a location listener to receive location updates
-                        locationListener = new LocationListener() {
-                            @Override
-                            public void onLocationChanged(Location location) {
-                                // Save the user's location to SharedPreferences
-                                SharedPreferences sharedPreferences = getSharedPreferences("LocationPref", Context.MODE_PRIVATE);
-                                SharedPreferences.Editor editor = sharedPreferences.edit();
-                                editor.putString("latitude", String.valueOf(location.getLatitude()));
-                                editor.putString("longitude", String.valueOf(location.getLongitude()));
-                                editor.apply();
-                            }
-
-                            @Override
-                            public void onStatusChanged(String provider, int status, Bundle extras) {
-                            }
-
-                            @Override
-                            public void onProviderEnabled(String provider) {
-                            }
-
-                            @Override
-                            public void onProviderDisabled(String provider) {
-                            }
-                        };
-
-                        // Register the location listener with the location manager
-                        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-                    } else {
-                        // Request location permissions from the user
-                        ActivityCompat.requestPermissions(HomeActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_LOCATION);
+                    recordLocation = true;
                     }
-                } else {
-                    // Remove the location listener
-                    if (locationListener != null) {
-                        locationManager.removeUpdates(locationListener);
-                    }
+
+                else {
+                    recordLocation = false;
                 }
 
             }
@@ -197,7 +167,16 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
                 intent1.putExtra("TheResult", result);
                 intent1.putExtra("TheBitmap", bitmap);
                 intent1.putExtra("UserID", userID);
-                intent1.putExtra("location", currentlocation);
+
+                if(recordLocation == true){
+                    intent1.putExtra("location", currentlocation);
+
+                }
+                else{
+
+                    intent1.putExtra("location", (Location) null);
+                }
+
                 startActivity(intent1);                   //Jumped to ScannedResult class
                 //Toast.makeText(HomeActivity.this, "" + result, Toast.LENGTH_SHORT).show();
 //                if(bitmap != null){
