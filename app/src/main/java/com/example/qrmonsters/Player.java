@@ -1,7 +1,6 @@
 package com.example.qrmonsters;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 /**
  * The Player class represents a player of the QR Monsters game.
