@@ -83,21 +83,6 @@ public class RegistrationActivity extends AppCompatActivity {
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             CollectionReference usersRef = db.collection("users");
 
-//            String userId = usersRef.push().getKey();
-//            Player user = new Player(userId, username, email, phoneNumber);
-//            usersRef.child(userId).setValue(user);
-//
-//            // Store user information in shared preferences
-//            editor.putString("username", username);
-//            editor.putString("email", email);
-//            editor.putString("phoneNumber", phoneNumber);
-//            editor.remove("phone");
-//            editor.putBoolean("isRegistered", true);
-//            editor.apply();
-//
-//            Intent intent = new Intent(RegistrationActivity.this, HomeActivity.class);
-//            startActivity(intent);
-//            finish();
             // check if the username already exists in the database
             usersRef.whereEqualTo("username", username).get().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {

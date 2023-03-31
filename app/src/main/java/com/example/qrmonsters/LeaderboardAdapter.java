@@ -1,7 +1,6 @@
 package com.example.qrmonsters;
 
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +19,6 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
     private SortBy currentSortBy;
     private OnPlayerClickListener onPlayerClickListener;
 
-
     public enum SortBy {
         TOTAL_SCORE,
         HIGHEST_INDIVIDUAL_SCORE,
@@ -33,7 +31,6 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
         this.onPlayerClickListener = onPlayerClickListener;
         sortUsers();
     }
-
 
     private void sortUsers() {
         Collections.sort(users, (p1, p2) -> {
@@ -55,22 +52,6 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
         this.users.addAll(playerList);
         this.currentSortBy = sortBy;
         sortUsers();
-        notifyDataSetChanged();
-    }
-
-    public void setSortBy(SortBy sortBy) {
-        Collections.sort(users, (p1, p2) -> {
-            switch (sortBy) {
-                case TOTAL_SCORE:
-                    return Integer.compare(p2.getTotalScore(), p1.getTotalScore());
-                case HIGHEST_INDIVIDUAL_SCORE:
-                    return Integer.compare(p2.getHighestIndividualScore(), p1.getHighestIndividualScore());
-                case NUM_QR_CODES_SCANNED:
-                    return Integer.compare(p2.getNumQRCodesScanned(), p1.getNumQRCodesScanned());
-                default:
-                    return 0;
-            }
-        });
         notifyDataSetChanged();
     }
 
@@ -114,8 +95,6 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
         }
         holder.scoreTextView.setText(String.valueOf(score));
     }
-
-
 
     @Override
     public int getItemCount() {

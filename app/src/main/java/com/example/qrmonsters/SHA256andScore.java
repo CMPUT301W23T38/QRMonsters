@@ -13,8 +13,6 @@ import java.util.Locale;
  */
 public class SHA256andScore {
     String host_name;
-
-
     /**
      * Returns the SHA-256 hash of a given string.
      * @param str the string to be hashed
@@ -132,65 +130,41 @@ public class SHA256andScore {
 
             }
             if (theConstonants.length() == 4){
-
                 break;
-
             }
-            
         }
 
         theConstonants = theConstonants.toUpperCase(Locale.ROOT);
 
         for (char letter: hashC) {
-
             if (Character.isLetter(letter)){
-
                 if(isVowel(letter)){
-
                     theVowels = theVowels + letter;
-
                 }
-
             }
             if (theVowels.length() == 4){
-
                 break;
-
             }
-
         }
 
         theVowels = theVowels.toLowerCase(Locale.ROOT);
 
         for (char letter: hashC) {
-
             if (Character.isDigit(letter)){
-
                 theNumbers = theNumbers + letter;
-
             }
             if (theNumbers.length() == 3){
-
                 break;
-
             }
-
         }
 
-
         for (int i = 0; i < 4; i++) {
-
             finalName = finalName + theConstonants.charAt(i);
             finalName = finalName + theVowels.charAt(i);
-
-
         }
 
         finalName = finalName + theNumbers;
 
         return finalName;
-
-
-
     }
 }

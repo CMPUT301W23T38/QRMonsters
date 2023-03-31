@@ -29,7 +29,6 @@ public class viewQRCode extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_qrcode);
 
-
         QRCodeObject qrCodeObject = getIntent().getParcelableExtra("qrCodeObject");
         String myuserID = getIntent().getStringExtra("usersID");
         //Set the TextViews to the QRCodeObject's properties
@@ -49,7 +48,6 @@ public class viewQRCode extends AppCompatActivity {
 
         qrNameTV.setText("Name: " + qrCodeObject.getCodeName());
 
-
         char[] qrNameCharArray = qrCodeObject.getCodeName().toCharArray();
 
         String syl1 = textToAsciiLetters.getAscii(qrNameCharArray[0], qrNameCharArray[1]);
@@ -67,8 +65,6 @@ public class viewQRCode extends AppCompatActivity {
         qrNumTV1.setText(num1);
         qrNumTV2.setText(num2);
         qrNumTV3.setText(num3);
-
-
 
         // Was trying to make qrCodeObject.toString() to see if I can mannually add a code inside there.
         // But not working, the code used for testing named 5vhp 08q
@@ -92,20 +88,15 @@ public class viewQRCode extends AppCompatActivity {
                 Location qrLocation = qrCodeObject.getCodeLocation();
 
                 if(qrLocation != null){
-
-                    LatLng currLoc = new LatLng(qrLocation.getLatitude(),
-                            qrLocation.getLongitude());
-
+                    LatLng currLoc = new LatLng(qrLocation.getLatitude(), qrLocation.getLongitude());
                     new currLocationFragment(currLoc).show(getSupportFragmentManager(),
                             "CURR_LOC");
-
                 }
                 else {
 
                     Toast.makeText(viewQRCode.this, "No Location Data Available!",
                             Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
 
@@ -117,7 +108,6 @@ public class viewQRCode extends AppCompatActivity {
                 intent1.putExtra("The_Code_Name", qrCodeObject.getCodeName());
 
                 intent1.putExtra("comments",(Serializable)qrCodeObject.getComments());
-
 
                 startActivity(intent1);
             }
@@ -131,13 +121,10 @@ public class viewQRCode extends AppCompatActivity {
                 inputDialog.setTitle("Please enter your comment:").setView(editText);
                 inputDialog.setPositiveButton("Confirm",
                         (dialog, which) -> {
-
                             if(qrCodeObject.getComments().keySet().contains(username)){
-
                                 Toast.makeText(viewQRCode.this,
                                         "You have already commented on this QR code!",
                                         Toast.LENGTH_SHORT).show();
-
                             }
                             else{
                                 Toast.makeText(viewQRCode.this, editText.getText().toString(), Toast.LENGTH_SHORT).show();
@@ -151,8 +138,6 @@ public class viewQRCode extends AppCompatActivity {
 
                                 qrComments.update("comments", qrCodeObject.getComments());
                             }
-
-
                                 });
                 inputDialog.setNegativeButton("Cancel",
                         (dialog, which) -> {

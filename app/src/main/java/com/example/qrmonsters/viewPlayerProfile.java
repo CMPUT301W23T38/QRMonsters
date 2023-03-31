@@ -96,7 +96,6 @@ public class viewPlayerProfile extends AppCompatActivity {
         });
     }
 
-
     private QRCodeObject createQRCodeObject(DocumentSnapshot document) {
         String cn = document.getString("codeName");
         String ch = document.getString("codeHash");
@@ -256,9 +255,7 @@ public class viewPlayerProfile extends AppCompatActivity {
             }
             return true;
         });
-
     }
-
 
     public void updateScore(){
         Integer tentScore = 0;

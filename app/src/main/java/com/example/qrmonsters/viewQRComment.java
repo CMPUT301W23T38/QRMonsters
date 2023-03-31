@@ -30,7 +30,5 @@ public class viewQRComment extends AppCompatActivity {
         ArrayList<Map.Entry<String, String>> data = new ArrayList<>(comments.entrySet());
         commentAdapter = new viewQRCommentAdapter(this, data);
         comment_view.setAdapter(commentAdapter);
-
-
     }
 }
