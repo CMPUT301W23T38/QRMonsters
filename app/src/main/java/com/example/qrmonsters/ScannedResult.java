@@ -105,6 +105,8 @@ public class ScannedResult extends AppCompatActivity {
                             }
 
                             userInfo.update("qrCodes", FieldValue.arrayUnion(qrName));
+                            playerRef.addQRCode(qrName, qrAdd.getCodeScore());
+                            userInfo.update("qrScores", playerRef.getQrScores());
 
                             qrRef.whereEqualTo("codeName", qrName).get().addOnCompleteListener(task -> {
                                 if(task.isSuccessful()){
@@ -157,5 +159,5 @@ public class ScannedResult extends AppCompatActivity {
                     }
                 });
 
-        }
+    }
 }

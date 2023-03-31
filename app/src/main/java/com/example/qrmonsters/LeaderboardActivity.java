@@ -87,6 +87,9 @@ public class LeaderboardActivity extends AppCompatActivity implements Leaderboar
                                     @Override
                                     public void onTotalScoreCalculated(int totalScore, int highestIndividualScore, int numQRCodesScanned) {
                                         player.setTotalScore(totalScore);
+                                        //update the player's total score in the database
+                                        DocumentReference playerRef = db.collection("users").document(player.getUserId());
+                                        playerRef.update("totalScore", totalScore);
                                         player.setHighestIndividualScore(highestIndividualScore);
                                         player.setNumQRCodesScanned(numQRCodesScanned);
                                         players.add(player);

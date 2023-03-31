@@ -16,6 +16,8 @@ public class Player {
     private int TotalScore;
     private int highestIndividualScore;
     private int numQRCodesScanned;
+
+    private ArrayList<Integer> qrScores = new ArrayList<>();
     //private List<String> qrCodes = new List<String>;
     /**
      * Default constructor required for Firebase Database.
@@ -47,6 +49,7 @@ public class Player {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.qrCodes = new ArrayList<>();
+        this.qrScores = new ArrayList<>();
     }
     /**
      * Returns the user ID of the player.
@@ -164,4 +167,18 @@ public class Player {
     public void setNumQRCodesScanned(int numQRCodesScanned) {
         this.numQRCodesScanned = numQRCodesScanned;
     }
+
+    public List<Integer> getQrScores() {
+        return qrScores;
+    }
+
+    public void setQrScores(List<Integer> qrScores) {
+        this.qrScores = (ArrayList<Integer>) qrScores;
+    }
+
+    public void addQRCode(String qrCodeName, int qrCodeScore) {
+        this.qrCodes.add(qrCodeName);
+        this.qrScores.add(qrCodeScore);
+    }
+
 }

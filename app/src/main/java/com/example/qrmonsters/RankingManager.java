@@ -5,23 +5,24 @@ import java.util.Collections;
 import java.util.List;
 
 public class RankingManager {
-
     public static int getEstimatedRanking(int playerHighestScore, List<Player> allPlayers) {
-        List<Integer> highestIndividualScores = new ArrayList<>();
-        for (Player player : allPlayers) {
-            highestIndividualScores.add(player.getHighestIndividualScore());
-        }
-        Collections.sort(highestIndividualScores, Collections.reverseOrder());
+        int rank = 1;
+        int playersWithSameScore = 0;
 
-        int ranking = 1;
-        for (int score : highestIndividualScores) {
-            if (playerHighestScore < score) {
-                ranking++;
-            } else {
-                break;
+        for (Player player : allPlayers) {
+            int currentPlayerHighestScore = Collections.max(player.getQrScores());
+            if (playerHighestScore < currentPlayerHighestScore) {
+                rank++;
+            } else if (playerHighestScore == currentPlayerHighestScore) {
+                playersWithSameScore++;
             }
         }
-        return ranking;
+
+        if (playersWithSameScore > 1) {
+            return rank + playersWithSameScore - 1;
+        } else {
+            return rank;
+        }
     }
-    
 }
+

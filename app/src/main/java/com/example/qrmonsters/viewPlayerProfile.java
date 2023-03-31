@@ -55,26 +55,39 @@ public class viewPlayerProfile extends AppCompatActivity {
         playersRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 List<Player> allPlayers = new ArrayList<>();
+                AtomicInteger playersProcessed = new AtomicInteger(0);
+
                 for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
                     Player player = document.toObject(Player.class);
                     ArrayList<String> qrCodes = player.getQrCodes();
                     ArrayList<Integer> qrScores = new ArrayList<>();
 
-                    for (String qrCode : qrCodes) {
-                        qrCodesRef.document(qrCode).get().addOnCompleteListener(qrCodeTask -> {
-                            if (qrCodeTask.isSuccessful()) {
-                                int score = qrCodeTask.getResult().getLong("codeScore").intValue();
-                                qrScores.add(score);
-                                player.setQrScores(qrScores);
+                    if (qrCodes.isEmpty()) {
+                        allPlayers.add(player);
+                        playersProcessed.incrementAndGet();
 
-                                if (qrScores.size() == qrCodes.size()) {
-                                    allPlayers.add(player);
-                                    if (allPlayers.size() == task.getResult().size()) {
-                                        callback.onComplete(allPlayers);
+                        if (playersProcessed.get() == task.getResult().size()) {
+                            callback.onComplete(allPlayers);
+                        }
+                    } else {
+                        for (String qrCode : qrCodes) {
+                            qrCodesRef.document(qrCode).get().addOnCompleteListener(qrCodeTask -> {
+                                if (qrCodeTask.isSuccessful()) {
+                                    int score = qrCodeTask.getResult().getLong("codeScore").intValue();
+                                    qrScores.add(score);
+                                    player.setQrScores(qrScores);
+
+                                    if (qrScores.size() == qrCodes.size()) {
+                                        allPlayers.add(player);
+                                        playersProcessed.incrementAndGet();
+
+                                        if (playersProcessed.get() == task.getResult().size()) {
+                                            callback.onComplete(allPlayers);
+                                        }
                                     }
                                 }
-                            }
-                        });
+                            });
+                        }
                     }
                 }
             } else {
@@ -82,6 +95,7 @@ public class viewPlayerProfile extends AppCompatActivity {
             }
         });
     }
+
 
     private QRCodeObject createQRCodeObject(DocumentSnapshot document) {
         String cn = document.getString("codeName");
@@ -113,8 +127,13 @@ public class viewPlayerProfile extends AppCompatActivity {
         playerHighestTV.setText("Highest QR code Score: \n" + highest.getCodeName() + "    Score: " + highest.getCodeScore().toString());
 
         fetchAllPlayers(allPlayers -> {
-            int estimatedRanking = RankingManager.getEstimatedRanking(highest.getCodeScore(), allPlayers);
-            playerEstimatedRankingTV.setText("Estimated Ranking: " + estimatedRanking);
+            if (playerRef.getQrScores() != null && !playerRef.getQrScores().isEmpty()) {
+                int playerHighestScore = Collections.max(playerRef.getQrScores());
+                int estimatedRanking = RankingManager.getEstimatedRanking(playerHighestScore, allPlayers);
+                playerEstimatedRankingTV.setText("Estimated Ranking: " + estimatedRanking);
+            } else {
+                playerEstimatedRankingTV.setText("Estimated Ranking: N/A");
+            }
         });
     }
 
@@ -215,6 +234,9 @@ public class viewPlayerProfile extends AppCompatActivity {
                             Player playerRef = document.toObject(Player.class);
                             playerRef.getQrCodes().remove(clickQR.getCodeName());
                             playerInfo.update("qrCodes", playerRef.getQrCodes());
+                            //remove from qrScores as well
+                            playerRef.getQrScores().remove(clickQR.getCodeScore());
+                            playerInfo.update("qrScores", playerRef.getQrScores());
                             qrDataList.clear();
 
                             if (playerRef.getQrCodes().size() == 0) {
