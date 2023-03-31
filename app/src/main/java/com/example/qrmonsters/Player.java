@@ -13,6 +13,9 @@ public class Player {
     private String email;
     private String phoneNumber;
     private ArrayList<String> qrCodes;
+    private int TotalScore;
+    private int highestIndividualScore;
+    private int numQRCodesScanned;
     //private List<String> qrCodes = new List<String>;
     /**
      * Default constructor required for Firebase Database.
@@ -27,6 +30,7 @@ public class Player {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.qrCodes = qrCodes;
+
     }
 
     /**
@@ -137,4 +141,27 @@ public class Player {
 
     }
 
+    public int getTotalScore() {
+        return TotalScore;
+    }
+    
+    public void setTotalScore(int TotalScore) {
+        this.TotalScore = TotalScore;
+    }
+
+    public int getHighestIndividualScore() {
+        return highestIndividualScore;
+    }
+
+    public void setHighestIndividualScore(int highestIndividualScore) {
+        this.highestIndividualScore = highestIndividualScore;
+    }
+
+    public int getNumQRCodesScanned() {
+        return numQRCodesScanned;
+    }
+
+    public void setNumQRCodesScanned(int numQRCodesScanned) {
+        this.numQRCodesScanned = numQRCodesScanned;
+    }
 }

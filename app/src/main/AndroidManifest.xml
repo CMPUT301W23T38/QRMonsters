@@ -48,6 +48,7 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+        <activity android:name=".LeaderboardActivity" />
         <activity
             android:name=".searchNearbyQR"
             android:exported="true"

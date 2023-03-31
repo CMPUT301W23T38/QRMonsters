@@ -266,6 +266,8 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
      */
     public void viewLeaderboard(View view) {
         // TODO: Add code to display the leaderboard
+        Intent intent = new Intent(HomeActivity.this, LeaderboardActivity.class);
+        startActivity(intent);
     }
 
     /**

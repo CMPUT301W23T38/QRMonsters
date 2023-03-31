@@ -48,6 +48,25 @@ public class viewPlayerProfile extends AppCompatActivity {
     TextView playerQRCountTV;
     TextView playerLowestTV;
     TextView playerHighestTV;
+    TextView playerEstimatedRankingTV;
+
+    private void fetchAllPlayers(FetchPlayersCallback callback) {
+        db.collection("users")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        List<Player> allPlayers = new ArrayList<>();
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Player player = document.toObject(Player.class);
+                            allPlayers.add(player);
+                        }
+                        callback.onComplete(allPlayers);
+                    } else {
+                        Log.d("FETCH PLAYERS FAILED", "Error getting documents: ", task.getException());
+                    }
+                });
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +79,7 @@ public class viewPlayerProfile extends AppCompatActivity {
         //reference to current player profile being viewed
         String playerView = getIntent().getStringExtra("viewUser");
         //print to console to check if correct player is being viewed
-        Log.d("PLAYERVIEW", playerView);
+        //Log.d("PLAYERVIEW", playerView);
 
 //        // Check if the currentUser is null
 //        if (currentUser == null) {
@@ -86,6 +105,8 @@ public class viewPlayerProfile extends AppCompatActivity {
         playerQRCountTV = findViewById(R.id.playerQRcountTextView);
         playerLowestTV = findViewById(R.id.lowestQRTextView);
         playerHighestTV = findViewById(R.id.highestQRTextView);
+        playerEstimatedRankingTV = findViewById(R.id.playerEstimatedRankingTV);
+
 
         Button backButton = findViewById(R.id.back_button);
         backButton.setOnClickListener(view -> finish());
@@ -161,6 +182,12 @@ public class viewPlayerProfile extends AppCompatActivity {
                                                 }
                                             }
                                             playerHighestTV.setText("Highest QR code Score: \n" + highest.getCodeName() + "    Score: " + highest.getCodeScore().toString());
+                                            QRCodeObject finalHighest = highest;
+                                            fetchAllPlayers(allPlayers -> {
+                                                    int playerHighestScore = finalHighest.getCodeScore();
+                                                    int estimatedRanking = RankingManager.getEstimatedRanking(playerHighestScore, allPlayers);
+                                                    playerEstimatedRankingTV.setText("Estimated Ranking: " + estimatedRanking);
+                                                });
                                             //set on click listener for each item in the list view 
                                             qrList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                                 @Override
@@ -310,4 +337,9 @@ public class viewPlayerProfile extends AppCompatActivity {
     public void updateTotalQR(){
         playerQRCount = qrDataList.size();
     }
+
+    public interface FetchPlayersCallback {
+        void onComplete(List<Player> players);
+    }
+
 }

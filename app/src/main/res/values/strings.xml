@@ -29,4 +29,10 @@
     <string name="welcome_to_qrmonster">WELCOME TO QRMONSTER!</string>
     <string name="search_nearby_qr_codes">Search Nearby QR codes</string>
     <string name="name">Name:</string>
+    <string-array name="sort_by_options">
+        <item>Total Score</item>
+        <item>Highest Individual Score</item>
+        <item>Number of QR Codes Scanned</item>
+    </string-array>
+
 </resources>
