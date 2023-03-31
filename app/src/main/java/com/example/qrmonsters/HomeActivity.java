@@ -44,7 +44,7 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
     private Button curLocBut, scanQR, nearbyQR, viewSelfProfile;
     private Location currentlocation;
     private String userID;
-    private Boolean recordLocation;
+    private Boolean recordLocation = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
