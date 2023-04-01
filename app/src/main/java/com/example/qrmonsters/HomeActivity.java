@@ -104,12 +104,17 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
                 .addOnCompleteListener(task -> {
                     DocumentSnapshot documentSnapshot = task.getResult();
                     ArrayList playerList = (ArrayList) Objects.requireNonNull(documentSnapshot.getData()).get("qrCodes");
-                    Intent intent = new Intent(HomeActivity.this, searchNearbyQR.class);
-                    intent.putExtra("User Location", currentlocation);
-                    intent.putStringArrayListExtra("playerList", playerList);
-                    startActivity(intent);
+                    if (currentlocation != null) {
+                        Intent intent = new Intent(HomeActivity.this, searchNearbyQR.class);
+                        intent.putExtra("User Location", currentlocation);
+                        intent.putStringArrayListExtra("playerList", playerList);
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(HomeActivity.this, "Location not available yet", Toast.LENGTH_SHORT).show();
+                    }
                 });
     }
+
 
     private void viewCurrentLocation() {
         LatLng currLoc = new LatLng(currentlocation.getLatitude(), currentlocation.getLongitude());
