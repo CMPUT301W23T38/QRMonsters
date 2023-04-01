@@ -19,11 +19,25 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.Serializable;
+/**
+ This class is responsible for displaying the details of a QR code. It receives a qrcode
+ object from the previous activity through an intent and displays the QR code's name, score,
+ syllables, and numbers in their respective TextViews. It also allows the user to view the location
+ of the QR code and add comments to it.
+ */
 public class viewQRCode extends AppCompatActivity {
     TextView qrNameTV, qrScoreTV, qrName1TV, qrNameTV2, qrNameTV3, qrNameTV4;
     TextView qrNumTV1, qrNumTV2, qrNumTV3;
     String myuserID;
 
+    /**
+     * This method is called when the activity is created. It sets the content view, gets the
+     *  QRCodeObject object received from the previous activity through an intent and sets
+     * the TextViews to the QRCodeObject's properties. It also sets the syllables and numbers of
+     * the QR code's name to their respective TextViews. Additionally, it allows the user to view the
+     * QR code's location and add comments to it.
+     * @param savedInstanceState a saved instance of the activity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

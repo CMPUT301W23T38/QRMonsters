@@ -11,10 +11,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+/**
 
+ This class represents the activity for viewing QR code comments.
+ It extends AppCompatActivity and displays a ListView of comments for a given QR code.
+ */
 public class viewQRComment extends AppCompatActivity {
 
     private viewQRCommentAdapter commentAdapter;
+    /**
+
+     Called when the activity is created. Sets the layout and initializes the ListView and adapter.
+     @param savedInstanceState the saved instance state of the activity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

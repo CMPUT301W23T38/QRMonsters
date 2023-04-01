@@ -21,10 +21,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+/**
+ This class is responsible for displaying the result of a scanned QR code and processing it
+ */
 public class ScannedResult extends AppCompatActivity {
     private Player playerRef;
-
+    /**
+     * This method is called when the activity is created, initializes the UI with the scan result and image.
+     * @param savedInstanceState The bundle containing the saved instance state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +44,11 @@ public class ScannedResult extends AppCompatActivity {
         setUI(theResult, theBitmap);
         processScannedResult(currentUser, qrLocation, theResult);
     }
-
+    /**
+     * This method initializes the UI elements.
+     * @param theResult The result of the scanned QR code
+     * @param theBitmap The image of the scanned QR code
+     */
     private void setUI(String theResult, Bitmap theBitmap) {
         TextView mTvResult = findViewById(R.id.tv_result);
         ImageView mImageCallback = findViewById(R.id.image_callback);
@@ -50,7 +59,12 @@ public class ScannedResult extends AppCompatActivity {
             mImageCallback.setImageBitmap(theBitmap);
         }
     }
-
+    /**
+     * This method processes the scanned QR code and updates the database accordingly.
+     * @param currentUser The ID of the current user
+     * @param qrLocation The location where the QR code was scanned
+     * @param theResult The result of the scanned QR code
+     */
     private void processScannedResult(String currentUser, Location qrLocation, String theResult) {
         String hashCode = SHA256andScore.getSha256Str(theResult);
         Integer hashScore = SHA256andScore.getScore(hashCode);
@@ -78,7 +92,20 @@ public class ScannedResult extends AppCompatActivity {
                 .addOnFailureListener(e -> Toast.makeText(ScannedResult.this, "FAILED",
                         Toast.LENGTH_SHORT).show());
     }
+    /**
 
+     This method processes the scanned QR code for a player and updates the necessary information.
+
+     @param userInfo the reference to the player's information document in Firestore
+
+     @param qrName the name of the scanned QR code
+
+     @param qrRef the reference to the QR code collection in Firestore
+
+     @param qrAdd the QRCodeObject representing the scanned QR code
+
+     @param usersRef the reference to the collection of all players in Firestore
+     */
     private void processPlayer(DocumentReference userInfo, String qrName, CollectionReference qrRef,
                                QRCodeObject qrAdd, CollectionReference usersRef) {
         if (playerRef.getQrCodes().contains(qrName)) {
@@ -94,7 +121,13 @@ public class ScannedResult extends AppCompatActivity {
         processQRCode(qrName, qrRef, qrAdd);
         updatePlayersScannedInfo(qrName, usersRef);
     }
+    /**
 
+     This method checks if a QR code exists in the Firestore database and adds it if it doesn't.
+     @param qrName the name of the scanned QR code
+     @param qrRef the reference to the QR code collection in Firestore
+     @param qrAdd the QRCodeObject representing the scanned QR code
+     */
     private void processQRCode(String qrName, CollectionReference qrRef, QRCodeObject qrAdd) {
         qrRef.whereEqualTo("codeName", qrName).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -104,8 +137,13 @@ public class ScannedResult extends AppCompatActivity {
             }
         });
     }
+    /**
 
-    private void addNewQRCode(CollectionReference qrRef, QRCodeObject qrAdd) {
+     This method adds a new QR code to the Firestore database.
+     @param qrRef the reference to the QR code collection in Firestore
+     @param qrAdd the QRCodeObject representing the scanned QR code
+     */
+ private void addNewQRCode(CollectionReference qrRef, QRCodeObject qrAdd) {
         Map<String, Object> data = new HashMap<>();
         data.put("codeName", qrAdd.getCodeName());
         data.put("codeHash", qrAdd.getCodeHash());
@@ -117,7 +155,14 @@ public class ScannedResult extends AppCompatActivity {
                 .addOnSuccessListener(unused -> Log.d("Working", "Data added successfully"))
                 .addOnFailureListener(e -> Log.d("Working", "Data not added" + e));
     }
+    /**
 
+     This method updates the UI to display information about other players who have scanned the same QR code.
+
+     @param qrName the name of the scanned QR code
+
+     @param usersRef the reference to the collection of all players in Firestore
+     */
     private void updatePlayersScannedInfo(String qrName, CollectionReference usersRef) {
         usersRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -138,7 +183,14 @@ public class ScannedResult extends AppCompatActivity {
             }
         });
     }
+    /**
 
+     Updates the UI to display the number of players who have scanned a QR code and their usernames.
+
+     @param playersScannedSameQR the number of players who have scanned the QR code
+
+     @param playersScannedUsernames a List of the usernames of the players who have scanned the QR code
+     */
     private void updatePlayersScannedUI(int playersScannedSameQR, List<String> playersScannedUsernames) {
         TextView tvPlayersScanned = findViewById(R.id.tv_players_scanned);
         TextView tvPlayersScannedName = findViewById(R.id.tv_players_scanned_name);

@@ -36,7 +36,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
-
+/**
+ * This activity displays a user's profile information and QR code collection
+ */
 public class viewPlayerProfile extends AppCompatActivity {
     FirebaseFirestore db;
     ListView playerQRList;
@@ -46,7 +48,11 @@ public class viewPlayerProfile extends AppCompatActivity {
     List<String> playerQRs;
     ListView qrList;
     TextView playerNameTV, playerScoreTV, playerQRCountTV, playerLowestTV, playerHighestTV, playerEstimatedRankingTV;
-
+    /**
+     * Fetches all player information from Firestore database
+     *
+     * @param callback Interface to pass the fetched players list to the caller
+     */
     private void fetchAllPlayers(FetchPlayersCallback callback) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference playersRef = db.collection("users");
@@ -95,7 +101,12 @@ public class viewPlayerProfile extends AppCompatActivity {
             }
         });
     }
-
+    /**
+     * Creates a new QRCodeObject from a Firestore document snapshot
+     *
+     * @param document Document snapshot to convert to QRCodeObject
+     * @return Newly created QRCodeObject
+     */
     private QRCodeObject createQRCodeObject(DocumentSnapshot document) {
         String cn = document.getString("codeName");
         String ch = document.getString("codeHash");
@@ -111,7 +122,11 @@ public class viewPlayerProfile extends AppCompatActivity {
         }
         return new QRCodeObject(cn, ch, cs, qrLoc, comments);
     }
-
+    /**
+     * Updates the UI to display information about the given user
+     *
+     * @param playerRef The user to display information for
+     */
     private void updateUI(Player playerRef) {
         playerNameTV.setText("Name: " + playerRef.getUsername());
         updateScore();
@@ -135,7 +150,12 @@ public class viewPlayerProfile extends AppCompatActivity {
             }
         });
     }
-
+    /**
+     * Fetches data for all QR codes in a user's collection
+     *
+     * @param playerRef      User to fetch QR codes for
+     * @param qrCodesFetched Counter to track how many QR codes have been fetched so far
+     */
     private void fetchQRData(Player playerRef, AtomicInteger qrCodesFetched) {
         for (String qrCode : playerRef.getQrCodes()) {
             DocumentReference qrInfo = db.collection("qrCodes").document(qrCode);
@@ -161,7 +181,11 @@ public class viewPlayerProfile extends AppCompatActivity {
             });
         }
     }
-
+    /**
+     * Lifecycle method called when the activity is first created
+     *
+     * @param savedInstanceState Bundle containing saved state information
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -256,7 +280,10 @@ public class viewPlayerProfile extends AppCompatActivity {
             return true;
         });
     }
+    /**
 
+     Updates the player's score based on the sum of code scores from QRCodeObjects in qrDataList.
+     */
     public void updateScore(){
         Integer tentScore = 0;
         for(QRCodeObject qr: qrDataList){
@@ -270,6 +297,7 @@ public class viewPlayerProfile extends AppCompatActivity {
     }
 
     public interface FetchPlayersCallback {
+
         void onComplete(List<Player> players);
     }
 
