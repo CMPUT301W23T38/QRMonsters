@@ -101,7 +101,6 @@ public class Scan_QR extends AppCompatActivity implements View.OnClickListener {
  * @param resultCode The result code returned by the activity.
  * @param data The data returned by the activity.
  */
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -120,14 +119,8 @@ public class Scan_QR extends AppCompatActivity implements View.OnClickListener {
 
             }catch (NullPointerException e){
                 System.out.println("");
-
             }
-
-
-
         }
-
-
     }
     /**
      * show a pop up message of string message

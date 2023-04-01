@@ -29,9 +29,12 @@ import com.google.firebase.firestore.Source;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class viewPlayerProfile extends AppCompatActivity {
@@ -39,15 +42,125 @@ public class viewPlayerProfile extends AppCompatActivity {
     ListView playerQRList;
     ArrayAdapter<QRCodeObject> qrAdapter;
     ArrayList<QRCodeObject> qrDataList;
-    Integer playerScore;
-    Integer playerQRCount;
+    Integer playerScore, playerQRCount;
     List<String> playerQRs;
     ListView qrList;
-    TextView playerNameTV;
-    TextView playerScoreTV;
-    TextView playerQRCountTV;
-    TextView playerLowestTV;
-    TextView playerHighestTV;
+    TextView playerNameTV, playerScoreTV, playerQRCountTV, playerLowestTV, playerHighestTV, playerEstimatedRankingTV;
+
+    private void fetchAllPlayers(FetchPlayersCallback callback) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference playersRef = db.collection("users");
+        CollectionReference qrCodesRef = db.collection("qrCodes");
+
+        playersRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                List<Player> allPlayers = new ArrayList<>();
+                AtomicInteger playersProcessed = new AtomicInteger(0);
+
+                for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
+                    Player player = document.toObject(Player.class);
+                    ArrayList<String> qrCodes = player.getQrCodes();
+                    ArrayList<Integer> qrScores = new ArrayList<>();
+
+                    if (qrCodes.isEmpty()) {
+                        allPlayers.add(player);
+                        playersProcessed.incrementAndGet();
+
+                        if (playersProcessed.get() == task.getResult().size()) {
+                            callback.onComplete(allPlayers);
+                        }
+                    } else {
+                        for (String qrCode : qrCodes) {
+                            qrCodesRef.document(qrCode).get().addOnCompleteListener(qrCodeTask -> {
+                                if (qrCodeTask.isSuccessful()) {
+                                    int score = qrCodeTask.getResult().getLong("codeScore").intValue();
+                                    qrScores.add(score);
+                                    player.setQrScores(qrScores);
+
+                                    if (qrScores.size() == qrCodes.size()) {
+                                        allPlayers.add(player);
+                                        playersProcessed.incrementAndGet();
+
+                                        if (playersProcessed.get() == task.getResult().size()) {
+                                            callback.onComplete(allPlayers);
+                                        }
+                                    }
+                                }
+                            });
+                        }
+                    }
+                }
+            } else {
+                Log.w(TAG, "Error getting documents: ", task.getException());
+            }
+        });
+    }
+
+    private QRCodeObject createQRCodeObject(DocumentSnapshot document) {
+        String cn = document.getString("codeName");
+        String ch = document.getString("codeHash");
+        Integer cs = document.getLong("codeScore").intValue();
+        HashMap<String, Object> locationData = (HashMap<String, Object>) document.get("codeLocation");
+        HashMap<String, String> comments = (HashMap<String, String>) document.get("comments");
+
+        Location qrLoc = null;
+        if (locationData != null) {
+            qrLoc = new Location("");
+            qrLoc.setLatitude((Double) locationData.get("latitude"));
+            qrLoc.setLongitude((Double) locationData.get("longitude"));
+        }
+        return new QRCodeObject(cn, ch, cs, qrLoc, comments);
+    }
+
+    private void updateUI(Player playerRef) {
+        playerNameTV.setText("Name: " + playerRef.getUsername());
+        updateScore();
+        updateTotalQR();
+        playerScoreTV.setText("Score: " + playerScore);
+        playerQRCountTV.setText("# of QR codes: " + playerQRCount);
+
+        QRCodeObject lowest = Collections.min(qrDataList, Comparator.comparing(QRCodeObject::getCodeScore));
+        playerLowestTV.setText("Lowest QR code Score: \n" + lowest.getCodeName() + "    Score: " + lowest.getCodeScore().toString());
+
+        QRCodeObject highest = Collections.max(qrDataList, Comparator.comparing(QRCodeObject::getCodeScore));
+        playerHighestTV.setText("Highest QR code Score: \n" + highest.getCodeName() + "    Score: " + highest.getCodeScore().toString());
+
+        fetchAllPlayers(allPlayers -> {
+            if (playerRef.getQrScores() != null && !playerRef.getQrScores().isEmpty()) {
+                int playerHighestScore = Collections.max(playerRef.getQrScores());
+                int estimatedRanking = RankingManager.getEstimatedRanking(playerHighestScore, allPlayers);
+                playerEstimatedRankingTV.setText("Estimated Ranking: " + estimatedRanking);
+            } else {
+                playerEstimatedRankingTV.setText("Estimated Ranking: N/A");
+            }
+        });
+    }
+
+    private void fetchQRData(Player playerRef, AtomicInteger qrCodesFetched) {
+        for (String qrCode : playerRef.getQrCodes()) {
+            DocumentReference qrInfo = db.collection("qrCodes").document(qrCode);
+            qrInfo.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d("EXISTS", "DocumentSnapshot data: " + document.getData());
+                        QRCodeObject toAdd = createQRCodeObject(document);
+                        qrDataList.add(toAdd);
+                        qrAdapter.notifyDataSetChanged();
+                        qrCodesFetched.incrementAndGet();
+
+                        if (qrCodesFetched.get() == playerRef.getQrCodes().size()) {
+                            updateUI(playerRef);
+                        }
+                    } else {
+                        Log.d("!EXISTS", "No such document");
+                    }
+                } else {
+                    Log.d("TASK FAILED", "get failed with ", task.getException());
+                }
+            });
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,13 +173,6 @@ public class viewPlayerProfile extends AppCompatActivity {
         //reference to current player profile being viewed
         String playerView = getIntent().getStringExtra("viewUser");
         //print to console to check if correct player is being viewed
-        Log.d("PLAYERVIEW", playerView);
-
-//        // Check if the currentUser is null
-//        if (currentUser == null) {
-//            Log.e(TAG, "currentUser is null");
-//            return;
-//        }
 
         // Check if the playerView is null
         if (playerView == null) {
@@ -86,212 +192,64 @@ public class viewPlayerProfile extends AppCompatActivity {
         playerQRCountTV = findViewById(R.id.playerQRcountTextView);
         playerLowestTV = findViewById(R.id.lowestQRTextView);
         playerHighestTV = findViewById(R.id.highestQRTextView);
+        playerEstimatedRankingTV = findViewById(R.id.playerEstimatedRankingTV);
 
         Button backButton = findViewById(R.id.back_button);
         backButton.setOnClickListener(view -> finish());
 
-        //final CollectionReference qrReference = db.collection("qrCodes");
-        DocumentReference playerInfo = db.collection("users")
-                .document(playerView);
-
+        DocumentReference playerInfo = db.collection("users").document(playerView);
         playerInfo.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
                     Log.d("EXISTS", "DocumentSnapshot data: " + document.getData());
                     Player playerRef = document.toObject(Player.class);
-                    assert playerRef != null;
-
-                    for (String qrCode: playerRef.getQrCodes()) {
-                        DocumentReference qrInfo = db.collection("qrCodes").document(qrCode);
-                        qrInfo.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    DocumentSnapshot document = task.getResult();
-                                    if (document.exists()) {
-                                        Log.d("EXISTS", "DocumentSnapshot data: " + document.getData());
-
-                                        String cn = (String) Objects.requireNonNull(document.getData()).get("codeName");
-                                        String ch = (String) document.getData().get("codeHash");
-                                        Integer cs = Math.toIntExact((Long) document.getData().get("codeScore"));
-                                        HashMap locationData = (HashMap) document.getData().get("codeLocation");
-
-
-                                        HashMap<String, String> comments = (HashMap) document.getData().get("comments");
-
-                                        Location qrLoc = null;
-
-                                        if (locationData != null) {
-                                            qrLoc = new Location("");
-                                            qrLoc.setLatitude((Double) locationData.get("latitude"));
-                                            qrLoc.setLongitude((Double) locationData.get("longitude"));
-                                        }
-
-                                            QRCodeObject toAdd = new QRCodeObject(cn, ch, cs, qrLoc, comments);
-                                            qrDataList.add(toAdd);
-                                            qrAdapter.notifyDataSetChanged();
-                                            playerNameTV.setText("Name: " + playerRef.getUsername());
-
-                                            updateScore();
-                                            updateTotalQR();
-
-                                            playerScoreTV.setText("Score: " + String.valueOf(playerScore));
-                                            playerQRCountTV.setText("# of QR codes: " + String.valueOf(playerQRCount));
-
-                                            QRCodeObject lowest =  qrDataList.get(0);
-                                            //START NEW
-                                            for (QRCodeObject qrLowest : qrDataList) {
-                                                if(lowest != qrLowest){
-                                                    if(qrLowest.getCodeScore() < lowest.getCodeScore()){
-                                                        lowest = qrLowest;
-                                                    }
-                                                }
-                                            }
-                                            playerLowestTV.setText("Lowest QR code Score: \n" + lowest.getCodeName() + "    Score: " + lowest.getCodeScore().toString());
-                                            //END NEW
-
-                                            QRCodeObject highest =  qrDataList.get(0);
-                                            //START NEW
-                                            for (QRCodeObject qrHighest : qrDataList) {
-                                                if(highest != qrHighest){
-                                                    if(qrHighest.getCodeScore() > highest.getCodeScore()){
-                                                        highest = qrHighest;
-                                                    }
-                                                }
-                                            }
-                                            playerHighestTV.setText("Highest QR code Score: \n" + highest.getCodeName() + "    Score: " + highest.getCodeScore().toString());
-                                            //set on click listener for each item in the list view 
-                                            qrList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                                @Override
-                                                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                                                    QRCodeObject selectedQR = qrDataList.get(i);
-                                                    Intent intent = new Intent(viewPlayerProfile.this, viewQRCode.class);
-                                                    intent.putExtra("qrCodeObject", selectedQR);
-                                                    intent.putExtra("usersID", currentUser);
-                                                    startActivity(intent);
-                                                }
-                                            });
-
-
-
-                                    }
-                                    else {
-                                        Log.d("!EXISTS", "No such document");
-                                    }
-                                }
-                                else {
-                                    Log.d("TASK FAILED", "get failed with ", task.getException());
-                                }
-                            }
-                        });
-                    }
+                    AtomicInteger qrCodesFetched = new AtomicInteger(0);
+                    fetchQRData(playerRef, qrCodesFetched);
                 } else {
                     Log.d("!EXISTS", "No such document");
                 }
             } else {
                 Log.d("TASK FAILED", "get failed with ", task.getException());
             }
-
         });
-        //String currentUser = "a";
+
+        qrList.setOnItemClickListener((adapterView, view, i, l) -> {
+            QRCodeObject selectedQR = qrDataList.get(i);
+            Intent intent = new Intent(viewPlayerProfile.this, viewQRCode.class);
+            intent.putExtra("qrCodeObject", selectedQR);
+            intent.putExtra("usersID", currentUser);
+            startActivity(intent);
+        });
+
         qrList.setOnItemLongClickListener((adapterView, view, i, l) -> {
-
-            if(currentUser.equals(playerView)){
+            if (currentUser.equals(playerView)) {
                 QRCodeObject clickQR = qrAdapter.getItem(i);
-                playerInfo.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document.exists()) {
-                                Log.d("EXISTS", "DocumentSnapshot data: " + document.getData());
+                playerInfo.get().addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            Log.d("EXISTS", "DocumentSnapshot data: " + document.getData());
+                            Player playerRef = document.toObject(Player.class);
+                            playerRef.getQrCodes().remove(clickQR.getCodeName());
+                            playerInfo.update("qrCodes", playerRef.getQrCodes());
+                            //remove from qrScores as well
+                            playerRef.getQrScores().remove(clickQR.getCodeScore());
+                            playerInfo.update("qrScores", playerRef.getQrScores());
+                            qrDataList.clear();
 
-                                Player playerRef = document.toObject(Player.class);
-                                playerRef.getQrCodes().remove(clickQR.getCodeName());
-                                playerInfo.update("qrCodes", playerRef.getQrCodes());
-                                qrDataList.clear();
-
-                                if(playerRef.getQrCodes().size() == 0){
-                                    Toast.makeText(viewPlayerProfile.this, "Deleted all owned QR codes!",
-                                            Toast.LENGTH_SHORT).show();
-                                    finish();
-                                }
-
-                                for (String qrCode: playerRef.getQrCodes()) {
-                                    DocumentReference qrInfo = db.collection("qrCodes").document(qrCode);
-                                    qrInfo.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                            if (task.isSuccessful()) {
-                                                DocumentSnapshot document = task.getResult();
-                                                if (document.exists()) {
-                                                    Log.d("EXISTS", "DocumentSnapshot data: " + document.getData());
-
-                                                    String cn = (String) document.getData().get("codeName");
-                                                    String ch = (String) document.getData().get("codeHash");
-                                                    Integer cs = Math.toIntExact((Long) document.getData().get("codeScore"));
-                                                    HashMap locationData = (HashMap) document.getData().get("codeLocation");
-
-                                                    Location qrLoc = null;
-
-                                                    if (locationData != null) {
-                                                        qrLoc = new Location("");
-                                                        qrLoc.setLatitude((Double) locationData.get("latitude"));
-                                                        qrLoc.setLongitude((Double) locationData.get("longitude"));
-                                                    }
-                                                        QRCodeObject toAdd = new QRCodeObject(cn, ch, cs, qrLoc);
-                                                        qrDataList.add(toAdd);
-
-                                                        qrAdapter.notifyDataSetChanged();
-
-                                                        playerNameTV.setText("Player Name: " + playerRef.getUsername());
-
-                                                        updateScore();
-                                                        updateTotalQR();
-
-                                                        playerScoreTV.setText("Player Score: " + String.valueOf(playerScore));
-                                                        playerQRCountTV.setText("Player QR count: " + String.valueOf(playerQRCount));
-
-                                                        QRCodeObject lowest =  qrDataList.get(0);
-                                                        //START NEW
-                                                        for (QRCodeObject qrLowest : qrDataList) {
-                                                            if(lowest != qrLowest){
-                                                                if(qrLowest.getCodeScore() < lowest.getCodeScore()){
-                                                                    lowest = qrLowest;
-                                                                }
-                                                            }
-                                                        }
-                                                        playerLowestTV.setText("Player Lowest QR code: \n" + lowest.getCodeName() + "    Score: " + lowest.getCodeScore().toString());
-                                                        //END NEW
-
-                                                        QRCodeObject highest =  qrDataList.get(0);
-                                                        //START NEW
-                                                        for (QRCodeObject qrHighest : qrDataList) {
-                                                            if(highest != qrHighest){
-                                                                if(qrHighest.getCodeScore() > highest.getCodeScore()){
-                                                                    highest = qrHighest;
-                                                                }
-                                                            }
-                                                        }
-                                                        playerHighestTV.setText("Player Highest QR code: \n" + highest.getCodeName() + "    Score: " + highest.getCodeScore().toString());
-                                                } else {
-                                                    Log.d("!EXISTS", "No such document");
-                                                }
-                                            } else {
-                                                Log.d("TASK FAILED", "get failed with ", task.getException());
-                                            }
-                                        }
-                                    });
-
-                                }
-
-                            } else {
-                                Log.d("!EXISTS", "No such document part 2");
+                            if (playerRef.getQrCodes().size() == 0) {
+                                Toast.makeText(viewPlayerProfile.this, "Deleted all owned QR codes!",
+                                        Toast.LENGTH_SHORT).show();
+                                finish();
                             }
+                            AtomicInteger qrCodesFetched = new AtomicInteger(0);
+                            fetchQRData(playerRef, qrCodesFetched);
                         } else {
-                            Log.d("TASK FAILED", "get failed with ", task.getException());
+                            Log.d("!EXISTS", "No such document part 2");
                         }
+                    } else {
+                        Log.d("TASK FAILED", "get failed with ", task.getException());
                     }
                 });
             }
@@ -310,4 +268,9 @@ public class viewPlayerProfile extends AppCompatActivity {
     public void updateTotalQR(){
         playerQRCount = qrDataList.size();
     }
+
+    public interface FetchPlayersCallback {
+        void onComplete(List<Player> players);
+    }
+
 }

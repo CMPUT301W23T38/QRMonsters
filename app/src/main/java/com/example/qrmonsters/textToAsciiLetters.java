@@ -28,13 +28,11 @@ public class textToAsciiLetters {
 
     public static String getAscii(Character base, Character component){
 
-
         String B = "*****\n**** \n*****";
         String C = " ****\n*    \n ****";
         String D = "**** \n*   *\n**** ";
         String F = "*****\n***  \n**   ";
         String mainString;
-
 
         switch(base){
 

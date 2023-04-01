@@ -29,16 +29,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         notifyDataSetChanged();
     }
 
-//    @Override
-//    public void onClick(View view) {
-//        Player user = (Player) view.getTag();
-//
-//        // Start a new activity to show the user's profile
-//        Intent intent = new Intent(view.getContext(), viewPlayerProfile.class);
-//        intent.putExtra("username", user.getUsername());
-//        view.getContext().startActivity(intent);
-//    }
-
     /**
      * Creates a new UserViewHolder object when there are no existing ones to reuse
      * @param parent ViewGroup containing the RecyclerView
@@ -51,15 +41,12 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_item, parent, false);
         return new UserViewHolder(view);
     }
-
     @Override
     public void onBindViewHolder(@NonNull UserViewHolder holder, int position) {
         Player user = userList.get(position);
         //holder.bind(user);
         holder.usernameTextView.setText(user.getUsername());
         holder.phoneTextView.setText(user.getPhoneNumber());
-//        holder.itemView.setOnClickListener((View.OnClickListener) this);
-//        holder.itemView.setTag(user);
         holder.itemView.setOnClickListener(view -> {
             Intent intent = new Intent(view.getContext(), viewPlayerProfile.class);
             intent.putExtra("currentUser", user.getUserId());
@@ -83,17 +70,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
             super(itemView);
             usernameTextView = itemView.findViewById(R.id.username_text_view);
             phoneTextView = itemView.findViewById(R.id.phone_text_view);
-            //itemView.setOnClickListener(this);
         }
-
-//        @Override
-//        public void onClick(View view) {
-//            int position = getAdapterPosition();
-//            if (position != RecyclerView.NO_POSITION) {
-//                Player user = userList.get(position);
-//                onUserClickListener.onUserClick(user);
-//            }
-//        }
     }
 
     public interface OnUserClickListener {

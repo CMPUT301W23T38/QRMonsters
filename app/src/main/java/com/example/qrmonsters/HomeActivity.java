@@ -21,11 +21,8 @@ import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.maps.model.LatLng;
-//import com.google.android.gms.tasks.OnCompleteListener;
-//import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.zxing.activity.CaptureActivity;
@@ -40,119 +37,104 @@ import java.util.Objects;
  * QR codes, searching for other users, and viewing a leaderboard.
  */
 public class HomeActivity extends AppCompatActivity implements LocationListener {
-    private TextView tv_location;
     private static final int PERMISSION_LOCATION = 1000;
-    private final static int REQ_CODE = 1028;
-    private LocationListener locationListener;
+    private static final int REQ_CODE = 1028;
 
-    Button curLocBut;
-    Button scanQR;
-    Button nearbyQR;
-    Button viewSelfProfile;
-    Location currentlocation;
-    String userID;
-    Boolean recordLocation;
+    private TextView tv_location;
+    private Button curLocBut, scanQR, nearbyQR, viewSelfProfile;
+    private Location currentlocation;
+    private String userID;
+    private Boolean recordLocation = true;
 
-    /**
-     * This method is called when the activity is created. It sets up the UI components and loads
-     * the user's profile information from SharedPreferences. It also checks for location and camera
-     * permissions and requests them if necessary.
-     */
-    @SuppressLint({"MissingPermission", "MissingInflatedId"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        if(checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
-            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    PERMISSION_LOCATION);
-        }
-        else{
+        requestPermissionsIfNeeded();
+        initUIComponents();
+        loadUserProfile();
+    }
+
+    private void requestPermissionsIfNeeded() {
+        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_LOCATION);
+        } else {
             showLocation();
         }
 
-        if(checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+        if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.CAMERA}, PERMISSION_LOCATION);
         }
-        // Get references to the UI components
-        TextView usernameTextView = findViewById(R.id.usernameTextView);
-        TextView emailTextView = findViewById(R.id.emailTextView);
-        TextView phoneNumberTextView = findViewById(R.id.phoneNumberTextView);
+    }
+
+    private void initUIComponents() {
         curLocBut = findViewById(R.id.viewCurrentLocation);
         scanQR = findViewById(R.id.scanQRCodeButton);
         tv_location = findViewById(R.id.tv_location);
         nearbyQR = findViewById(R.id.searchNearbyQRButton);
         viewSelfProfile = findViewById(R.id.viewMyQRCodesButton);
 
-        // Load the user's profile information
+        setButtonListeners();
+    }
+
+    private void setButtonListeners() {
+        viewSelfProfile.setOnClickListener(view -> viewSelfProfile());
+
+        nearbyQR.setOnClickListener(view -> searchNearbyQR());
+
+        curLocBut.setOnClickListener(view -> viewCurrentLocation());
+
+        scanQR.setOnClickListener(view -> scanQRCode());
+
+        ToggleButton toggleLocationTracking = findViewById(R.id.toggle_location);
+        toggleLocationTracking.setOnCheckedChangeListener((buttonView, isChecked) -> recordLocation = isChecked);
+    }
+
+    private void viewSelfProfile() {
+        Intent intent = new Intent(HomeActivity.this, viewPlayerProfile.class);
+        intent.putExtra("currentUser", userID);
+        intent.putExtra("viewUser", userID);
+        startActivity(intent);
+    }
+
+    private void searchNearbyQR() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("users").document(userID).get()
+                .addOnCompleteListener(task -> {
+                    DocumentSnapshot documentSnapshot = task.getResult();
+                    ArrayList playerList = (ArrayList) Objects.requireNonNull(documentSnapshot.getData()).get("qrCodes");
+                    Intent intent = new Intent(HomeActivity.this, searchNearbyQR.class);
+                    intent.putExtra("User Location", currentlocation);
+                    intent.putStringArrayListExtra("playerList", playerList);
+                    startActivity(intent);
+                });
+    }
+
+    private void viewCurrentLocation() {
+        LatLng currLoc = new LatLng(currentlocation.getLatitude(), currentlocation.getLongitude());
+        new currLocationFragment(currLoc).show(getSupportFragmentManager(), "CURR_LOC");
+    }
+
+    private void scanQRCode() {
+        Intent intent = new Intent(HomeActivity.this, CaptureActivity.class);
+        startActivityForResult(intent, REQ_CODE);
+    }
+
+    private void loadUserProfile() {
         SharedPreferences preferences = getSharedPreferences("UserDetails", MODE_PRIVATE);
         String username = preferences.getString("username", "");
         String email = preferences.getString("email", "");
         String phoneNumber = preferences.getString("phoneNumber", "");
         userID = preferences.getString("userID", "");
-//        Log.d("HomeActivity", "Username: " + username);
-//        Log.d("HomeActivity", "Email: " + email);
-//        Log.d("HomeActivity", "Phone: " + phoneNumber);
 
-        // Update the UI with the user's profile information
+        TextView usernameTextView = findViewById(R.id.usernameTextView);
+        TextView emailTextView = findViewById(R.id.emailTextView);
+        TextView phoneNumberTextView = findViewById(R.id.phoneNumberTextView);
+
         usernameTextView.setText("Username: " + username);
         emailTextView.setText("Email: " + email);
         phoneNumberTextView.setText("Phone: " + phoneNumber);
-
-        viewSelfProfile.setOnClickListener(view -> {
-
-            Intent intent = new Intent(HomeActivity.this, viewPlayerProfile.class);
-            intent.putExtra("currentUser", userID);
-            intent.putExtra("viewUser", userID);
-            startActivity(intent);
-        });
-
-        nearbyQR.setOnClickListener(view -> {
-
-            //Grabbing list of already player owned QR's so they don't show up
-            //in nearby QR list
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-            db.collection("users").document(userID).get()
-                    .addOnCompleteListener(task -> {
-                        DocumentSnapshot documentSnapshot = task.getResult();
-                        ArrayList playerList =
-                                (ArrayList) Objects.requireNonNull(documentSnapshot.getData()).get("qrCodes");
-                        Intent intent = new Intent(HomeActivity.this, searchNearbyQR.class);
-                        intent.putExtra("User Location", currentlocation);
-                        intent.putStringArrayListExtra("playerList", playerList);
-                        startActivity(intent);
-                    });
-        });
-
-        curLocBut.setOnClickListener(view -> {
-            LatLng currLoc = new LatLng(currentlocation.getLatitude(),
-                    currentlocation.getLongitude());
-            new currLocationFragment(currLoc).show(getSupportFragmentManager(),
-                    "CURR_LOC");
-        });
-
-        scanQR.setOnClickListener(view -> {
-            Intent intent = new Intent(HomeActivity.this, CaptureActivity.class);
-            startActivityForResult(intent, REQ_CODE);
-        });
-
-        ToggleButton toggleLocationTracking = findViewById(R.id.toggle_location);
-        toggleLocationTracking.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                // Handle location tracking being enabled or disabled
-                LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-                if (isChecked) {
-                    recordLocation = true;
-                    }
-
-                else {
-                    recordLocation = false;
-                }
-
-            }
-        });
     }
 
     @Override
@@ -168,20 +150,14 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
                 intent1.putExtra("TheBitmap", bitmap);
                 intent1.putExtra("UserID", userID);
 
-                if(recordLocation == true){
+                if(recordLocation){
                     intent1.putExtra("location", currentlocation);
-
                 }
                 else{
-
                     intent1.putExtra("location", (Location) null);
                 }
-
                 startActivity(intent1);                   //Jumped to ScannedResult class
-                //Toast.makeText(HomeActivity.this, "" + result, Toast.LENGTH_SHORT).show();
-//                if(bitmap != null){
-//                    mImageCallback.setImageBitmap(bitmap);
-//                }
+
             }catch (NullPointerException e){
                 System.out.println();
             }
@@ -246,26 +222,13 @@ public class HomeActivity extends AppCompatActivity implements LocationListener 
     }
 
     /**
-     Launches the QR code scanning functionality when the "Scan QR Code" button is clicked.
-     @param view The button view that was clicked
-     */
-    public void scanQRCode(View view) {
-        // TODO: Add code to launch the QR code scanning functionality
-    }
-
-    /**
-     Displays a list of the user's QR codes when the "View My QR Codes" button is clicked.
-     @param view The button view that was clicked
-     */
-    public void viewMyQRCodes(View view) {
-        // TODO: Add code to display a list of the user's QR codes
-    }
-    /**
      Displays the leaderboard when the "View Leaderboard" button is clicked.
      @param view The button view that was clicked
      */
     public void viewLeaderboard(View view) {
         // TODO: Add code to display the leaderboard
+        Intent intent = new Intent(HomeActivity.this, LeaderboardActivity.class);
+        startActivity(intent);
     }
 
     /**

@@ -29,7 +29,6 @@ import java.util.Objects;
  database for users with matching usernames and displays them in a RecyclerView.
  */
 public class UserSearchActivity extends AppCompatActivity implements UserAdapter.OnUserClickListener {
-
     private EditText searchEditText;
     private RecyclerView userRecyclerView;
     private UserAdapter userAdapter;
@@ -72,7 +71,6 @@ public class UserSearchActivity extends AppCompatActivity implements UserAdapter
                 Toast.makeText(UserSearchActivity.this, "User search failed: " + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
                 Log.e(TAG, "User search failed: " + task.getException().getMessage());
             }
-
         });
     }
     @Override
@@ -82,6 +80,4 @@ public class UserSearchActivity extends AppCompatActivity implements UserAdapter
         intent.putExtra("username", user.getUsername());
         startActivity(intent);
     }
-
-
 }
