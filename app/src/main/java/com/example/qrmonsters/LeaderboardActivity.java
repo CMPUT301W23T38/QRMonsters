@@ -70,7 +70,9 @@ public class LeaderboardActivity extends AppCompatActivity implements Leaderboar
                                 DocumentReference playerRef = db.collection("users").document(player.getUserId());
                                 playerRef.update("totalScore", totalScore);
                                 player.setHighestIndividualScore(highestIndividualScore);
+                                playerRef.update("highestIndividualScore", highestIndividualScore);
                                 player.setNumQRCodesScanned(numQRCodesScanned);
+                                playerRef.update("numQRCodesScanned", numQRCodesScanned);
                                 players.add(player);
                                 if (players.size() == task.getResult().size()) {
                                     sortAndUpdateLeaderboard();
