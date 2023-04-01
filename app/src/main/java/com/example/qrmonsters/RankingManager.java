@@ -9,6 +9,10 @@ public class RankingManager {
         int playersWithSameScore = 0;
 
         for (Player player : allPlayers) {
+            if (player.getQrScores().isEmpty()) {
+                continue;
+            }
+
             int currentPlayerHighestScore = Collections.max(player.getQrScores());
             if (playerHighestScore < currentPlayerHighestScore) {
                 rank++;
@@ -24,4 +28,3 @@ public class RankingManager {
         }
     }
 }
-
