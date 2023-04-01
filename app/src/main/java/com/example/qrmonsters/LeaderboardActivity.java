@@ -1,5 +1,10 @@
 package com.example.qrmonsters;
+/**
 
+ The LeaderboardActivity class displays a list of players sorted by total score or other criteria selected by the user.
+ It loads data from a Firestore database and calculates the total score for each player based on the QR codes they have scanned.
+ It also provides a listener for when a player is clicked, which opens a view of their profile.
+ */
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import android.content.Intent;
@@ -25,7 +30,12 @@ public class LeaderboardActivity extends AppCompatActivity implements Leaderboar
     private List<Player> players = new ArrayList<>();
     private LeaderboardAdapter leaderboardAdapter;
     private Spinner spinnerSortBy;
-
+    /**
+     * This method is called when the activity is created. It initializes the RecyclerView, the Spinner,
+     * loads the leaderboard data, and sets the adapter to the RecyclerView.
+     *
+     * @param savedInstanceState a Bundle object containing the activity's previously saved state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +64,10 @@ public class LeaderboardActivity extends AppCompatActivity implements Leaderboar
         leaderboardAdapter = new LeaderboardAdapter(players, LeaderboardAdapter.SortBy.TOTAL_SCORE, this);
         recyclerViewLeaderboard.setAdapter(leaderboardAdapter);
     }
-
+    /**
+     * This method loads the leaderboard data from a Firestore database and calculates the total score for each player
+     * based on the QR codes they have scanned.
+     */
     private void loadLeaderboardData() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("users")
@@ -84,7 +97,10 @@ public class LeaderboardActivity extends AppCompatActivity implements Leaderboar
                     }
                 });
     }
-
+    /**
+     * Sorts the leaderboard based on the user's selected option from the spinner
+     * and updates the leaderboard data accordingly.
+     */
     private void sortAndUpdateLeaderboard() {
         int selectedOption = spinnerSortBy.getSelectedItemPosition();
         LeaderboardAdapter.SortBy sortBy;
@@ -105,7 +121,16 @@ public class LeaderboardActivity extends AppCompatActivity implements Leaderboar
 
         leaderboardAdapter.updateData(players, sortBy);
     }
-
+    /**
+     * Calculates the total score for the given QR codes by querying the Firestore database
+     * and invokes the onTotalScoreCalculated() method of the provided listener when done.
+     * If the list of QR codes is empty, then the total score, highest individual score, and number
+     * of QR codes scanned are all zero.
+     *
+     * @param db The Firestore database instance to use for the query.
+     * @param qrCodes The list of QR code IDs to query for total score.
+     * @param listener The listener to notify when the total score calculation is complete.
+     */
     private void calculateTotalScore(FirebaseFirestore db, List<String> qrCodes, OnTotalScoreCalculatedListener listener) {
         if (qrCodes.isEmpty()) {
             listener.onTotalScoreCalculated(0, 0, 0);
@@ -136,13 +161,22 @@ public class LeaderboardActivity extends AppCompatActivity implements Leaderboar
             });
         }
     }
-
+    /**
+     * Handles the click event for a player item in the leaderboard RecyclerView by
+     * launching the view player profile activity with the selected player's username.
+     *
+     * @param player The player item that was clicked.
+     */
     @Override
     public void onPlayerClick(Player player) {
         Intent intent = new Intent(this, viewPlayerProfile.class);
         intent.putExtra("username", player.getUsername());
         startActivity(intent);
     }
+
+    /**
+     * Listener interface for notifying when the total score calculation is complete.
+     */
 
     interface OnTotalScoreCalculatedListener {
         void onTotalScoreCalculated(int totalScore, int highestIndividualScore, int numQRCodesScanned);

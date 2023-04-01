@@ -12,26 +12,37 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
+/**
+ Adapter class for populating leaderboard recycler view with player data
+ */
 public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.LeaderboardViewHolder> {
 
     private List<Player> users;
     private SortBy currentSortBy;
     private OnPlayerClickListener onPlayerClickListener;
-
+    /**
+     * Enum class representing the different ways players can be sorted in the leaderboard
+     */
     public enum SortBy {
         TOTAL_SCORE,
         HIGHEST_INDIVIDUAL_SCORE,
         NUM_QR_CODES_SCANNED
     }
-
+    /**
+     * Constructor for the adapter
+     * @param playerList The list of players to populate the leaderboard with
+     * @param sortBy The initial sort method to use for the leaderboard
+     * @param onPlayerClickListener The listener for when a player is clicked on in the leaderboard
+     */
     public LeaderboardAdapter(List<Player> playerList, SortBy sortBy, OnPlayerClickListener onPlayerClickListener) {
         this.users = new ArrayList<>(playerList);
         this.currentSortBy = sortBy;
         this.onPlayerClickListener = onPlayerClickListener;
         sortUsers();
     }
-
+    /**
+     * Sorts the list of players using the current sort method specified by currentSortBy
+     */
     private void sortUsers() {
         Collections.sort(users, (p1, p2) -> {
             switch (currentSortBy) {
@@ -46,7 +57,11 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
             }
         });
     }
-
+    /**
+     * Updates the data in the adapter and updates the leaderboard
+     * @param playerList The new list of players to update the leaderboard with
+     * @param sortBy The new sort method to use for the leaderboard
+     */
     public void updateData(List<Player> playerList, SortBy sortBy) {
         this.users.clear();
         this.users.addAll(playerList);
@@ -54,6 +69,12 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
         sortUsers();
         notifyDataSetChanged();
     }
+    /**
+     * Inflates the view holder for the leaderboard
+     * @param parent The parent ViewGroup
+     * @param viewType The type of view to inflate
+     * @return The LeaderboardViewHolder
+     */
 
     @NonNull
     @Override
@@ -61,7 +82,11 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_leaderboard, parent, false);
         return new LeaderboardViewHolder(view);
     }
-
+    /**
+     * Binds the data for a single player to their corresponding row in the leaderboard
+     * @param holder The LeaderboardViewHolder to bind the data to
+     * @param position The position of the player in the list
+     */
     @Override
     public void onBindViewHolder(@NonNull LeaderboardViewHolder holder, int position) {
         Player user = users.get(position);
