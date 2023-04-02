@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#A7DEE9"
     android:orientation="vertical"
-    android:padding="16dp"
-    android:background="#A7DEE9">
+    android:padding="16dp">
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
-        android:layout_height="163dp"
+        android:layout_height="142dp"
         app:srcCompat="@drawable/logo2" />
 
     <TextView
@@ -22,9 +22,10 @@
         android:layout_gravity="center"
         android:layout_marginTop="200dp"
         android:padding="16dp"
+        android:rotationX="23"
         android:text="@string/create_account"
-        android:textColor="#757575"
-        android:textSize="24sp"
+        android:textColor="#FFFFFF"
+        android:textSize="28sp"
         android:textStyle="bold" />
 
     <EditText
@@ -36,7 +37,8 @@
         android:hint="@string/username"
         android:inputType="text"
         android:minHeight="48dp"
-        android:textColorHint="#455A64"
+        android:textColorHint="#757575"
+        android:textStyle="bold"
         tools:ignore="VisualLintTextFieldSize" />
 
     <EditText
@@ -48,7 +50,8 @@
         android:hint="@string/email_address"
         android:inputType="textEmailAddress"
         android:minHeight="48dp"
-        android:textColorHint="#455A64"
+        android:textColorHint="#757575"
+        android:textStyle="bold"
         tools:ignore="VisualLintTextFieldSize" />
 
     <EditText
@@ -60,7 +63,8 @@
         android:hint="@string/phone_number"
         android:inputType="phone"
         android:minHeight="48dp"
-        android:textColorHint="#455A64"
+        android:textColorHint="#757575"
+        android:textStyle="bold"
         tools:ignore="VisualLintTextFieldSize" />
 
     <Button
@@ -69,7 +73,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:backgroundTint="#EAAF26"
+        android:outlineProvider="none"
         android:text="@string/register"
-        android:textColor="#F3EFEE" />
+        android:textColor="#F3EFEE"
+        android:textStyle="bold" />
 
 </LinearLayout>
