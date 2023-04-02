@@ -6,7 +6,9 @@ import static org.junit.Assert.assertTrue;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.util.Log;
+import android.widget.ListView;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
@@ -24,7 +26,8 @@ import org.junit.Test;
 import java.util.HashMap;
 import java.util.Map;
 
-public class viewSelfProfileTest {
+public class viewQrCodeTest {
+
     private Solo solo;
 
     @Rule
@@ -59,14 +62,17 @@ public class viewSelfProfileTest {
 
         usersRef.document("S39gHoJQtgOuaH5nYE1U").set(user);
 
-        QRCodeObject qr1 = new QRCodeObject("londonderry", "fbhefbhebfqd",
-                45, null);
+        Location londonderry = new Location("");
 
-        QRCodeObject qr2 = new QRCodeObject("happyMart", "bgbgdgfdgd",
-                32, null);
+        londonderry.setLatitude(53.60291953603656);
+        londonderry.setLongitude(-113.44608664603429);
 
-        QRCodeObject qr3 = new QRCodeObject("clareview", "ngbgdhdg",
-                32, null);
+        Map<String, String> comments = new HashMap<>();
+        comments.put("homer", "pretty");
+
+        QRCodeObject qr1 = new QRCodeObject("BaBaBaBa454", "BaBaBaBa454546422",
+                45, londonderry, (HashMap<String, String>) comments);
+
 
         Map<String, Object> data = new HashMap<>();
         data.put("codeName", qr1.getCodeName());
@@ -79,32 +85,9 @@ public class viewSelfProfileTest {
                 .addOnSuccessListener(unused -> Log.d("Working", "Data added successfully"))
                 .addOnFailureListener(e -> Log.d("Working", "Data not added" + e));
 
-        data = new HashMap<>();
-        data.put("codeName", qr2.getCodeName());
-        data.put("codeHash", qr2.getCodeHash());
-        data.put("codeScore", qr2.getCodeScore());
-        data.put("codeLocation", qr2.getCodeLocation());
-        data.put("comments", qr2.getComments());
-        qrRef.document(qr2.getCodeName())
-                .set(data)
-                .addOnSuccessListener(unused -> Log.d("Working", "Data added successfully"))
-                .addOnFailureListener(e -> Log.d("Working", "Data not added" + e));
-
-        data = new HashMap<>();
-        data.put("codeName", qr3.getCodeName());
-        data.put("codeHash", qr3.getCodeHash());
-        data.put("codeScore", qr3.getCodeScore());
-        data.put("codeLocation", qr3.getCodeLocation());
-        data.put("comments", qr3.getComments());
-        qrRef.document(qr3.getCodeName())
-                .set(data)
-                .addOnSuccessListener(unused -> Log.d("Working", "Data added successfully"))
-                .addOnFailureListener(e -> Log.d("Working", "Data not added" + e));
-
 
         usersRef.document("S39gHoJQtgOuaH5nYE1U").update("qrCodes",
-                FieldValue.arrayUnion(qr1.getCodeName(), qr2.getCodeName()
-                ,qr3.getCodeName()));
+                FieldValue.arrayUnion(qr1.getCodeName()));
 
     }
 
@@ -114,14 +97,41 @@ public class viewSelfProfileTest {
     }
 
     @Test
-    public void viewSelfProfileTest(){
+    public void viewQRTest(){
 
 
         solo.clickOnButton("View My QR Codes");
-        assertTrue(solo.waitForText("londonderry", 1, 2000));
-        assertTrue(solo.waitForText("happyMart", 1, 2000));
-        assertTrue(solo.waitForText("clareview", 1, 2000));
+        assertTrue(solo.waitForText("BaBaBaBa454", 1, 2000));
 
+        ListView list = solo.getCurrentViews(ListView.class).get(0);
+
+
+        solo.clickInList(0,0);
+
+        solo.assertCurrentActivity("view QR activity", viewQRCode.class);
+        assertTrue(solo.waitForText("BaBaBaBa454"));
+        assertTrue(solo.waitForText("45"));
+
+        solo.clickOnButton("View QRcode Location");
+        solo.goBack();
+
+        solo.clickOnButton("View QRcode Comments");
+        solo.assertCurrentActivity("comments sections", viewQRComment.class);
+
+        assertTrue(solo.waitForText("homer"));
+        assertTrue(solo.waitForText("pretty"));
+
+        solo.goBack();
+
+        solo.clickOnButton("Comment on QRCode");
+        solo.typeText(0, "ok");
+        solo.clickOnButton("Confirm");
+
+        solo.clickOnButton("View QRcode Comments");
+        solo.assertCurrentActivity("comments sections", viewQRComment.class);
+
+        assertTrue(solo.waitForText("yehdhs"));
+        assertTrue(solo.waitForText("ok"));
 
     }
 
@@ -132,20 +142,12 @@ public class viewSelfProfileTest {
 
         db.collection("users").document("S39gHoJQtgOuaH5nYE1U").delete();
 
-        QRCodeObject qr1 = new QRCodeObject("londonderry", "fbhefbhebfqd",
+        QRCodeObject qr1 = new QRCodeObject("BaBaBaBa454", "BaBaBaBa454546422",
                 45, null);
 
-        QRCodeObject qr2 = new QRCodeObject("happyMart", "bgbgdgfdgd",
-                32, null);
-
-        QRCodeObject qr3 = new QRCodeObject("clareview", "ngbgdhdg",
-                32, null);
-
         db.collection("qrCodes").document(qr1.getCodeName()).delete();
-        db.collection("qrCodes").document(qr2.getCodeName()).delete();
-        db.collection("qrCodes").document(qr2.getCodeName()).delete();
-
 
     }
+
 
 }
