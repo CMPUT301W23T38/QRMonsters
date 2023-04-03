@@ -1,5 +1,7 @@
 package com.example.qrmonsters;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -24,9 +26,11 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -36,6 +40,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 /**
 
@@ -74,76 +79,76 @@ public class searchNearbyQR extends AppCompatActivity implements OnMapReadyCallb
         }
     }
 
-//    private void searchQRByLocation(String locationName) {
-//        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-//        try {
-//            List<Address> addresses = geocoder.getFromLocationName(locationName, 1);
-//            if (addresses != null && !addresses.isEmpty()) {
-//                Address address = addresses.get(0);
-//                double latitude = address.getLatitude();
-//                double longitude = address.getLongitude();
-//
-//                // Calculate the latitude and longitude boundaries
-//                double latDistance = SEARCH_RADIUS_METERS / 111000.0; // Roughly 111,000 meters in a degree of latitude
-//                double lonDistance = SEARCH_RADIUS_METERS / (111000.0 * Math.cos(Math.toRadians(latitude)));
-//
-//                double minLat = latitude - latDistance;
-//                double maxLat = latitude + latDistance;
-//                double minLon = longitude - lonDistance;
-//                double maxLon = longitude + lonDistance;
-//
-//                // Update the Firestore query to filter the results based on the boundaries
-//                Query query = db.collection("qrCodes")
-//                        .whereGreaterThanOrEqualTo("latitude", minLat)
-//                        .whereLessThanOrEqualTo("latitude", maxLat)
-//                        .whereGreaterThanOrEqualTo("longitude", minLon)
-//                        .whereLessThanOrEqualTo("longitude", maxLon);
-//
-//                // Query Firestore for nearby QR codes using the updated query
-//                query.addSnapshotListener(new EventListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-//                        if (e != null) {
-//                            Log.w("Firestore", "Listen failed.", e);
-//                            return;
-//                        }
-//
-//                        // Clear the list of QR codes
-//                        qrDataList.clear();
-//
-//                        // Add the QR codes to the list
-//                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-//                            String codeName = document.getString("codeName");
-//                            String codeHash = document.getString("codeHash");
-//                            Integer codeScore = document.getLong("codeScore").intValue();
-//                            Location codeLocation = new Location("");
-//                            codeLocation.setLatitude(document.getDouble("latitude"));
-//                            codeLocation.setLongitude(document.getDouble("longitude"));
-//                            HashMap<String, String> comments = (HashMap<String, String>) document.get("comments");
-//                            QRCodeObject qrCodeObject = new QRCodeObject(codeName, codeHash, codeScore, codeLocation, comments);
-//                            qrDataList.add(qrCodeObject);
-//                        }
-//
-//                        // Update the ListView
-//                        qrAdapter.notifyDataSetChanged();
-//                    }
-//                });
-//
-//
-//            } else {
-//                Toast.makeText(searchNearbyQR.this, "Location not found", Toast.LENGTH_SHORT).show();
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            Toast.makeText(searchNearbyQR.this, "Error while searching location", Toast.LENGTH_SHORT).show();
-//        }
-//
-//        ListView nearbyQRList = findViewById(R.id.nearbyQRList);
-//        FrameLayout mapContainer = findViewById(R.id.mapContainer);
-//
-//        nearbyQRList.setVisibility(View.VISIBLE);
-//        mapContainer.setVisibility(View.VISIBLE);
-//    }
+    private void searchQRByLocation(String locationName) {
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocationName(locationName, 1);
+            if (addresses != null && !addresses.isEmpty()) {
+                Address address = addresses.get(0);
+                double latitude = address.getLatitude();
+                double longitude = address.getLongitude();
+
+                Location targetLocation = new Location("");
+                targetLocation.setLatitude(latitude);
+                targetLocation.setLongitude(longitude);
+
+                float maxDistance = 10000; // Set a maximum distance in meters
+
+                ListView nearbyQRList = findViewById(R.id.nearbyQRList);
+                FrameLayout mapContainer = findViewById(R.id.mapContainer);
+
+                Query query = db.collection("qrCodes");
+                query.get().addOnSuccessListener(queryDocumentSnapshots -> {
+                    ArrayList<QRCodeObject> qrCodeObjects = new ArrayList<>();
+                    for (DocumentSnapshot doc : queryDocumentSnapshots) {
+                        String codeName = doc.getString("codeName");
+                        Integer score = ((Long) doc.get("codeScore")).intValue();
+
+                        // Get the location data from Firestore
+                        Map<String, Object> locationData = (Map<String, Object>) doc.get("codeLocation");
+                        if (locationData != null) {
+                            double qrLatitude = (double) locationData.get("latitude");
+                            double qrLongitude = (double) locationData.get("longitude");
+
+                            // Create a Location object from the Firestore data
+                            Location qrLocation = new Location("");
+                            qrLocation.setLatitude(qrLatitude);
+                            qrLocation.setLongitude(qrLongitude);
+
+                            QRCodeObject qrCode = new QRCodeObject(codeName, null, score, qrLocation);
+                            float[] distance = new float[1];
+                            Location.distanceBetween(qrLatitude, qrLongitude, targetLocation.getLatitude(), targetLocation.getLongitude(), distance);
+                            if (distance[0] <= maxDistance) {
+                                qrCodeObjects.add(qrCode);
+                            }
+                        }
+                    }
+
+                    QrCustomAdapter qrCustomAdapter = new QrCustomAdapter(searchNearbyQR.this, qrCodeObjects);
+                    nearbyQRList.setAdapter(qrCustomAdapter);
+
+                    // Clear the map and add new markers for the searched QR codes
+                    mMap.clear();
+                    for (QRCodeObject qr : qrCodeObjects) {
+                        LatLng qrLatLng = new LatLng(qr.getCodeLocation().getLatitude(), qr.getCodeLocation().getLongitude());
+                        mMap.addMarker(new MarkerOptions().position(qrLatLng).title(qr.getCodeName()));
+                    }
+                });
+
+                nearbyQRList.setVisibility(View.VISIBLE);
+                mapContainer.setVisibility(View.VISIBLE);
+
+            } else {
+                Toast.makeText(searchNearbyQR.this, "Location not found", Toast.LENGTH_SHORT).show();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(searchNearbyQR.this, "Error while searching location", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+
 
     /**
      Called when the activity is first created.
@@ -162,6 +167,7 @@ public class searchNearbyQR extends AppCompatActivity implements OnMapReadyCallb
         ArrayList playerList = getIntent().getStringArrayListExtra("playerList");
 
         //QRCodeObject qrAdd;
+
         qrList = findViewById(R.id.nearbyQRList);
         qrDataList = new ArrayList<>();
         qrAdapter = new QrCustomAdapter(this, qrDataList);
@@ -175,16 +181,16 @@ public class searchNearbyQR extends AppCompatActivity implements OnMapReadyCallb
                 .commit();
         mapFragment.getMapAsync(this);
 
-//        EditText locationSearchEditText = findViewById(R.id.locationSearchEditText);
-//        Button searchLocationButton = findViewById(R.id.searchLocationButton);
-//
-//        searchLocationButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                String locationName = locationSearchEditText.getText().toString();
-//                searchQRByLocation(locationName);
-//            }
-//        });
+        EditText locationSearchEditText = findViewById(R.id.locationSearchEditText);
+        Button searchLocationButton = findViewById(R.id.searchLocationButton);
+
+        searchLocationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String locationName = locationSearchEditText.getText().toString();
+                searchQRByLocation(locationName);
+            }
+        });
 
         qrList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

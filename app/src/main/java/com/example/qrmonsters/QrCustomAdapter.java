@@ -50,6 +50,7 @@ public class QrCustomAdapter extends ArrayAdapter<QRCodeObject> {
             addresses = geocoder.getFromLocation(latitude, longitude, 1);
             if (addresses != null && !addresses.isEmpty()) {
                 Address address = addresses.get(0);
+                Log.d("Address", address.getAddressLine(0));
                 return address.getAddressLine(0);
             } else {
                 return "Unknown Location";
