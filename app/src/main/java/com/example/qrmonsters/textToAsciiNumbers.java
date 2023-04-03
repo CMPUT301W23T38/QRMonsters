@@ -1,5 +1,8 @@
 package com.example.qrmonsters;
 
+/**
+ * The textToAsciiNumbers class contains methods to generate ASCII art numbers.
+ */
 public class textToAsciiNumbers {
 
     public static String zero    = "00000\n0   0\n00000";
@@ -12,7 +15,13 @@ public class textToAsciiNumbers {
     public static String seven   = "77777\n  7  \n7    ";
     public static String eight   = "88888\n8 8 8\n88888";
     public static String nine    = "99999\n 9999\n   99";
-
+    /**
+     * This method returns a String containing the ASCII art number generated based on the num parameter.
+     *
+     * @param num a Character representing the number to convert to ASCII art.
+     * @return a String containing the ASCII art number.
+     * @throws IllegalStateException if the number is not recognized.
+     */
     public static String getAscii(Character num){
 
         String mainString;

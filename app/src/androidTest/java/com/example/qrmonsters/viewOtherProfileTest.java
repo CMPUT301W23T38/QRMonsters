@@ -1,32 +1,25 @@
 package com.example.qrmonsters;
-import static android.content.Context.MODE_PRIVATE;
 
-import android.app.Activity;
+import static android.content.Context.MODE_PRIVATE;
+import static org.junit.Assert.assertTrue;
+
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.widget.EditText;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.zxing.decode.Intents;
 import com.robotium.solo.Solo;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-public class viewNearbyQRTest {
+
+public class viewOtherProfileTest {
+
     private Solo solo;
 
     @Rule
@@ -34,7 +27,7 @@ public class viewNearbyQRTest {
             true);
 
     @Before
-    public void setUp() throws Exception{
+    public void setUp() throws Exception {
 
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
@@ -51,22 +44,43 @@ public class viewNearbyQRTest {
         editor.putBoolean("isRegistered", true);
         editor.apply();
         editor.commit();
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference usersRef = db.collection("users");
+        CollectionReference qrRef = db.collection("qrCodes");
+
+        Player user = new Player("S39gHoJQtgOuaH5nYE1U", "yehdhs", "r@v.com"
+                , "196864");
+
+        usersRef.document("S39gHoJQtgOuaH5nYE1U").set(user);
+
     }
 
     @Test
-    public void start() throws Exception{
-        Activity activity = rule.getActivity();
+    public void viewOtherProfile(){
+
+
+        solo.clickOnButton("Search Users");
+        solo.typeText(0, "Kkst12");
+        solo.clickOnButton("Search");
+        solo.clickInRecyclerView(0);
+        solo.assertCurrentActivity("player Profile", viewPlayerProfile.class);
+        assertTrue(solo.waitForText("1487"));
+        assertTrue(solo.waitForText("248"));
+        assertTrue(solo.waitForText("39"));
+
+
     }
 
-    @Test
-    public void viewNearbyQR(){
 
-        solo.waitForText("Latitude");
-        solo.clickOnButton("Search Nearby QR codes");
-        assertTrue(solo.waitForText("Happy", 1, 2000));
-        assertTrue(solo.waitForText("londonderry", 1, 2000));
-        assertTrue(solo.waitForText("Cardinal", 1, 2000));
+
+    @After
+    public void teardown() throws Exception{
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("users").document("S39gHoJQtgOuaH5nYE1U").delete();
+
 
     }
-
 }

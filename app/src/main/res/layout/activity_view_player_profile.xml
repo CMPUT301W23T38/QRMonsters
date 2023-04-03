@@ -86,7 +86,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:padding="8dp"
-        android:text="QR Codes (name/score)"
+        android:text="QR Codes (name/score/location)"
         android:textSize="20dp"
         android:textColor="#455A64"
         android:textStyle="bold" />

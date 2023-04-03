@@ -87,8 +87,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="#EAAF26"
-        android:onClick="scanQRCode"
         android:text="@string/scan_qr_code"
+        android:textColor="#FFFFFF" />
+
+    <Button
+        android:id="@+id/viewMyQRCodesButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#EAAF26"
+        android:text="@string/view_my_qr_codes"
         android:textColor="#FFFFFF" />
 
     <Button
@@ -97,15 +104,6 @@
         android:layout_height="wrap_content"
         android:backgroundTint="#EAAF26"
         android:text="@string/search_nearby_qr_codes"
-        android:textColor="#FFFFFF" />
-
-    <Button
-        android:id="@+id/viewMyQRCodesButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#EAAF26"
-        android:onClick="viewMyQRCodes"
-        android:text="@string/view_my_qr_codes"
         android:textColor="#FFFFFF" />
 
     <Button
