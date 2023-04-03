@@ -35,6 +35,22 @@ android {
         ]
     }
 
+    def localProperties = new Properties()
+    def localPropertiesFile = rootProject.file('local.properties')
+    if (localPropertiesFile.exists()) {
+        localPropertiesFile.withReader('UTF-8') { reader ->
+            localProperties.load(reader)
+        }
+    }
+
+    def mapsApiKey = localProperties.getProperty('api_key') ?: ""
+
+    defaultConfig {
+        manifestPlaceholders = [
+                MAPS_API_KEY: mapsApiKey
+        ]
+    }
+
     testOptions{
         unitTests.all{
             useJUnitPlatform()
