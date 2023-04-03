@@ -4,45 +4,39 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#A7DEE9">
+    android:background="#A7DEE9"
+    android:orientation="vertical">
 
     <!-- Toolbar -->
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="#EAAF26"
-        android:minHeight="?actionBarSize">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Search for other users "
-        android:textColor="#616161"
-        android:textSize="30sp"
-        android:textStyle="bold" />
-
-    </androidx.appcompat.widget.Toolbar>
     <!-- Search bar -->
+
     <LinearLayout
         android:id="@+id/search_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="8dp">
+        android:padding="8dp"
+        android:textStyle="bold">
+
+        <ImageView
+            android:id="@+id/imageView7"
+            android:layout_width="38dp"
+            android:layout_height="51dp"
+            android:layout_weight="10"
+            app:srcCompat="?android:attr/actionModeWebSearchDrawable" />
 
         <EditText
             android:id="@+id/search_edit_text"
-            android:layout_width="0dp"
+            android:layout_width="267dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:autofillHints=""
             android:hint="@string/search_users_hint"
+            android:inputType="text"
             android:minHeight="48dp"
             android:padding="8dp"
-            android:autofillHints=""
-            android:inputType="text"
+            android:textColor="#757575"
+            android:textStyle="bold"
             tools:ignore="VisualLintTextFieldSize" />
 
         <Button
@@ -50,20 +44,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="#EAAF26"
+            android:outlineProvider="none"
             android:text="@string/search_button_text"
             android:textColor="#FFFFFF"
+            android:textStyle="bold"
             tools:ignore="TouchTargetSizeCheck" />
 
 
     </LinearLayout>
 
     <!-- List of users -->
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/user_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
         android:layout_margin="8dp"
+        android:layout_weight="1"
         android:clipToPadding="false"
         android:padding="8dp"
         android:scrollbars="vertical" />
@@ -73,8 +70,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="#EAAF26"
+        android:outlineProvider="none"
         android:text="@string/back_to_home"
         android:textColor="#FFFFFF"
+        android:textStyle="bold"
         tools:ignore="VisualLintButtonSize" />
 
 </LinearLayout>

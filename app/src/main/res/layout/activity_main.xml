@@ -10,6 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="#EAAF26"
-        android:text="TIAOZHUAN" />
+        android:textStyle="bold"
+        android:outlineProvider="none"
+        android:text="JUMPING TO..." />
 
 </LinearLayout>

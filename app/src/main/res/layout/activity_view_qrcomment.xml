@@ -8,22 +8,20 @@
     android:background="#A7DEE9"
     tools:context=".viewQRComment">
 
-    <androidx.appcompat.widget.Toolbar
+    <ImageView
+        android:id="@+id/imageView8"
+        android:layout_width="match_parent"
+        android:layout_height="123dp"
+        app:srcCompat="@drawable/comment" />
+
+    <TextView
+        android:id="@+id/textView4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#EAAF26"
-        android:minHeight="?actionBarSize">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="View QR Codes' comment"
-            android:textColor="#616161"
-            android:textSize="30sp"
-            android:textStyle="bold" />
-
-    </androidx.appcompat.widget.Toolbar>
+        android:text="             VIEW COMMENTS"
+        android:textColor="#F8F7F7"
+        android:textSize="28sp"
+        android:textStyle="bold" />
 
     <ListView
         android:id="@+id/comments"

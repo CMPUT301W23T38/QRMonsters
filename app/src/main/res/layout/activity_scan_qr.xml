@@ -21,7 +21,8 @@
         android:layout_height="wrap_content"
         android:backgroundTint="#EAAF26"
         android:text="@string/generate_qr_code"
-        android:textColor="#5D4037"
+        android:textColor="#F3F0EF"
+        android:textStyle="bold"
         tools:ignore="VisualLintButtonSize" />
 
     <Button
@@ -30,7 +31,8 @@
         android:layout_height="wrap_content"
         android:backgroundTint="#EAAF26"
         android:text="@string/scan_code"
-        android:textColor="#5D4037"
+        android:textColor="#FAF9F9"
+        android:textStyle="bold"
         tools:ignore="VisualLintButtonSize" />
 
     <ImageView
@@ -46,8 +48,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:gravity="center"
-        android:text="@string/scan_returns_bitmap"
-        android:textColor="#455A64"
+        android:text="SCAN RETURNS BITMAP"
+        android:textStyle="bold"
+        android:textColor="#757575"
         android:textSize="18sp" />
 
     <ImageView

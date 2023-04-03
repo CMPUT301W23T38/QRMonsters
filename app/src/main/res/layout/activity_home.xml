@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -7,18 +8,15 @@
     android:background="#A7DEE9">
 
     <!-- Add a welcome to QRMonster text-->
-    <TextView
-        android:id="@+id/welcome_to_qrmonster"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:padding="16dp"
-        android:text="@string/welcome_to_qrmonster"
-        android:textColor="#757575"
-        android:textSize="24sp"
-        android:textStyle="bold" />
 
     <!-- Add a TextView for the username, email, and phone number -->
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="match_parent"
+        android:layout_height="112dp"
+        app:srcCompat="@drawable/userprofile" />
+
     <TextView
         android:id="@+id/usernameTextView"
         android:layout_width="match_parent"
@@ -38,7 +36,8 @@
         android:layout_gravity="center"
         android:padding="16dp"
         android:text="@string/email"
-        android:textColor="#455A64"
+        android:textStyle="bold"
+        android:textColor="#757575"
         android:textSize="18sp" />
 
     <TextView
@@ -48,7 +47,8 @@
         android:layout_gravity="center"
         android:padding="16dp"
         android:text="@string/phone_numberr"
-        android:textColor="#455A64"
+        android:textStyle="bold"
+        android:textColor="#757575"
         android:textSize="18sp" />
 
     <LinearLayout
@@ -60,9 +60,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Would you like to track location?"
+            android:text="TRACK LOCATION PERMISSIONS"
+            android:textStyle="bold"
             android:padding="16dp"
-            android:textColor="#455A64"
+            android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:layout_gravity="center"/>
 
@@ -74,6 +75,8 @@
             android:backgroundTint="#EAAF26"
             android:textColor="#FFFFFF"
             android:checked="true"
+            android:textStyle="bold"
+            android:outlineProvider="none"
             android:textOn="YES"
             android:textOff="NO"/>
 
@@ -88,6 +91,8 @@
         android:layout_height="wrap_content"
         android:backgroundTint="#EAAF26"
         android:text="@string/scan_qr_code"
+        android:textStyle="bold"
+        android:outlineProvider="none"
         android:textColor="#FFFFFF" />
 
     <Button
@@ -95,7 +100,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="#EAAF26"
-        android:text="@string/view_my_qr_codes"
+        android:text="@string/search_nearby_qr_codes"
+        android:textStyle="bold"
+        android:outlineProvider="none"
         android:textColor="#FFFFFF" />
 
     <Button
@@ -103,7 +110,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="#EAAF26"
-        android:text="@string/search_nearby_qr_codes"
+        android:onClick="viewMyQRCodes"
+        android:text="@string/view_my_qr_codes"
+        android:textStyle="bold"
+        android:outlineProvider="none"
         android:textColor="#FFFFFF" />
 
     <Button
@@ -113,6 +123,8 @@
         android:backgroundTint="#EAAF26"
         android:onClick="searchUsers"
         android:text="@string/search_users_"
+        android:textStyle="bold"
+        android:outlineProvider="none"
         android:textColor="#FFFFFF" />
 
     <Button
@@ -122,6 +134,8 @@
         android:backgroundTint="#EAAF26"
         android:onClick="viewLeaderboard"
         android:text="@string/view_leaderboard_"
+        android:textStyle="bold"
+        android:outlineProvider="none"
         android:textColor="#FFFFFF" />
 
     <Button
@@ -130,6 +144,8 @@
         android:layout_height="wrap_content"
         android:backgroundTint="#EAAF26"
         android:text="@string/view_current_location"
+        android:textStyle="bold"
+        android:outlineProvider="none"
         android:textColor="#FFFFFF" />
 
     <TextView
@@ -137,6 +153,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/location"
-        android:textColor="#455A64" />
+        android:textStyle="bold"
+        android:textColor="#757575" />
 
 </LinearLayout>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,39 +9,27 @@
     android:background="#A7DEE9"
     tools:context=".searchNearbyQR">
 
-    <androidx.appcompat.widget.Toolbar
+    <ImageView
+        android:id="@+id/imageView2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#EAAF26"
-        android:minHeight="?actionBarSize">
-
-        <TextView
-            android:id="@+id/playerTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="View player profile"
-            android:textColor="#616161"
-            android:textSize="30sp"
-            android:textStyle="bold" />
-
-    </androidx.appcompat.widget.Toolbar>
+        android:layout_height="135dp"
+        app:srcCompat="@drawable/earth" />
 
     <TextView
         android:id="@+id/playerNameTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/name"
-        android:textColor="#455A64"
         android:padding="8dp"
-        android:textStyle="bold"/>
+        android:text="@string/name"
+        android:textColor="#757575"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/playerScoreTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Current score:"
-        android:textColor="#455A64"
+        android:text="CURRENT SCORE:"
+        android:textColor="#757575"
         android:padding="8dp"
         android:textStyle="bold"/>
 
@@ -48,8 +37,8 @@
         android:id="@+id/playerQRcountTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="# of QR Codes:"
-        android:textColor="#455A64"
+        android:text="# OF QR CODES:"
+        android:textColor="#757575"
         android:padding="8dp"
         android:textStyle="bold"/>
 
@@ -57,38 +46,39 @@
         android:id="@+id/highestQRTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Highest QR Score:"
-        android:textColor="#455A64"
+        android:text="HIGHEST QR SCORE:"
+        android:textColor="#757575"
         android:padding="8dp"
         android:textStyle="bold"/>
-
-    <TextView
-        android:id="@+id/playerEstimatedRankingTV"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Estimated Ranking: "
-        android:textColor="#455A64"
-        android:padding="8dp"
-        android:textStyle="bold"/>
-
 
     <TextView
         android:id="@+id/lowestQRTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Lowest QR Score:"
-        android:textColor="#455A64"
+        android:padding="8dp"
+        android:text="LOWEST QR SCORE:"
+        android:textColor="#757575"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/playerEstimatedRankingTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ESTIMATED RANKING: "
+        android:textColor="#757575"
         android:padding="8dp"
         android:textStyle="bold"/>
+
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:padding="8dp"
-        android:text="QR Codes (name/score/location)"
-        android:textSize="20dp"
-        android:textColor="#455A64"
+        android:rotationX="23"
+        android:text="QR CODES (NAME/SCORE)"
+        android:textColor="#FFFFFF"
+        android:textSize="23dp"
         android:textStyle="bold" />
 
     <ListView
@@ -102,7 +92,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="#EAAF26"
+        android:outlineProvider="none"
         android:text="@string/back_to_home"
         android:textColor="#FFFFFF"
+        android:textStyle="bold"
         tools:ignore="VisualLintButtonSize" />
 </LinearLayout>
