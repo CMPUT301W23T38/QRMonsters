@@ -18,20 +18,20 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-    
-    def localProperties = new Properties()
-    def localPropertiesFile = rootProject.file('local.properties')
-    if (localPropertiesFile.exists()) {
-        localPropertiesFile.withReader('UTF-8') { reader ->
-            localProperties.load(reader)
+
+    def localProps = new Properties()
+    def localPropsFile = rootProject.file('local.properties')
+    if (localPropsFile.exists()) {
+        localPropsFile.withReader('UTF-8') { reader ->
+            localProps.load(reader)
         }
     }
 
-    def mapsApiKey = localProperties.getProperty('api_key') ?: ""
+    def myMapsApiKey = localProps.getProperty('api_key') ?: ""
 
     defaultConfig {
         manifestPlaceholders = [
-                MAPS_API_KEY: mapsApiKey
+                MAPS_API_KEY: myMapsApiKey
         ]
     }
 
