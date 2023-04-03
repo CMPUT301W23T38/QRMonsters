@@ -23,7 +23,7 @@
         android:text="NAME"
         android:textStyle="bold"
         android:textColor="#FFFFFF"
-        android:textSize="20sp" />
+        android:textSize="21sp" />
 
     <TextView
         android:id="@+id/qrScore"
@@ -32,7 +32,7 @@
         android:layout_marginStart="20dp"
         android:text="SCORE    "
         android:textColor="#FFFFFF"
-        android:textSize="20sp"
+        android:textSize="21sp"
         android:textStyle="bold" />
 
     <TextView
@@ -43,7 +43,7 @@
         android:text="LOCATION"
         android:textStyle="bold"
         android:textColor="#FFFFFF"
-        android:textSize="20sp" />
+        android:textSize="21sp" />
 
 
 </LinearLayout>
