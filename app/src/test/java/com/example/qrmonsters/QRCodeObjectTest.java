@@ -42,8 +42,8 @@ public class QRCodeObjectTest {
     @Test
     public void testAddComment() {
         QRCodeObject qrCodeObject = new QRCodeObject("Test QR Code", "1234567890", 100);
-        qrCodeObject.addComment("Test Comment");
-        assertTrue(qrCodeObject.getComments().containsKey("Test Comment"));
+        qrCodeObject.addComment("abc", "Test Comment");
+        assertTrue(qrCodeObject.getComments().containsKey("abc") && qrCodeObject.getComments().containsValue("Test Comment"));
     }
 
     @Test
