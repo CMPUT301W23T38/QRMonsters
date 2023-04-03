@@ -30,13 +30,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
-        android:layout_marginBottom="524dp"
+        android:layout_marginBottom="476dp"
         android:entries="@array/sort_by_options"
         android:layerType="none"
         android:minHeight="48dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.545"
         app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -55,12 +54,10 @@
         android:id="@+id/imageView5"
         android:layout_width="104dp"
         android:layout_height="108dp"
-        app:layout_constraintBottom_toBottomOf="@+id/spinner_sort_by"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.025"
         app:srcCompat="@drawable/leaderboard" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
