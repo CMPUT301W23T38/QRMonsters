@@ -95,7 +95,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="#EAAF26"
-        android:onClick="viewMyQRCodes"
         android:text="@string/view_my_qr_codes"
         android:textColor="#FFFFFF" />
 
