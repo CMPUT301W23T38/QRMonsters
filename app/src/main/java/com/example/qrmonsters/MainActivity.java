@@ -17,13 +17,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
  */
 public class MainActivity extends AppCompatActivity {
 
-// <<<<<<< QRScanner_Integrate 
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    Button btm;
-// =======
-//     //FirebaseFirestore db = FirebaseFirestore.getInstance();
-// >>>>>>> main
-
     /**
      * Called when the activity is starting.
      * Initializes the SharedPreferences object to check if the user is registered,
