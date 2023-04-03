@@ -26,7 +26,6 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <!--
     <LinearLayout
         android:id="@+id/search_bar"
         android:layout_below="@+id/toolbar"
@@ -56,23 +55,24 @@
             android:textColor="#FFFFFF"
             tools:ignore="TouchTargetSizeCheck" />
 
-    To remember: Add android:visibility="gone" the the ListView and FrameLayout to hide them until the user searches for a location
     </LinearLayout>
-    -->
+
 
     <ListView
         android:id="@+id/nearbyQRList"
         android:background="#A7DEE9"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbar"
-        android:layout_above="@+id/mapContainer"/>
+        android:layout_below="@+id/search_bar"
+        android:layout_above="@+id/mapContainer"
+        android:visibility="gone"/>
 
     <FrameLayout
         android:id="@+id/mapContainer"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:layout_alignParentBottom="true"/>
+        android:layout_alignParentBottom="true"
+        android:visibility="gone"/>
 
 
 </RelativeLayout>
