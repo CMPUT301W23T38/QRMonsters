@@ -1,6 +1,7 @@
 package com.example.qrmonsters;
 
 import static android.content.Context.MODE_PRIVATE;
+
 import static org.junit.Assert.assertTrue;
 
 import android.app.Activity;
@@ -18,7 +19,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-public class viewNearbyQRTest {
+
+public class viewRankingsTest {
+
     private Solo solo;
 
     @Rule
@@ -26,7 +29,7 @@ public class viewNearbyQRTest {
             true);
 
     @Before
-    public void setUp() throws Exception{
+    public void setUp() throws Exception {
 
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
@@ -51,6 +54,8 @@ public class viewNearbyQRTest {
                 , "196864");
 
         usersRef.document("S39gHoJQtgOuaH5nYE1U").set(user);
+        usersRef.document("test_user").set(user);
+
 
     }
 
@@ -60,25 +65,30 @@ public class viewNearbyQRTest {
     }
 
     @Test
-    public void viewNearbyQR(){
+    public void viewRankingTest(){
 
-        solo.waitForText("Lat");
-        solo.clickOnButton("Search Nearby QR codes");
-        assertTrue(solo.waitForText("BaBaFeBa025", 1, 2000));
-        assertTrue(solo.waitForText("BaBaFeFe118", 1, 2000));
-        assertTrue(solo.waitForText("BaCaBaFa678", 1, 2000));
-        assertTrue(solo.waitForText("BaCaDeCe091", 1, 2000));
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference usersRef = db.collection("users");
+
+        solo.clickOnButton("View Leaderboard");
+
+        solo.assertCurrentActivity("leaderboard Activity", LeaderboardActivity.class);
+        assertTrue(solo.waitForText("Kkst12"));
+        assertTrue(solo.waitForText("1487"));
+
+        solo.pressSpinnerItem(0,1);
+        assertTrue(solo.waitForText("Kkst12"));
+        assertTrue(solo.waitForText("248"));
+
+        solo.pressSpinnerItem(0,2);
+        assertTrue(solo.waitForText("Kkst12"));
+        assertTrue(solo.waitForText("39"));
+
 
     }
 
     @After
     public void teardown() throws Exception{
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        db.collection("users").document("S39gHoJQtgOuaH5nYE1U").delete();
-
-
     }
-
 }

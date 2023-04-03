@@ -3,7 +3,6 @@ package com.example.qrmonsters;
 import static android.content.Context.MODE_PRIVATE;
 import static org.junit.Assert.assertTrue;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -18,7 +17,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-public class viewNearbyQRTest {
+
+public class viewOtherProfileTest {
+
     private Solo solo;
 
     @Rule
@@ -26,7 +27,7 @@ public class viewNearbyQRTest {
             true);
 
     @Before
-    public void setUp() throws Exception{
+    public void setUp() throws Exception {
 
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
@@ -46,6 +47,7 @@ public class viewNearbyQRTest {
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference usersRef = db.collection("users");
+        CollectionReference qrRef = db.collection("qrCodes");
 
         Player user = new Player("S39gHoJQtgOuaH5nYE1U", "yehdhs", "r@v.com"
                 , "196864");
@@ -55,21 +57,22 @@ public class viewNearbyQRTest {
     }
 
     @Test
-    public void start() throws Exception{
-        Activity activity = rule.getActivity();
+    public void viewOtherProfile(){
+
+
+        solo.clickOnButton("Search Users");
+        solo.typeText(0, "Kkst12");
+        solo.clickOnButton("Search");
+        solo.clickInRecyclerView(0);
+        solo.assertCurrentActivity("player Profile", viewPlayerProfile.class);
+        assertTrue(solo.waitForText("1487"));
+        assertTrue(solo.waitForText("248"));
+        assertTrue(solo.waitForText("39"));
+
+
     }
 
-    @Test
-    public void viewNearbyQR(){
 
-        solo.waitForText("Lat");
-        solo.clickOnButton("Search Nearby QR codes");
-        assertTrue(solo.waitForText("BaBaFeBa025", 1, 2000));
-        assertTrue(solo.waitForText("BaBaFeFe118", 1, 2000));
-        assertTrue(solo.waitForText("BaCaBaFa678", 1, 2000));
-        assertTrue(solo.waitForText("BaCaDeCe091", 1, 2000));
-
-    }
 
     @After
     public void teardown() throws Exception{
@@ -80,5 +83,4 @@ public class viewNearbyQRTest {
 
 
     }
-
 }

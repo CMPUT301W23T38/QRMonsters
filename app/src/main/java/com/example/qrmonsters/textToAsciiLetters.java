@@ -1,5 +1,8 @@
 package com.example.qrmonsters;
+/**
 
+ The textToAsciiLetters class contains methods to generate ASCII art letters.
+ */
 public class textToAsciiLetters {
 
     public String A1 = "  *  ";
@@ -25,6 +28,18 @@ public class textToAsciiLetters {
     public String F1 = "*****";
     public String F2 = "***  ";
     public String F3 = "**";
+    /**
+
+     This method returns a String containing the ASCII art letter generated based on the base and component parameters.
+
+     @param base a Character representing the base letter.
+
+     @param component a Character representing the component of the letter to replace the asterisk symbol.
+
+     @return a String containing the ASCII art letter.
+
+     @throws IllegalStateException if the base letter is not recognized.
+     */
 
     public static String getAscii(Character base, Character component){
 
