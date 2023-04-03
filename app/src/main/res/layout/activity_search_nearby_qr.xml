@@ -19,8 +19,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="View QR codes in your area"
-            android:textColor="#616161"
+            android:text="NEARBY QR CODES"
+            android:textColor="#FFFFFF"
             android:textSize="30sp"
             android:textStyle="bold" />
 
@@ -52,6 +52,8 @@
             android:layout_height="wrap_content"
             android:backgroundTint="#EAAF26"
             android:text="@string/search_button_text"
+            android:textStyle="bold"
+            android:outlineProvider="none"
             android:textColor="#FFFFFF"
             tools:ignore="TouchTargetSizeCheck" />
 
