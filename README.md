@@ -26,3 +26,6 @@ To install the QRHunter App, follow these steps:
 - Launch the QRHunter App and create an account.
 
 - Start scanning QR codes and barcodes and compete with other players to score the highest number of points.
+
+## A demo of the app
+https://clipchamp.com/watch/iWHkQTb4cOj
